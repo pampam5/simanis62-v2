@@ -58,6 +58,7 @@ inclusion: always
 | Remote Support | RustDesk | Self-hosted, gratis komersial |
 | Backend Logging | Python logging | RotatingFileHandler |
 | Frontend Logging | Serilog | Structured logging + Sentry sink |
+| Database Management | DBHub | Visual explorer, MCP integration, query testing |
 
 ### Kenapa GlitchTip?
 - **Gratis** - Open-source, self-hosted
@@ -143,8 +144,40 @@ Script PowerShell untuk otomatisasi:
 | `scripts/setup_dev.ps1` | Setup environment (venv, dependencies) |
 | `scripts/build_installer.ps1` | Build installer (pyinstaller, dotnet publish, iscc) |
 | `scripts/run_tests.ps1` | Run semua tests (pytest, dotnet test) |
+| `scripts/start_dbhub.ps1` | Start DBHub server untuk database management |
+
+## Database Management (DBHub)
+
+### Setup DBHub
+DBHub adalah MCP server untuk database management yang menyediakan:
+- Visual interface untuk explore database
+- Query testing dan optimization
+- Multi-database support (dev/test/prod)
+- MCP tools untuk database operations
+
+**Quick Start:**
+```powershell
+# Start DBHub server
+.\scripts\start_dbhub.ps1
+
+# Access workbench
+# Browser: http://localhost:8080
+```
+
+**Configuration:** `dbhub.toml` dengan 3 database sources:
+- `development` - Daily development (D:/simanis62-v2/backend/simanis62-dev.db)
+- `testing` - Unit testing (:memory:)
+- `production` - Read-only production (C:/ProgramData/Simanis62/simanis62.db)
+
+**MCP Integration:** DBHub tersedia sebagai MCP server di Kiro untuk:
+- Search database objects (tables, columns, indexes)
+- Execute SQL queries
+- Verify data integrity
+- Debug database issues
+
+**Detail Lengkap:** Lihat `.kiro/steering/DBHUB_GUIDE.md`
 
 ## Referensi Lengkap
 
 #[[file:docs/tech_stack.md]]
-
+#[[file:.kiro/steering/DBHUB_GUIDE.md]]

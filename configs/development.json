@@ -1,1 +1,14 @@
-{ "env": "development", "debug": true, "port": 8000 }
+{
+  "api": {
+    "host": "127.0.0.1",
+    "port": 8000,
+    "debug": true
+  },
+  "database": {
+    "path": "C:\\ProgramData\\Simanis62\\simanis62-dev.db"
+  },
+  "logging": {
+    "level": "DEBUG",
+    "log_dir": "logs"
+  }
+}

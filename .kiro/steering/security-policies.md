@@ -201,7 +201,7 @@ class AsetCreate(BaseModel):
     kode_barang: str = Field(..., pattern=r"^\d{2}\.\d{2}\.\d{2}\.\d{4}$")
     harga: int = Field(..., ge=0, le=999_999_999_999)
     tahun_perolehan: int = Field(..., ge=1900, le=2100)
-    
+
     @validator("nama_barang")
     def sanitize_nama(cls, v):
         # Remove potential XSS

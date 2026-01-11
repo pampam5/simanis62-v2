@@ -46,13 +46,13 @@ Simanis62.WPF/
 public partial class AsetViewModel : ObservableObject
 {
     private readonly IApiService _apiService;
-    
+
     [ObservableProperty]
     private string _namaBarang = string.Empty;
-    
+
     [ObservableProperty]
     private bool _isLoading;
-    
+
     [RelayCommand]
     private async Task LoadAsetAsync()
     {
@@ -77,7 +77,7 @@ public interface IApiService
 {
     [Get("/api/v1/aset")]
     Task<ApiResponse<List<Aset>>> GetAsetAsync();
-    
+
     [Post("/api/v1/aset")]
     Task<ApiResponse<Aset>> CreateAsetAsync([Body] AsetCreate data);
 }

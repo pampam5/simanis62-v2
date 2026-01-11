@@ -124,7 +124,7 @@ copy RustDesk_Setup.exe SIMANIS62_Installer/
 
 ### Error: "Cannot connect to API"
 **Penyebab**: Firewall blokir atau API tidak running
-**Solusi**: 
+**Solusi**:
 1. Cek apakah Simanis62.API.exe running di Task Manager
 2. Tambahkan exception di Windows Firewall
 3. Restart aplikasi

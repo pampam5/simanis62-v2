@@ -13,11 +13,11 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ## Phase 1: Project Setup & Infrastructure
 
 ### Task 1.1: Backend Project Structure
-- [ ] Create backend directory structure sesuai design.md
-- [ ] Setup `pyproject.toml` dengan dependencies
-- [ ] Setup `requirements.txt`
-- [ ] Create `.env.example` template
-- [ ] Setup pre-commit hooks configuration
+- [x] Create backend directory structure sesuai design.md
+- [x] Setup `pyproject.toml` dengan dependencies
+- [x] Setup `requirements.txt`
+- [x] Create `.env.example` template
+- [x] Setup pre-commit hooks configuration
 
 **Files:**
 - `backend/app/__init__.py`
@@ -31,9 +31,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 
 
 ### Task 1.2: Core Infrastructure - Configuration
-- [ ] Implement `app/core/config.py` dengan Pydantic Settings
-- [ ] Setup environment-based configuration loading
-- [ ] Create config files di `configs/` folder
+- [x] Implement `app/core/config.py` dengan Pydantic Settings
+- [x] Setup environment-based configuration loading
+- [x] Create config files di `configs/` folder
 
 **Files:**
 - `backend/app/core/__init__.py`
@@ -47,10 +47,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 1.3: Core Infrastructure - Database
-- [ ] Implement `app/core/database.py` dengan SQLite WAL mode
-- [ ] Setup async SQLAlchemy engine dengan optimal pragmas
-- [ ] Implement DatabaseManager class dengan health check
-- [ ] Create database session dependency untuk FastAPI
+- [x] Implement `app/core/database.py` dengan SQLite WAL mode
+- [x] Setup async SQLAlchemy engine dengan optimal pragmas
+- [x] Implement DatabaseManager class dengan health check
+- [x] Create database session dependency untuk FastAPI
 
 **Files:**
 - `backend/app/core/database.py`
@@ -60,11 +60,11 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 1.4: Core Infrastructure - Logging
-- [ ] Implement `app/core/logging.py` dengan structured logging
-- [ ] Setup StructuredFormatter (JSON) dan HumanReadableFormatter
-- [ ] Implement correlation ID context variable
-- [ ] Setup GlitchTip integration dengan sensitive data filter
-- [ ] Configure RotatingFileHandler
+- [x] Implement `app/core/logging.py` dengan structured logging
+- [x] Setup StructuredFormatter (JSON) dan HumanReadableFormatter
+- [x] Implement correlation ID context variable
+- [x] Setup GlitchTip integration dengan sensitive data filter
+- [x] Configure RotatingFileHandler
 
 **Files:**
 - `backend/app/core/logging.py`
@@ -74,14 +74,14 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 1.5: Core Infrastructure - Exceptions
-- [ ] Implement `app/core/exceptions.py` dengan exception hierarchy
-- [ ] Create SimanisException base class
-- [ ] Create Authentication exceptions (InvalidCredentialsError, SessionExpiredError)
-- [ ] Create Authorization exceptions (InsufficientPermissionError)
-- [ ] Create Validation exceptions (DuplicateKodeBarangError, InvalidKodeBarangFormatError, dll)
-- [ ] Create Business exceptions (AssetInMutationError, SameRoomMutationError)
-- [ ] Create Resource exceptions (AssetNotFoundError, UserNotFoundError, RuanganNotFoundError)
-- [ ] Create Database exceptions
+- [x] Implement `app/core/exceptions.py` dengan exception hierarchy
+- [x] Create SimanisException base class
+- [x] Create Authentication exceptions (InvalidCredentialsError, SessionExpiredError)
+- [x] Create Authorization exceptions (InsufficientPermissionError)
+- [x] Create Validation exceptions (DuplicateKodeBarangError, InvalidKodeBarangFormatError, dll)
+- [x] Create Business exceptions (AssetInMutationError, SameRoomMutationError)
+- [x] Create Resource exceptions (AssetNotFoundError, UserNotFoundError, RuanganNotFoundError)
+- [x] Create Database exceptions
 
 **Files:**
 - `backend/app/core/exceptions.py`
@@ -90,10 +90,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 
 
 ### Task 1.6: Core Infrastructure - Security
-- [ ] Implement `app/core/security.py`
-- [ ] Setup password hashing dengan bcrypt
-- [ ] Implement session management (create, verify, destroy)
-- [ ] Configure session timeout (2 jam)
+- [x] Implement `app/core/security.py`
+- [x] Setup password hashing dengan bcrypt
+- [x] Implement session management (create, verify, destroy)
+- [x] Configure session timeout (2 jam)
 
 **Files:**
 - `backend/app/core/security.py`
@@ -103,11 +103,11 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 1.7: API Middleware
-- [ ] Implement `app/api/middleware.py`
-- [ ] Create ErrorHandlingMiddleware dengan correlation ID
-- [ ] Setup global exception handler untuk SimanisException
-- [ ] Setup handler untuk unexpected exceptions
-- [ ] Add X-Correlation-ID header ke responses
+- [x] Implement `app/api/middleware.py`
+- [x] Create ErrorHandlingMiddleware dengan correlation ID
+- [x] Setup global exception handler untuk SimanisException
+- [x] Setup handler untuk unexpected exceptions
+- [x] Add X-Correlation-ID header ke responses
 
 **Files:**
 - `backend/app/api/__init__.py`
@@ -118,10 +118,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 1.8: API Response Schemas
-- [ ] Implement `app/schemas/response.py`
-- [ ] Create SuccessResponse generic schema
-- [ ] Create ErrorResponse schema
-- [ ] Create PaginatedResponse generic schema
+- [x] Implement `app/schemas/response.py`
+- [x] Create SuccessResponse generic schema
+- [x] Create ErrorResponse schema
+- [x] Create PaginatedResponse generic schema
 
 **Files:**
 - `backend/app/schemas/__init__.py`

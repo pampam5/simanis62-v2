@@ -48,13 +48,13 @@ app/
 ```python
 async def get_aset_by_id(aset_id: UUID) -> Aset:
     """Mengambil aset berdasarkan ID.
-    
+
     Args:
         aset_id: UUID dari aset.
-        
+
     Returns:
         Objek Aset jika ditemukan.
-        
+
     Raises:
         NotFoundError: Jika aset tidak ditemukan.
     """

@@ -103,3 +103,4 @@ cd frontend && dotnet test
 | `configs/*.json` | Environment configuration |
 | `.kiro/steering/deployment-guide.md` | Panduan distribusi & instalasi |
 | `.kiro/steering/maintenance-guide.md` | Panduan maintenance & support |
+| `.kiro/steering/DBHUB_GUIDE.md` | DBHub setup & database management |

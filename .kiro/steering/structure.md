@@ -167,3 +167,5 @@ Proyek ini menggunakan **nested AGENTS.md** untuk memberikan context spesifik pe
 | `docs/data_schema.md` | Schema database |
 | `configs/*.json` | Konfigurasi environment |
 | `scripts/*.ps1` | Automation scripts |
+| `dbhub.toml` | DBHub multi-database configuration |
+| `.kiro/steering/DBHUB_GUIDE.md` | DBHub setup & usage guide |

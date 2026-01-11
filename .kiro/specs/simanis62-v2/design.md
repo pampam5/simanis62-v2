@@ -156,7 +156,7 @@ from typing import Optional, Dict, Any
 
 class SimanisException(Exception):
     """Base exception untuk semua error SIMANIS62."""
-    
+
     def __init__(
         self,
         message: str,
@@ -356,17 +356,17 @@ logger = logging.getLogger(__name__)
 
 class ErrorHandlingMiddleware(BaseHTTPMiddleware):
     """Middleware untuk menangani semua exception secara terpusat."""
-    
+
     async def dispatch(self, request: Request, call_next) -> Response:
         # Generate correlation ID untuk request tracking
         correlation_id = str(uuid4())[:8]
         correlation_id_ctx.set(correlation_id)
-        
+
         try:
             response = await call_next(request)
             response.headers["X-Correlation-ID"] = correlation_id
             return response
-            
+
         except SimanisException as e:
             # Custom exception - log dan return structured response
             logger.warning(
@@ -391,7 +391,7 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
                 ).model_dump(),
                 headers={"X-Correlation-ID": correlation_id}
             )
-            
+
         except Exception as e:
             # Unexpected exception - log full traceback
             logger.error(
@@ -483,7 +483,7 @@ from app.api.middleware import correlation_id_ctx
 
 class StructuredFormatter(logging.Formatter):
     """JSON formatter untuk structured logging."""
-    
+
     def format(self, record: logging.LogRecord) -> str:
         log_data: Dict[str, Any] = {
             "timestamp": datetime.utcnow().isoformat() + "Z",
@@ -492,15 +492,15 @@ class StructuredFormatter(logging.Formatter):
             "message": record.getMessage(),
             "correlation_id": correlation_id_ctx.get(""),
         }
-        
+
         # Add extra fields
         if hasattr(record, "extra"):
             log_data.update(record.extra)
-        
+
         # Add exception info if present
         if record.exc_info:
             log_data["exception"] = self.formatException(record.exc_info)
-        
+
         # Add location info for errors
         if record.levelno >= logging.ERROR:
             log_data["location"] = {
@@ -508,13 +508,13 @@ class StructuredFormatter(logging.Formatter):
                 "line": record.lineno,
                 "function": record.funcName
             }
-        
+
         return json.dumps(log_data, ensure_ascii=False, default=str)
 
 
 class HumanReadableFormatter(logging.Formatter):
     """Human-readable formatter untuk development."""
-    
+
     def format(self, record: logging.LogRecord) -> str:
         correlation_id = correlation_id_ctx.get("")
         prefix = f"[{correlation_id}] " if correlation_id else ""
@@ -523,18 +523,18 @@ class HumanReadableFormatter(logging.Formatter):
 
 def setup_logging() -> None:
     """Setup logging configuration."""
-    
+
     # Create logs directory
     log_dir = Path(settings.LOG_DIR)
     log_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Root logger
     root_logger = logging.getLogger()
     root_logger.setLevel(settings.LOG_LEVEL)
-    
+
     # Clear existing handlers
     root_logger.handlers.clear()
-    
+
     # === File Handler (JSON format) ===
     file_handler = RotatingFileHandler(
         filename=log_dir / "simanis62.log",
@@ -545,13 +545,13 @@ def setup_logging() -> None:
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(StructuredFormatter())
     root_logger.addHandler(file_handler)
-    
+
     # === Console Handler (Human-readable for dev) ===
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.DEBUG if settings.DEBUG else logging.INFO)
     console_handler.setFormatter(HumanReadableFormatter())
     root_logger.addHandler(console_handler)
-    
+
     # === Error File Handler (Errors only) ===
     error_handler = RotatingFileHandler(
         filename=log_dir / "simanis62_error.log",
@@ -562,7 +562,7 @@ def setup_logging() -> None:
     error_handler.setLevel(logging.ERROR)
     error_handler.setFormatter(StructuredFormatter())
     root_logger.addHandler(error_handler)
-    
+
     # === GlitchTip Integration ===
     if settings.GLITCHTIP_DSN:
         sentry_logging = LoggingIntegration(
@@ -580,7 +580,7 @@ def setup_logging() -> None:
 
 def filter_sensitive_data(event: Dict, hint: Dict) -> Dict:
     """Filter data sensitif sebelum kirim ke GlitchTip."""
-    
+
     # Filter request data
     if "request" in event:
         if "data" in event["request"]:
@@ -594,14 +594,14 @@ def filter_sensitive_data(event: Dict, hint: Dict) -> Dict:
                 k: v for k, v in event["request"]["headers"].items()
                 if k.lower() in safe_headers
             }
-    
+
     # Filter user data
     if "user" in event:
         if "email" in event["user"]:
             event["user"]["email"] = "[FILTERED]"
         if "username" in event["user"]:
             event["user"]["username"] = "[FILTERED]"
-    
+
     return event
 ```
 
@@ -619,7 +619,7 @@ logger = logging.getLogger(__name__)
 class AssetService:
     async def create_asset(self, data: AssetCreate) -> Asset:
         correlation_id = correlation_id_ctx.get()
-        
+
         logger.info(
             f"Creating asset: {data.nama_barang}",
             extra={
@@ -629,7 +629,7 @@ class AssetService:
                 "kode_barang": data.kode_barang
             }
         )
-        
+
         try:
             asset = await self.repository.create(data)
             logger.info(
@@ -642,7 +642,7 @@ class AssetService:
                 }
             )
             return asset
-            
+
         except DuplicateKodeBarangError as e:
             logger.warning(
                 f"Duplicate kode_barang: {data.kode_barang}",
@@ -682,18 +682,18 @@ logger = logging.getLogger(__name__)
 
 class DatabaseManager:
     """Manager untuk SQLite database dengan WAL mode."""
-    
+
     def __init__(self):
         self.engine = None
         self.session_factory = None
-    
+
     async def initialize(self) -> None:
         """Initialize database connection dengan optimal settings."""
-        
+
         # Ensure database directory exists
         db_path = Path(settings.DATABASE_PATH)
         db_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         # Create async engine dengan SQLite optimizations
         self.engine = create_async_engine(
             f"sqlite+aiosqlite:///{db_path}",
@@ -704,30 +704,30 @@ class DatabaseManager:
             },
             poolclass=StaticPool  # Single connection pool untuk SQLite
         )
-        
+
         # Configure SQLite pragmas untuk performance dan reliability
         async with self.engine.begin() as conn:
             # WAL mode untuk concurrent reads
             await conn.execute("PRAGMA journal_mode=WAL")
-            
+
             # Busy timeout untuk menghindari "database is locked"
             await conn.execute("PRAGMA busy_timeout=30000")  # 30 seconds
-            
+
             # Synchronous NORMAL untuk balance performance/safety
             await conn.execute("PRAGMA synchronous=NORMAL")
-            
+
             # Cache size (negative = KB, positive = pages)
             await conn.execute("PRAGMA cache_size=-64000")  # 64MB cache
-            
+
             # Foreign keys enforcement
             await conn.execute("PRAGMA foreign_keys=ON")
-            
+
             # Temp store in memory
             await conn.execute("PRAGMA temp_store=MEMORY")
-            
+
             # Memory-mapped I/O
             await conn.execute("PRAGMA mmap_size=268435456")  # 256MB
-        
+
         # Create session factory
         self.session_factory = async_sessionmaker(
             bind=self.engine,
@@ -735,7 +735,7 @@ class DatabaseManager:
             expire_on_commit=False,
             autoflush=False
         )
-        
+
         logger.info(
             "Database initialized",
             extra={
@@ -744,13 +744,13 @@ class DatabaseManager:
                 "busy_timeout": 30000
             }
         )
-    
+
     async def create_tables(self) -> None:
         """Create all tables dari SQLModel metadata."""
         async with self.engine.begin() as conn:
             await conn.run_sync(SQLModel.metadata.create_all)
         logger.info("Database tables created")
-    
+
     @asynccontextmanager
     async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
         """Get database session dengan automatic cleanup."""
@@ -764,7 +764,7 @@ class DatabaseManager:
             raise
         finally:
             await session.close()
-    
+
     async def close(self) -> None:
         """Close database connection."""
         if self.engine:
@@ -794,19 +794,19 @@ async def check_database_health() -> Dict[str, Any]:
         async with db_manager.get_session() as session:
             # Check connection
             result = await session.execute("SELECT 1")
-            
+
             # Check WAL mode
             wal_result = await session.execute("PRAGMA journal_mode")
             journal_mode = wal_result.scalar()
-            
+
             # Check integrity
             integrity_result = await session.execute("PRAGMA integrity_check")
             integrity = integrity_result.scalar()
-            
+
             # Get database size
             db_path = Path(settings.DATABASE_PATH)
             db_size = db_path.stat().st_size if db_path.exists() else 0
-            
+
             return {
                 "status": "healthy",
                 "journal_mode": journal_mode,
@@ -844,18 +844,18 @@ ModelType = TypeVar("ModelType", bound=SQLModel)
 
 class BaseRepository(Generic[ModelType]):
     """Base repository dengan CRUD operations."""
-    
+
     def __init__(self, model: Type[ModelType], session: AsyncSession):
         self.model = model
         self.session = session
-    
+
     async def get_by_id(self, id: UUID) -> Optional[ModelType]:
         """Get single record by ID."""
         result = await self.session.execute(
             select(self.model).where(self.model.id == str(id))
         )
         return result.scalar_one_or_none()
-    
+
     async def get_all(
         self,
         skip: int = 0,
@@ -864,28 +864,28 @@ class BaseRepository(Generic[ModelType]):
     ) -> List[ModelType]:
         """Get all records dengan pagination dan optional filters."""
         query = select(self.model)
-        
+
         if filters:
             for field, value in filters.items():
                 if hasattr(self.model, field) and value is not None:
                     query = query.where(getattr(self.model, field) == value)
-        
+
         query = query.offset(skip).limit(limit)
         result = await self.session.execute(query)
         return list(result.scalars().all())
-    
+
     async def count(self, filters: Optional[dict] = None) -> int:
         """Count records dengan optional filters."""
         query = select(func.count()).select_from(self.model)
-        
+
         if filters:
             for field, value in filters.items():
                 if hasattr(self.model, field) and value is not None:
                     query = query.where(getattr(self.model, field) == value)
-        
+
         result = await self.session.execute(query)
         return result.scalar() or 0
-    
+
     async def create(self, obj_in: SQLModel) -> ModelType:
         """Create new record."""
         db_obj = self.model.model_validate(obj_in)
@@ -893,27 +893,27 @@ class BaseRepository(Generic[ModelType]):
         await self.session.flush()
         await self.session.refresh(db_obj)
         return db_obj
-    
+
     async def update(self, id: UUID, obj_in: dict) -> Optional[ModelType]:
         """Update existing record."""
         db_obj = await self.get_by_id(id)
         if not db_obj:
             return None
-        
+
         for field, value in obj_in.items():
             if hasattr(db_obj, field):
                 setattr(db_obj, field, value)
-        
+
         await self.session.flush()
         await self.session.refresh(db_obj)
         return db_obj
-    
+
     async def delete(self, id: UUID) -> bool:
         """Hard delete record."""
         db_obj = await self.get_by_id(id)
         if not db_obj:
             return False
-        
+
         await self.session.delete(db_obj)
         await self.session.flush()
         return True
@@ -937,17 +937,17 @@ from app.repositories.base import BaseRepository
 
 class AssetRepository(BaseRepository[Aset]):
     """Repository khusus untuk Aset dengan business-specific queries."""
-    
+
     def __init__(self, session: AsyncSession):
         super().__init__(Aset, session)
-    
+
     async def get_by_kode_barang(self, kode_barang: str) -> Optional[Aset]:
         """Get asset by kode_barang."""
         result = await self.session.execute(
             select(Aset).where(Aset.kode_barang == kode_barang)
         )
         return result.scalar_one_or_none()
-    
+
     async def search(
         self,
         keyword: Optional[str] = None,
@@ -960,11 +960,11 @@ class AssetRepository(BaseRepository[Aset]):
     ) -> List[Aset]:
         """Search assets dengan multiple filters."""
         query = select(Aset)
-        
+
         # Exclude deleted unless explicitly requested
         if not include_deleted:
             query = query.where(Aset.status != StatusAset.DIHAPUS)
-        
+
         # Keyword search (case-insensitive)
         if keyword:
             keyword_filter = or_(
@@ -972,25 +972,25 @@ class AssetRepository(BaseRepository[Aset]):
                 Aset.nama_barang.ilike(f"%{keyword}%")
             )
             query = query.where(keyword_filter)
-        
+
         # Category filter
         if kategori_kib:
             query = query.where(Aset.kategori_kib == kategori_kib)
-        
+
         # Status filter
         if status:
             query = query.where(Aset.status == status)
-        
+
         # Room filter
         if ruangan_id:
             query = query.where(Aset.ruangan_id == str(ruangan_id))
-        
+
         # Pagination
         query = query.offset(skip).limit(limit)
-        
+
         result = await self.session.execute(query)
         return list(result.scalars().all())
-    
+
     async def get_next_nomor_register(self, kategori_kib: KategoriKIB) -> int:
         """Get next nomor_register untuk kategori KIB tertentu."""
         result = await self.session.execute(
@@ -999,7 +999,7 @@ class AssetRepository(BaseRepository[Aset]):
         )
         max_register = result.scalar() or 0
         return max_register + 1
-    
+
     async def get_for_kib_report(
         self,
         kategori_kib: KategoriKIB
@@ -1016,7 +1016,7 @@ class AssetRepository(BaseRepository[Aset]):
             .order_by(Aset.nomor_register)
         )
         return list(result.scalars().all())
-    
+
     async def soft_delete(
         self,
         id: UUID,
@@ -1027,12 +1027,12 @@ class AssetRepository(BaseRepository[Aset]):
         db_obj = await self.get_by_id(id)
         if not db_obj:
             return None
-        
+
         db_obj.status = StatusAset.DIHAPUS
         db_obj.deleted_by = str(deleted_by)
         db_obj.deleted_at = datetime.utcnow()
         db_obj.alasan_hapus = delete_reason
-        
+
         await self.session.flush()
         await self.session.refresh(db_obj)
         return db_obj
@@ -1059,7 +1059,7 @@ RepositoryType = TypeVar("RepositoryType", bound=BaseRepository)
 
 class BaseService(Generic[RepositoryType]):
     """Base service dengan common functionality."""
-    
+
     def __init__(self, repository: RepositoryType, session: AsyncSession):
         self.repository = repository
         self.session = session
@@ -1098,38 +1098,38 @@ logger = logging.getLogger(__name__)
 
 class AssetService(BaseService[AssetRepository]):
     """Service untuk business logic Aset."""
-    
+
     def __init__(self, session: AsyncSession):
         repository = AssetRepository(session)
         super().__init__(repository, session)
-    
+
     # === Validation Methods ===
-    
+
     def _validate_kode_barang_format(self, kode_barang: str) -> None:
         """Validate format kode_barang (XX.XX.XX.XXXX)."""
         import re
         pattern = r"^\d{2}\.\d{2}\.\d{2}\.\d{4}$"
         if not re.match(pattern, kode_barang):
             raise InvalidKodeBarangFormatError(kode_barang)
-    
+
     def _validate_tahun_perolehan(self, tahun: int) -> None:
         """Validate tahun_perolehan (1900 - current year)."""
         current_year = datetime.now().year
         if tahun < 1900 or tahun > current_year:
             raise InvalidTahunPerolehanError(tahun, current_year)
-    
+
     def _validate_harga(self, harga: int) -> None:
         """Validate harga (positive, max 999.999.999.999)."""
         if harga <= 0 or harga > 999_999_999_999:
             raise InvalidHargaError(harga)
-    
+
     def _validate_delete_reason(self, reason: str) -> None:
         """Validate delete reason (min 20 characters)."""
         if len(reason) < 20:
             raise DeleteReasonTooShortError(len(reason))
-    
+
     # === CRUD Operations ===
-    
+
     async def create_asset(
         self,
         data: AssetCreate,
@@ -1137,20 +1137,20 @@ class AssetService(BaseService[AssetRepository]):
     ) -> Aset:
         """Create new asset dengan validasi."""
         correlation_id = correlation_id_ctx.get()
-        
+
         # Validations
         self._validate_kode_barang_format(data.kode_barang)
         self._validate_tahun_perolehan(data.tahun_perolehan)
         self._validate_harga(data.harga)
-        
+
         # Check duplicate kode_barang
         existing = await self.repository.get_by_kode_barang(data.kode_barang)
         if existing:
             raise DuplicateKodeBarangError(data.kode_barang)
-        
+
         # Get next nomor_register
         nomor_register = await self.repository.get_next_nomor_register(data.kategori_kib)
-        
+
         # Create asset
         asset_data = data.model_dump()
         asset_data.update({
@@ -1159,9 +1159,9 @@ class AssetService(BaseService[AssetRepository]):
             "created_by": str(created_by),
             "created_at": datetime.utcnow()
         })
-        
+
         asset = await self.repository.create(Aset(**asset_data))
-        
+
         logger.info(
             f"Asset created: {asset.id}",
             extra={
@@ -1173,9 +1173,9 @@ class AssetService(BaseService[AssetRepository]):
                 "created_by": str(created_by)
             }
         )
-        
+
         return asset
-    
+
     async def update_asset(
         self,
         asset_id: UUID,
@@ -1184,29 +1184,29 @@ class AssetService(BaseService[AssetRepository]):
     ) -> Aset:
         """Update existing asset dengan validasi."""
         correlation_id = correlation_id_ctx.get()
-        
+
         # Get existing asset
         asset = await self.repository.get_by_id(asset_id)
         if not asset:
             raise AssetNotFoundError(str(asset_id))
-        
+
         # Cannot update if in mutation
         if asset.status == StatusAset.MUTASI:
             raise AssetInMutationError(str(asset_id))
-        
+
         # Validate fields if provided
         if data.tahun_perolehan:
             self._validate_tahun_perolehan(data.tahun_perolehan)
         if data.harga:
             self._validate_harga(data.harga)
-        
+
         # Check duplicate kode_barang if changed
         if data.kode_barang and data.kode_barang != asset.kode_barang:
             self._validate_kode_barang_format(data.kode_barang)
             existing = await self.repository.get_by_kode_barang(data.kode_barang)
             if existing:
                 raise DuplicateKodeBarangError(data.kode_barang)
-        
+
         # Auto-update status based on kondisi
         update_data = data.model_dump(exclude_unset=True)
         if "kondisi" in update_data:
@@ -1215,14 +1215,14 @@ class AssetService(BaseService[AssetRepository]):
                 update_data["status"] = StatusAset.RUSAK
             elif kondisi == Kondisi.BAIK and asset.status == StatusAset.RUSAK:
                 update_data["status"] = StatusAset.AKTIF
-        
+
         update_data.update({
             "updated_by": str(updated_by),
             "updated_at": datetime.utcnow()
         })
-        
+
         updated_asset = await self.repository.update(asset_id, update_data)
-        
+
         logger.info(
             f"Asset updated: {asset_id}",
             extra={
@@ -1233,9 +1233,9 @@ class AssetService(BaseService[AssetRepository]):
                 "updated_by": str(updated_by)
             }
         )
-        
+
         return updated_asset
-    
+
     async def delete_asset(
         self,
         asset_id: UUID,
@@ -1244,24 +1244,24 @@ class AssetService(BaseService[AssetRepository]):
     ) -> Aset:
         """Soft delete asset dengan reason."""
         correlation_id = correlation_id_ctx.get()
-        
+
         # Validate reason
         self._validate_delete_reason(delete_reason)
-        
+
         # Get existing asset
         asset = await self.repository.get_by_id(asset_id)
         if not asset:
             raise AssetNotFoundError(str(asset_id))
-        
+
         # Cannot delete if in mutation
         if asset.status == StatusAset.MUTASI:
             raise AssetInMutationError(str(asset_id))
-        
+
         # Soft delete
         deleted_asset = await self.repository.soft_delete(
             asset_id, deleted_by, delete_reason
         )
-        
+
         logger.info(
             f"Asset deleted: {asset_id}",
             extra={
@@ -1272,9 +1272,9 @@ class AssetService(BaseService[AssetRepository]):
                 "deleted_by": str(deleted_by)
             }
         )
-        
+
         return deleted_asset
-    
+
     async def search_assets(
         self,
         params: AssetSearchParams,
@@ -1290,12 +1290,12 @@ class AssetService(BaseService[AssetRepository]):
             skip=params.skip,
             limit=params.limit
         )
-        
+
         total = await self.repository.count({
             "kategori_kib": params.kategori_kib,
             "status": params.status
         })
-        
+
         return assets, total
 ```
 
@@ -1309,7 +1309,7 @@ from app.models.mutasi import Mutation, StatusMutasi
 
 class MutationService(BaseService[MutationRepository]):
     """Service untuk logic mutasi aset."""
-    
+
     async def create_request(self, data: MutationCreate, user_id: UUID) -> Mutation:
         """Create request mutasi baru."""
         # Logic implementation
@@ -1361,22 +1361,22 @@ async def get_current_user(
     """Get current authenticated user dari session cookie."""
     if not simanis62_session:
         raise AuthenticationError("Session tidak ditemukan")
-    
+
     # Verify session
     user_id = await verify_session(simanis62_session)
     if not user_id:
         raise AuthenticationError("Session tidak valid atau sudah expired")
-    
+
     # Get user
     user_repo = UserRepository(session)
     user = await user_repo.get_by_id(UUID(user_id))
-    
+
     if not user:
         raise AuthenticationError("User tidak ditemukan")
-    
+
     if user.status != "Aktif":
         raise AuthenticationError("Akun tidak aktif")
-    
+
     return user
 
 
@@ -1395,10 +1395,10 @@ async def require_export_permission(current_user: CurrentUser) -> User:
     """Require export permission (Admin atau Viewer dengan dapat_ekspor=True)."""
     if current_user.role == UserRole.ADMIN:
         return current_user
-    
+
     if current_user.role == UserRole.VIEWER and current_user.dapat_ekspor:
         return current_user
-    
+
     raise InsufficientPermissionError("Admin atau Kepala Sekolah")
 
 
@@ -1493,12 +1493,12 @@ async def search_assets(
         skip=(page - 1) * page_size,
         limit=page_size
     )
-    
+
     # Viewer tidak bisa lihat deleted assets
     include_deleted = current_user.role == "Admin"
-    
+
     assets, total = await service.search_assets(params, include_deleted)
-    
+
     return PaginatedResponse(
         data=[AssetResponse.model_validate(a) for a in assets],
         total=total,
@@ -2782,3 +2782,96 @@ Design document ini mendefinisikan arsitektur teknis SIMANIS62 V2 dengan fokus p
 
 *Terakhir diupdate: 10 Januari 2026*
 *Versi: 1.0*
+
+
+---
+
+## Development Tools & Database Management
+
+### DBHub Integration
+
+**Purpose:** Visual database management and debugging tool for SQLite database during development.
+
+**Configuration:** `dbhub.toml` with 3 database sources:
+- **development** - Daily development database (D:/simanis62-v2/backend/simanis62-dev.db)
+- **testing** - Unit testing in-memory database (:memory:)
+- **production** - Read-only production database (C:/ProgramData/Simanis62/simanis62.db)
+
+**Key Features:**
+- Visual interface untuk explore database schema
+- Query testing dan optimization dengan EXPLAIN QUERY PLAN
+- Multi-database support untuk different environments
+- MCP integration untuk database operations dari Kiro IDE
+
+**Usage During Development:**
+
+```powershell
+# Start DBHub server
+.\scripts\start_dbhub.ps1
+
+# Access workbench
+# Browser: http://localhost:8080
+```
+
+**Common Use Cases:**
+
+1. **Schema Validation**
+   - Verify table structures match design specifications
+   - Check indexes and foreign key constraints
+   - Validate data types and constraints
+
+2. **Query Testing**
+   - Test complex queries before implementing in code
+   - Optimize query performance with EXPLAIN QUERY PLAN
+   - Verify JOIN operations and relationships
+
+3. **Data Integrity Checks**
+   - Check for duplicate records
+   - Verify referential integrity
+   - Validate business rules at database level
+
+4. **Debugging**
+   - Inspect actual data in development database
+   - Verify mutation history and audit trails
+   - Check session data and user permissions
+
+**MCP Tools Available:**
+
+- `mcp_dbhub_search_objects_development` - Search tables, columns, indexes
+- `mcp_dbhub_execute_sql_development` - Execute SQL queries
+- `mcp_dbhub_search_objects_testing` - Search in test database
+- `mcp_dbhub_execute_sql_testing` - Execute queries in test database
+- `mcp_dbhub_search_objects_production` - Search in production (read-only)
+- `mcp_dbhub_execute_sql_production` - Execute queries in production (read-only)
+
+**Integration with Development Workflow:**
+
+```
+Phase 2: Database Models
+├── 1. Design model di SQLModel
+├── 2. Test di DBHub workbench ← DBHub
+├── 3. Implement di backend/app/models/
+├── 4. Verify di DBHub ← DBHub
+└── 5. Write unit tests
+
+Query Development
+├── 1. Write query di DBHub workbench ← DBHub
+├── 2. Test dengan sample data ← DBHub
+├── 3. Optimize dengan EXPLAIN QUERY PLAN ← DBHub
+├── 4. Implement di service layer
+└── 5. Verify results di DBHub ← DBHub
+```
+
+**Documentation:** See `.kiro/steering/DBHUB_GUIDE.md` for complete setup and usage guide.
+
+---
+
+## References
+
+- **AGENTS.md** - Master instructions dan tech stack overview
+- **requirements.md** - Complete requirements dengan DBHub development tools
+- **data_schema.md** - Database schema dengan DBHub validation notes
+- **api_contract.md** - API specifications dengan DBHub testing examples
+- **.kiro/steering/DBHUB_GUIDE.md** - Complete DBHub setup and usage guide
+- **dbhub.toml** - DBHub configuration file
+- **scripts/start_dbhub.ps1** - Quick start script untuk DBHub server

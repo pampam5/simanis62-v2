@@ -509,6 +509,15 @@ SIMANIS62 V2 adalah sistem manajemen aset sekolah berbasis desktop yang dirancan
 4. WHEN database operation fails, THE System SHALL rollback transaction and display error message
 5. THE System SHALL create automatic backup daily and retain 7 days of backups
 
+#### Development Tools
+
+**DBHub Integration:**
+- DBHub SHALL be used during development for database management and debugging
+- DBHub provides visual interface for exploring database schema and testing queries
+- DBHub configuration in `dbhub.toml` with 3 database sources: development, testing, production
+- DBHub available as MCP server in Kiro for database operations
+- See `.kiro/steering/DBHUB_GUIDE.md` for complete setup and usage guide
+
 ### Requirement 24: Session Management
 
 **User Story:** As the System, I want to manage user sessions securely, so that unauthorized access is prevented.

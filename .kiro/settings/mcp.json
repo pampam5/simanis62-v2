@@ -100,7 +100,7 @@
         "@bam-devcrew/maxential-thinking-mcp"
       ],
       "env": {},
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "think",
         "revise",
@@ -197,6 +197,24 @@
       ],
       "command": "uvx",
       "disabled": false
+    },
+    "dbhub": {
+      "command": "dbhub",
+      "args": [
+        "--config",
+        "D:\\simanis62-v2\\dbhub.toml"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "list_tables",
+        "describe_table",
+        "execute_query",
+        "get_schema",
+        "search_objects_development",
+        "execute_sql_development"
+      ],
+      "description": "DBHub - Visual database management untuk SIMANIS62 V2 (SQLite multi-environment)"
     }
   }
 }

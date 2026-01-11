@@ -39,7 +39,7 @@ The 9 SSOT documents for Simanis62 V2 are **realistic, logical, and mostly consi
 - **Tech Stack:** FastAPI (Python 3.12) + WPF .NET 8 + SQLite 3.x
 - **Target Environment:** Laptop kentang (RAM 2-4GB), < 10 concurrent users
 - **Database Design:** 11 tables with Single Table Inheritance - appropriate complexity
-- **Performance Targets:** 
+- **Performance Targets:**
   - < 5 seconds for search ✅ Achievable with proper indexing
   - < 10 seconds for report generation ✅ Realistic for 1000 assets
   - < 2 seconds for detail view ✅ Easy with SQLite

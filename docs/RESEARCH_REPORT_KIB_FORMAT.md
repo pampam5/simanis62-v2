@@ -1,7 +1,7 @@
 # Laporan Riset: Format KIB B BPAD DKI Jakarta
 
-**Tanggal:** 11 Januari 2026 (Koreksi Final: 11 Januari 2026)  
-**Peneliti:** Kiro AI Assistant  
+**Tanggal:** 11 Januari 2026 (Koreksi Final: 11 Januari 2026)
+**Peneliti:** Kiro AI Assistant
 **Tujuan:** Verifikasi format KIB B yang digunakan oleh BPAD DKI Jakarta untuk sekolah
 **Tools Verifikasi:** Exa Search, Tavily Search, Firecrawl, Fetch, Sequential Thinking, **Verifikasi Visual PDF**
 

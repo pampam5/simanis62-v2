@@ -29,24 +29,24 @@
 public partial class AsetViewModel : ObservableObject
 {
     private readonly IApiService _apiService;
-    
+
     [ObservableProperty]
     private string _namaBarang = string.Empty;
-    
+
     [ObservableProperty]
     private int _harga; // Rupiah penuh, BUKAN ribuan
-    
+
     [ObservableProperty]
     private string _kondisi = "Baik";
-    
+
     [ObservableProperty]
     private bool _isLoading;
-    
+
     public AsetViewModel(IApiService apiService)
     {
         _apiService = apiService;
     }
-    
+
     [RelayCommand]
     private async Task SimpanAsetAsync()
     {
@@ -82,10 +82,10 @@ public interface IApiService
 {
     [Get("/api/v1/aset")]
     Task<List<Aset>> GetAllAsetAsync();
-    
+
     [Get("/api/v1/aset/{id}")]
     Task<Aset> GetAsetByIdAsync(Guid id);
-    
+
     [Post("/api/v1/aset")]
     Task<Aset> CreateAsetAsync([Body] AsetCreate aset);
 }

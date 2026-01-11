@@ -23,7 +23,7 @@ Tujuan utama dari inisiatif ini adalah menciptakan lokasi yang terprediksi dan t
 ## 5. Proses Instalasi dan Lokasi
 Standar `AGENTS.md` secara teknis bukanlah sebuah perangkat lunak yang memerlukan proses instalasi sistem yang rumit. Namun, implementasinya mengikuti langkah-langkah berikut:
 
-*   **Lokasi Instalasi**: Berkas ini **WAJIB** diletakkan pada **Direktori Utama (Root Directory)** dari sebuah proyek. Misalnya: `/nama-proyek/AGENTS.md`. 
+*   **Lokasi Instalasi**: Berkas ini **WAJIB** diletakkan pada **Direktori Utama (Root Directory)** dari sebuah proyek. Misalnya: `/nama-proyek/AGENTS.md`.
     *   Beberapa platform canggih juga mendukung penempatan di dalam folder `.github/agents/` untuk instruksi yang lebih spesifik.
 *   **Mekanisme "Instalasi"**:
     1.  **Inisialisasi Manual**: Membuat berkas teks baru dengan nama `AGENTS.md`.

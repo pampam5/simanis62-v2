@@ -2,33 +2,33 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    
+
     <!-- Title -->
     <mxCell id="title" value="SEQUENCE DIAGRAM - GENERATE LAPORAN KIB" style="text;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="180" y="10" width="440" height="30" as="geometry"/>
     </mxCell>
-    
+
     <!-- Lifeline Boxes -->
     <mxCell id="user-box" value="User&#xa;(Admin/Kepsek)" style="rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="40" y="60" width="100" height="40" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="wpf-box" value="WPF Client" style="rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="200" y="60" width="100" height="40" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="api-box" value="FastAPI Server" style="rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="360" y="60" width="120" height="40" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="db-box" value="SQLite DB" style="rounded=0;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="540" y="60" width="100" height="40" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="excel-box" value="Excel Generator" style="rounded=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="700" y="60" width="120" height="40" as="geometry"/>
     </mxCell>
-    
+
     <!-- Lifeline Dashed Lines -->
     <mxCell id="user-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
@@ -36,40 +36,40 @@
         <mxPoint x="90" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="wpf-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="100" as="sourcePoint"/>
         <mxPoint x="250" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="api-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="100" as="sourcePoint"/>
         <mxPoint x="420" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="db-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="100" as="sourcePoint"/>
         <mxPoint x="590" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="excel-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="760" y="100" as="sourcePoint"/>
         <mxPoint x="760" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <!-- VIEW KIB REPORT -->
     <mxCell id="view-label" value="VIEW KIB REPORT (Preview)" style="text;fontSize=12;fontStyle=1;align=left;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
       <mxGeometry x="40" y="120" width="200" height="25" as="geometry"/>
     </mxCell>
-    
+
     <!-- Messages -->
     <mxCell id="msg1" value="1: pilih kategori KIB (A/B/C/D/E/F)" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
@@ -77,35 +77,35 @@
         <mxPoint x="250" y="160" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg2" value="2: pilih filter (tahun, kondisi, ruangan)" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="90" y="180" as="sourcePoint"/>
         <mxPoint x="250" y="180" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg3" value="3: GET /api/v1/kib/{kategori}?filters" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="200" as="sourcePoint"/>
         <mxPoint x="420" y="200" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg4" value="4: SELECT aset JOIN kib_x WHERE kategori &amp; filters" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="220" as="sourcePoint"/>
         <mxPoint x="590" y="220" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret4" value="5: data aset (max 1000 rows)" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="240" as="sourcePoint"/>
         <mxPoint x="420" y="240" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg5" value="6: hitung summary (total aset, total nilai)" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="260" as="sourcePoint"/>
@@ -116,40 +116,40 @@
         </Array>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret6" value="7: 200 OK + data KIB + summary" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="300" as="sourcePoint"/>
         <mxPoint x="250" y="300" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret7" value="8: tampilkan preview tabel KIB" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="320" as="sourcePoint"/>
         <mxPoint x="90" y="320" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <!-- EXPORT TO EXCEL -->
     <mxCell id="export-label" value="EXPORT TO EXCEL (Format BPAD DKI Jakarta)" style="text;fontSize=12;fontStyle=1;align=left;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
       <mxGeometry x="40" y="360" width="320" height="25" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="msg8" value="9: klik tombol 'Ekspor ke Excel'" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="90" y="400" as="sourcePoint"/>
         <mxPoint x="250" y="400" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg9" value="10: GET /api/v1/kib/{kategori}/export?filters" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="420" as="sourcePoint"/>
         <mxPoint x="420" y="420" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg10" value="11: validasi permission (Admin/Kepsek)" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="440" as="sourcePoint"/>
@@ -160,28 +160,28 @@
         </Array>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg11" value="12: SELECT aset JOIN kib_x WHERE status='Aktif'" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="480" as="sourcePoint"/>
         <mxPoint x="590" y="480" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret11" value="13: data aset lengkap" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="500" as="sourcePoint"/>
         <mxPoint x="420" y="500" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg12" value="14: generate Excel (18 kolom BPAD)" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="520" as="sourcePoint"/>
         <mxPoint x="760" y="520" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg13" value="15: buat header (PROVINSI, SKPD, dll)" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="760" y="540" as="sourcePoint"/>
@@ -192,7 +192,7 @@
         </Array>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg14" value="16: tulis data aset (format DD/MM/YYYY)" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="760" y="580" as="sourcePoint"/>
@@ -203,7 +203,7 @@
         </Array>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg15" value="17: tambah footer (tanda tangan)" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="760" y="620" as="sourcePoint"/>
@@ -214,31 +214,31 @@
         </Array>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret15" value="18: file Excel (.xlsx)" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="760" y="660" as="sourcePoint"/>
         <mxPoint x="420" y="660" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret16" value="19: 200 OK + Excel binary (Content-Type: xlsx)" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="680" as="sourcePoint"/>
         <mxPoint x="250" y="680" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret17" value="20: download file KIB_B_20260108.xlsx" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="700" as="sourcePoint"/>
         <mxPoint x="90" y="700" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="note" value="Performance: &lt; 10s query, &lt; 15s export" style="text;fontSize=10;fontStyle=2;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
       <mxGeometry x="300" y="740" width="240" height="30" as="geometry"/>
     </mxCell>
-    
+
   </root>
 </mxGraphModel>

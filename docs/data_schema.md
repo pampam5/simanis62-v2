@@ -34,6 +34,9 @@ Dokumen ini mencakup:
 | ORM | SQLModel | Latest | SQLAlchemy + Pydantic integration |
 | Python | Python | 3.12 | Backend runtime |
 | Backend | FastAPI | Latest | REST API framework |
+| **DB Management** | **DBHub** | **Latest** | **Visual database explorer & MCP integration (development tool)** |
+
+**DBHub Note:** DBHub digunakan sebagai development tool untuk database management, query testing, dan debugging. Konfigurasi tersedia di `dbhub.toml` dengan 3 database sources (development, testing, production). Lihat `.kiro/steering/DBHUB_GUIDE.md` untuk detail lengkap.
 
 ### 1.3 Prinsip Desain Database
 
@@ -904,68 +907,68 @@ class AsetKIBB(SQLModel, table=True):
     )
 
     # === KIB B Specific Fields (Format BPAD DKI Jakarta 18 Kolom) ===
-    
+
     # Kolom 6: SATU-AN
     satuan: str = Field(
         max_length=20,
         description="Satuan barang: BH/Unit/Set/Buah/Paket/Rim/Dus (required)"
     )
-    
+
     # Kolom 5: UKU-RAN
     ukuran_cc: Optional[str] = Field(
         default=None,
         max_length=50,
         description="Ukuran/CC (optional)"
     )
-    
+
     # Kolom 8: BA-HAN
     bahan: Optional[str] = Field(
         default=None,
         max_length=100,
         description="Material/bahan barang (optional)"
     )
-    
+
     # Kolom 9: MEREK
     merk: Optional[str] = Field(
         default=None,
         max_length=100,
         description="Merk barang (optional)"
     )
-    
+
     # Kolom 10: TYPE
     tipe: Optional[str] = Field(
         default=None,
         max_length=100,
         description="Tipe/model barang (optional)"
     )
-    
+
     # Kolom 11: TGL. BPKB/TGL. DOK.
     tanggal_dokumen: Optional[date] = Field(
         default=None,
         description="Tanggal BPKB/dokumen - format DD/MM/YYYY (optional)"
     )
-    
+
     # Kolom 12: NO. CHASIS/NO. RANGKA
     nomor_rangka: Optional[str] = Field(
         default=None,
         max_length=50,
         description="Nomor rangka/chasis - untuk kendaraan (optional)"
     )
-    
+
     # Kolom 13: NO. MESIN/NO. PABRIK
     nomor_mesin: Optional[str] = Field(
         default=None,
         max_length=50,
         description="Nomor mesin/pabrik (optional)"
     )
-    
+
     # Kolom 14: NOMOR POLISI
     nomor_polisi: Optional[str] = Field(
         default=None,
         max_length=20,
         description="Nomor polisi - untuk kendaraan (optional)"
     )
-    
+
     # Kolom 17: KAPITALISASI (Rp.)
     kapitalisasi: Optional[int] = Field(
         default=None,
@@ -973,7 +976,7 @@ class AsetKIBB(SQLModel, table=True):
         le=999999999999,
         description="Nilai kapitalisasi dalam Rupiah penuh (optional)"
     )
-    
+
     # Kolom 18: TOTAL (Rp.)
     total_harga: Optional[int] = Field(
         default=None,

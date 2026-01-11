@@ -437,7 +437,7 @@ public class KibBExporterBPAD
 ## 17. Status Verifikasi
 
 > ✅ **FORMAT 18 KOLOM TERVERIFIKASI**
-> 
+>
 > Format KIB B **18 kolom** telah diverifikasi dari dokumen resmi BPAD DKI Jakarta yang di-host di website BKD DKI Jakarta. Dokumen ini digunakan untuk Rekon Semester 1 Tahun 2024.
 >
 > **Sumber:** https://bkddki.jakarta.go.id/download/detail/N3Q3NR1JDVVKMY9

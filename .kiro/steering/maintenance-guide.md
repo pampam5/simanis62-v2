@@ -14,6 +14,24 @@ Dokumen ini berisi panduan untuk developer dalam melakukan maintenance dan suppo
 |------|--------|-------|
 | GlitchTip | Error monitoring | Rp 50-100k/bulan (VPS) |
 | RustDesk | Remote support | Gratis (self-hosted) |
+| DBHub | Database management & debugging | Gratis (development tool) |
+
+### GlitchTip
+- Self-hosted error monitoring
+- Sentry SDK compatible
+- Dashboard: https://glitchtip.yourdomain.com
+
+### RustDesk
+- Self-hosted remote desktop
+- End-to-end encryption
+- User harus approve setiap koneksi
+
+### DBHub
+- Visual database explorer
+- Query testing dan debugging
+- MCP integration untuk Kiro
+- **Use Case**: Debug database issues, verify data integrity
+- **Setup**: See `.kiro/steering/DBHUB_GUIDE.md`
 | WhatsApp | Komunikasi dengan user | Gratis |
 | Velopack | Auto-update | Gratis |
 
@@ -196,10 +214,37 @@ Terima kasih 🙏
 - Retain 7 hari terakhir
 
 ### Cek Integrity Database
+
+**Via DBHub (Recommended)**:
+```
+1. Start DBHub: .\scripts\start_dbhub.ps1
+2. Open workbench: http://localhost:8080
+3. Select production database (read-only)
+4. Run query: PRAGMA integrity_check;
+5. Verify results
+```
+
+**Via Kiro MCP**:
+```
+User: "Check database integrity for production"
+Kiro: [calls mcp_dbhub_execute_sql_production with sql="PRAGMA integrity_check;"]
+```
+
+**Via SQLite CLI**:
 ```sql
 -- Jalankan di SQLite CLI atau DB Browser
 PRAGMA integrity_check;
 ```
+
+### Debug Database Issues dengan DBHub
+
+DBHub sangat berguna untuk:
+- **Explore schema**: List tables, columns, indexes
+- **Test queries**: Verify query results sebelum implement di code
+- **Check data**: Verify data integrity dan relationships
+- **Performance**: Use EXPLAIN QUERY PLAN untuk optimization
+
+**Setup DBHub**: Lihat `.kiro/steering/DBHUB_GUIDE.md`
 
 ### Vacuum Database (Jika Lambat)
 ```sql
@@ -226,3 +271,4 @@ VACUUM;
 #[[file:AGENTS.md]]
 #[[file:.kiro/steering/deployment-guide.md]]
 #[[file:.kiro/steering/security-policies.md]]
+#[[file:.kiro/steering/DBHUB_GUIDE.md]]

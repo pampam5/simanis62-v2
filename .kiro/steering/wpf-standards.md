@@ -43,23 +43,23 @@ using CommunityToolkit.Mvvm.Input;
 public partial class AsetListViewModel : ObservableObject
 {
     private readonly IApiService _apiService;
-    
+
     [ObservableProperty]
     private string _searchQuery = string.Empty;
-    
+
     [ObservableProperty]
     private bool _isLoading;
-    
+
     [ObservableProperty]
     private Aset? _selectedAset;
-    
+
     public ObservableCollection<Aset> DaftarAset { get; } = new();
-    
+
     public AsetListViewModel(IApiService apiService)
     {
         _apiService = apiService;
     }
-    
+
     [RelayCommand]
     private async Task LoadDataAsync()
     {
@@ -78,7 +78,7 @@ public partial class AsetListViewModel : ObservableObject
             IsLoading = false;
         }
     }
-    
+
     [RelayCommand]
     private async Task SearchAsync()
     {
@@ -96,11 +96,11 @@ public partial class AsetListViewModel : ObservableObject
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:Simanis62.WPF.ViewModels">
-    
+
     <UserControl.DataContext>
         <vm:AsetListViewModel />
     </UserControl.DataContext>
-    
+
     <Grid>
         <!-- Search Bar -->
         <md:Card Margin="16">
@@ -114,7 +114,7 @@ public partial class AsetListViewModel : ObservableObject
                 </Button>
             </StackPanel>
         </md:Card>
-        
+
         <!-- Data Grid -->
         <DataGrid ItemsSource="{Binding DaftarAset}"
                   SelectedItem="{Binding SelectedAset}"
@@ -127,7 +127,7 @@ public partial class AsetListViewModel : ObservableObject
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
             </DataGrid.Columns>
         </DataGrid>
-        
+
         <!-- Loading Indicator -->
         <md:ProgressBar IsIndeterminate="True"
                         Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}}" />
@@ -146,16 +146,16 @@ public interface IApiService
     Task<ApiResponse<List<Aset>>> GetAsetListAsync(
         [Query] int page = 1,
         [Query] int limit = 100);
-    
+
     [Get("/api/v1/aset/{id}")]
     Task<ApiResponse<Aset>> GetAsetByIdAsync(Guid id);
-    
+
     [Post("/api/v1/aset")]
     Task<ApiResponse<Aset>> CreateAsetAsync([Body] AsetCreate data);
-    
+
     [Put("/api/v1/aset/{id}")]
     Task<ApiResponse<Aset>> UpdateAsetAsync(Guid id, [Body] AsetUpdate data);
-    
+
     [Delete("/api/v1/aset/{id}")]
     Task<ApiResponse<object>> DeleteAsetAsync(Guid id);
 }
@@ -218,7 +218,7 @@ public partial class App : Application
                 o.MinimumEventLevel = Serilog.Events.LogEventLevel.Error;
             })
             .CreateLogger();
-        
+
         // Global exception handler
         AppDomain.CurrentDomain.UnhandledException += (s, args) =>
         {
@@ -226,17 +226,17 @@ public partial class App : Application
             Log.Fatal(ex, "Unhandled exception");
             SentrySdk.CaptureException(ex);
         };
-        
+
         DispatcherUnhandledException += (s, args) =>
         {
             Log.Error(args.Exception, "Dispatcher unhandled exception");
             SentrySdk.CaptureException(args.Exception);
             args.Handled = true; // Prevent crash, show error dialog
         };
-        
+
         base.OnStartup(e);
     }
-    
+
     protected override void OnExit(ExitEventArgs e)
     {
         Log.CloseAndFlush();
@@ -256,12 +256,12 @@ public partial class AsetListViewModel : ObservableObject
     {
         Log.Information("Loading aset list...");
         IsLoading = true;
-        
+
         try
         {
             var result = await _apiService.GetAsetListAsync();
             Log.Information("Loaded {Count} aset", result.Data.Count);
-            
+
             DaftarAset.Clear();
             foreach (var aset in result.Data)
             {

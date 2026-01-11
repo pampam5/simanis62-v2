@@ -22,14 +22,14 @@ async def get_aset_by_id(aset_id):
 ```python
 async def create_aset(data: AsetCreate, db: Session) -> Aset:
     """Membuat aset baru di database.
-    
+
     Args:
         data: Data aset yang akan dibuat.
         db: Session database.
-        
+
     Returns:
         Objek Aset yang baru dibuat.
-        
+
     Raises:
         HTTPException: Jika validasi gagal.
     """
@@ -89,7 +89,7 @@ class StatusAset(str, Enum):
 
 class Aset(SQLModel, table=True):
     __tablename__ = "aset"
-    
+
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     nama_barang: str = Field(max_length=200, index=True)
     kode_barang: str = Field(max_length=50, unique=True)
@@ -177,7 +177,7 @@ sentry_sdk.init(
 def setup_logging():
     logger = logging.getLogger("simanis62")
     logger.setLevel(logging.INFO)
-    
+
     # Rotating file handler (10MB, keep 5 files)
     file_handler = RotatingFileHandler(
         "logs/simanis62.log",
@@ -188,7 +188,7 @@ def setup_logging():
     file_handler.setFormatter(logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     ))
-    
+
     logger.addHandler(file_handler)
     return logger
 ```

@@ -1,0 +1,20 @@
+# DBHub Configuration for SIMANIS62 V2
+# Multi-database setup untuk development, testing, dan production
+
+[[sources]]
+id = "development"
+name = "SIMANIS62 Development"
+type = "sqlite"
+database = "D:/simanis62-v2/backend/simanis62-dev.db"
+
+[[sources]]
+id = "testing"
+name = "SIMANIS62 Testing"
+type = "sqlite"
+database = ":memory:"
+
+[[sources]]
+id = "production"
+name = "SIMANIS62 Production"
+type = "sqlite"
+database = "C:/ProgramData/Simanis62/simanis62.db"

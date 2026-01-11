@@ -2,29 +2,29 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    
+
     <!-- Title -->
     <mxCell id="title" value="SEQUENCE DIAGRAM - MUTASI ASET" style="text;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="200" y="10" width="400" height="30" as="geometry"/>
     </mxCell>
-    
+
     <!-- Lifeline Boxes -->
     <mxCell id="admin-box" value="Admin Sekolah" style="rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="40" y="60" width="100" height="40" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="wpf-box" value="WPF Client" style="rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="200" y="60" width="100" height="40" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="api-box" value="FastAPI Server" style="rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="360" y="60" width="120" height="40" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="db-box" value="SQLite DB" style="rounded=0;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;align=center;" vertex="1" parent="1">
       <mxGeometry x="540" y="60" width="100" height="40" as="geometry"/>
     </mxCell>
-    
+
     <!-- Lifeline Dashed Lines -->
     <mxCell id="admin-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
@@ -32,33 +32,33 @@
         <mxPoint x="90" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="wpf-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="100" as="sourcePoint"/>
         <mxPoint x="250" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="api-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="100" as="sourcePoint"/>
         <mxPoint x="420" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="db-line" value="" style="endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="100" as="sourcePoint"/>
         <mxPoint x="590" y="800" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <!-- CREATE MUTATION FLOW -->
     <mxCell id="create-label" value="CREATE MUTATION" style="text;fontSize=12;fontStyle=1;align=left;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
       <mxGeometry x="40" y="120" width="140" height="25" as="geometry"/>
     </mxCell>
-    
+
     <!-- Messages -->
     <mxCell id="msg1" value="1: pilih aset &amp; ruangan tujuan" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
@@ -66,21 +66,21 @@
         <mxPoint x="250" y="160" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg2" value="2: input alasan &amp; kondisi saat mutasi" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="90" y="180" as="sourcePoint"/>
         <mxPoint x="250" y="180" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg3" value="3: POST /api/v1/mutasi" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="200" as="sourcePoint"/>
         <mxPoint x="420" y="200" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg4" value="4: validasi business rules" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="220" as="sourcePoint"/>
@@ -91,158 +91,158 @@
         </Array>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg5" value="5: BEGIN TRANSACTION" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="260" as="sourcePoint"/>
         <mxPoint x="590" y="260" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg6" value="6: UPDATE aset SET status='Mutasi'" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="280" as="sourcePoint"/>
         <mxPoint x="590" y="280" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret6" value="7: OK" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="300" as="sourcePoint"/>
         <mxPoint x="420" y="300" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg7" value="8: INSERT riwayat_mutasi (status='Dalam Proses')" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="320" as="sourcePoint"/>
         <mxPoint x="590" y="320" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret7" value="9: mutasi_id" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="340" as="sourcePoint"/>
         <mxPoint x="420" y="340" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg8" value="10: INSERT audit_trail" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="360" as="sourcePoint"/>
         <mxPoint x="590" y="360" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret8" value="11: OK" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="380" as="sourcePoint"/>
         <mxPoint x="420" y="380" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg9" value="12: COMMIT" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="400" as="sourcePoint"/>
         <mxPoint x="590" y="400" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret9" value="13: OK" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="420" as="sourcePoint"/>
         <mxPoint x="420" y="420" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret10" value="14: 201 Created + mutasi_id" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="440" as="sourcePoint"/>
         <mxPoint x="250" y="440" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret11" value="15: tampilkan notifikasi sukses" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="460" as="sourcePoint"/>
         <mxPoint x="90" y="460" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <!-- COMPLETE MUTATION FLOW -->
     <mxCell id="complete-label" value="COMPLETE MUTATION (setelah aset tiba)" style="text;fontSize=12;fontStyle=1;align=left;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
       <mxGeometry x="40" y="500" width="280" height="25" as="geometry"/>
     </mxCell>
-    
+
     <mxCell id="msg12" value="16: klik konfirmasi selesai" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="90" y="540" as="sourcePoint"/>
         <mxPoint x="250" y="540" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg13" value="17: PUT /api/v1/mutasi/{id}/complete" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="560" as="sourcePoint"/>
         <mxPoint x="420" y="560" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg14" value="18: BEGIN TRANSACTION" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="580" as="sourcePoint"/>
         <mxPoint x="590" y="580" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg15" value="19: UPDATE aset SET ruangan_id, status='Aktif'" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="600" as="sourcePoint"/>
         <mxPoint x="590" y="600" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg16" value="20: UPDATE mutasi SET status='Selesai'" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="620" as="sourcePoint"/>
         <mxPoint x="590" y="620" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg17" value="21: INSERT audit_trail" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="640" as="sourcePoint"/>
         <mxPoint x="590" y="640" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="msg18" value="22: COMMIT" style="endArrow=classic;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="660" as="sourcePoint"/>
         <mxPoint x="590" y="660" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret18" value="23: OK" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="590" y="680" as="sourcePoint"/>
         <mxPoint x="420" y="680" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret19" value="24: 200 OK" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="420" y="700" as="sourcePoint"/>
         <mxPoint x="250" y="700" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
     <mxCell id="ret20" value="25: tampilkan mutasi selesai" style="endArrow=open;dashed=1;" edge="1" parent="1">
       <mxGeometry relative="1" as="geometry">
         <mxPoint x="250" y="720" as="sourcePoint"/>
         <mxPoint x="90" y="720" as="targetPoint"/>
       </mxGeometry>
     </mxCell>
-    
+
   </root>
 </mxGraphModel>

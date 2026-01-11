@@ -267,23 +267,23 @@ async def create_aset(
     session: Session
 ) -> Aset:
     """Membuat aset baru di database.
-    
+
     Fungsi ini memvalidasi data input, mengecek duplikasi kode barang,
     dan menyimpan aset baru ke database.
-    
+
     Args:
         data: Data aset yang akan dibuat (dari request body).
         user_id: UUID user yang membuat aset.
         session: Database session untuk transaksi.
-    
+
     Returns:
         Objek Aset yang baru dibuat dengan ID yang di-generate.
-    
+
     Raises:
         ValidationError: Jika kode barang sudah digunakan.
         BusinessRuleError: Jika harga negatif.
         DatabaseError: Jika gagal menyimpan ke database.
-    
+
     Example:
         >>> aset = await create_aset(
         ...     data=AsetCreate(nama_barang="Laptop", kode_barang="02.06.01.0001"),
@@ -483,31 +483,31 @@ jobs:
     defaults:
       run:
         working-directory: backend
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install ruff mypy pytest pytest-cov
-      
+
       - name: Run Ruff (lint + format check)
         run: |
           ruff check .
           ruff format --check .
-      
+
       - name: Run MyPy
         run: mypy app/
-      
+
       - name: Run Tests
         run: pytest --cov=app --cov-report=xml
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v4
         with:
@@ -520,3 +520,4 @@ jobs:
 
 #[[file:backend/AGENTS.md]]
 #[[file:backend/requirements.txt]]
+#[[file:.kiro/steering/DBHUB_GUIDE.md]]

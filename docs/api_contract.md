@@ -48,6 +48,9 @@ Dokumen ini mencakup:
 | Database | SQLite | 3.x | WAL mode untuk concurrency |
 | Authentication | Session-based | - | Cookie dengan HttpOnly flag |
 | Serialization | JSON | - | Standard format |
+| **DB Management** | **DBHub** | **Latest** | **Visual database explorer & MCP integration (development/testing tool)** |
+
+**DBHub Note:** DBHub dapat digunakan untuk testing API endpoints dengan database queries. Konfigurasi tersedia di `dbhub.toml`. Lihat `.kiro/steering/DBHUB_GUIDE.md` untuk detail lengkap.
 
 ---
 

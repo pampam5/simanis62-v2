@@ -39,6 +39,7 @@
 ### Monitoring & Support
 - **GlitchTip** - Error monitoring (self-hosted, Sentry SDK compatible)
 - **RustDesk** - Remote support (self-hosted, gratis untuk komersial)
+- **DBHub** - Database management & debugging (visual explorer, MCP integration)
 - **Python logging** - Structured logging untuk backend
 - **Serilog** - Structured logging untuk WPF frontend
 
@@ -200,7 +201,51 @@ iscc installer/simanis62.iss
 
 # Run all tests
 ./scripts/run_tests.ps1
+
+# Start DBHub for database management
+./scripts/start_dbhub.ps1
 ```
+
+---
+
+## Database Management (DBHub)
+
+### Overview
+DBHub adalah MCP server untuk database management yang menyediakan:
+- Visual interface untuk explore database
+- Query testing dan optimization
+- Multi-database support (dev/test/prod)
+- MCP tools untuk database operations
+
+### Quick Start
+```powershell
+# Start DBHub server
+.\scripts\start_dbhub.ps1
+
+# Access workbench
+# Browser: http://localhost:8080
+```
+
+### Configuration
+File `dbhub.toml` dengan 3 database sources:
+- **development** - Daily development (D:/simanis62-v2/backend/simanis62-dev.db)
+- **testing** - Unit testing (:memory:)
+- **production** - Read-only production (C:/ProgramData/Simanis62/simanis62.db)
+
+### MCP Integration
+DBHub tersedia sebagai MCP server di Kiro untuk:
+- Search database objects (tables, columns, indexes)
+- Execute SQL queries
+- Verify data integrity
+- Debug database issues
+
+### Use Cases
+- **Phase 2 Development**: Test queries sebelum implement di code
+- **Debugging**: Verify data integrity dan relationships
+- **Performance**: Use EXPLAIN QUERY PLAN untuk optimization
+- **Maintenance**: Check database health di production (read-only)
+
+**Detail Lengkap**: Lihat `.kiro/steering/DBHUB_GUIDE.md`
 
 ---
 
@@ -230,13 +275,13 @@ iscc installer/simanis62.iss
 # Contoh yang BENAR
 async def get_aset_by_id(aset_id: UUID) -> Aset:
     """Mengambil data aset berdasarkan ID.
-    
+
     Args:
         aset_id: UUID dari aset yang dicari.
-        
+
     Returns:
         Objek Aset jika ditemukan.
-        
+
     Raises:
         HTTPException: Jika aset tidak ditemukan.
     """
@@ -258,7 +303,7 @@ public partial class AsetViewModel : ObservableObject
 {
     [ObservableProperty]
     private string _namaBarang = string.Empty;
-    
+
     [RelayCommand]
     private async Task SimpanAsetAsync()
     {
@@ -558,7 +603,7 @@ logging.basicConfig(
 ```csharp
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
-    .WriteTo.File("logs/simanis62-wpf.log", 
+    .WriteTo.File("logs/simanis62-wpf.log",
         rollingInterval: RollingInterval.Day,
         retainedFileCountLimit: 7)
     .WriteTo.Sentry(o => o.Dsn = "YOUR_GLITCHTIP_DSN")
@@ -632,6 +677,22 @@ VACUUM;
 PRAGMA journal_mode;
 ```
 
+### Maintenance dengan DBHub
+DBHub sangat berguna untuk database maintenance:
+```powershell
+# Start DBHub
+.\scripts\start_dbhub.ps1
+
+# Via Workbench (http://localhost:8080):
+# - Select production database (read-only)
+# - Run: PRAGMA integrity_check;
+# - Verify results
+
+# Via Kiro MCP:
+# User: "Check database integrity for production"
+# Kiro: [calls mcp_dbhub_execute_sql_production]
+```
+
 ### Recovery dari Backup
 1. Tutup aplikasi SIMANIS62
 2. Rename `simanis62.db` → `simanis62.db.old`
@@ -671,6 +732,7 @@ Untuk detail implementasi lebih lengkap, lihat file di `.kiro/steering/`:
 | `code-quality.md` | Ruff, MyPy, pre-commit, testing standards |
 | `deployment-guide.md` | Panduan deployment & troubleshooting |
 | `maintenance-guide.md` | Panduan maintenance & template komunikasi |
+| `DBHUB_GUIDE.md` | DBHub setup, usage, & MCP integration |
 
 ---
 

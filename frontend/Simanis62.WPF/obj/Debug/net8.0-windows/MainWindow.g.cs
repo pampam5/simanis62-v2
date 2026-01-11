@@ -33,15 +33,15 @@ using simanis62;
 
 
 namespace simanis62 {
-    
-    
+
+
     /// <summary>
     /// MainWindow
     /// </summary>
     public partial class MainWindow : System.Windows.Window, System.Windows.Markup.IComponentConnector {
-        
+
         private bool _contentLoaded;
-        
+
         /// <summary>
         /// InitializeComponent
         /// </summary>
@@ -53,14 +53,14 @@ namespace simanis62 {
             }
             _contentLoaded = true;
             System.Uri resourceLocater = new System.Uri("/Frontend;V1.0.0.0;component/mainwindow.xaml", System.UriKind.Relative);
-            
+
             #line 1 "..\..\..\MainWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
-            
+
             #line default
             #line hidden
         }
-        
+
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.1.0")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
@@ -72,4 +72,3 @@ namespace simanis62 {
         }
     }
 }
-

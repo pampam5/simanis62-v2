@@ -51,7 +51,7 @@ from uuid import UUID, uuid4
 
 class Aset(SQLModel, table=True):
     __tablename__ = "aset"
-    
+
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     kode_barang: str = Field(index=True, unique=True)
     nama_barang: str
@@ -60,7 +60,7 @@ class Aset(SQLModel, table=True):
     harga: int  # Rupiah penuh, BUKAN ribuan
     kondisi: str  # Baik, Rusak Ringan, Rusak Berat
     status: str = Field(default="Baru")  # Baru, Aktif, Mutasi, Rusak, Dihapus
-    
+
     # Audit trail
     dibuat_oleh: UUID
     dibuat_pada: datetime = Field(default_factory=datetime.utcnow)
