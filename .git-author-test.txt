@@ -1,4 +1,0 @@
-Git author configuration test
-Username: papam5
-Email: rahmadalpamsihasibuan@gmail.com
-Date: 2026-01-11
