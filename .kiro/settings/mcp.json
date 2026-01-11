@@ -1,0 +1,202 @@
+{
+  "mcpServers": {
+    "local-image-analysis": {
+      "command": "python",
+      "args": [
+        "d:\\local-mcp-image-analysis-server\\enhanced_image_analysis_server.py"
+      ],
+      "env": {},
+      "disabled": true,
+      "autoApprove": [
+        "ai_analyze_single_image",
+        "ai_analyze_directory_images",
+        "extract_comprehensive_metadata",
+        "organize_images_by_content"
+      ],
+      "description": "Local image analysis MCP server for analyzing screenshots and images"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "D:\\sistem manajemen aset sekolah project\\docs",
+        "D:\\sistem manajemen aset sekolah project\\simanis62"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "read_file",
+        "list_directory",
+        "search_files",
+        "read_text_file"
+      ],
+      "description": "Direct access ke dokumentasi dan source code Simanis62 V2"
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "create_thought_tree",
+        "add_thought",
+        "get_thought_tree",
+        "sequentialthinking"
+      ],
+      "description": "Structured reasoning untuk complex problem solving"
+    },
+    "serena": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@serenaai/mcp-server-serena"
+      ],
+      "env": {},
+      "disabled": true,
+      "autoApprove": [
+        "serena_create_task",
+        "serena_list_tasks",
+        "serena_update_task",
+        "serena_get_task"
+      ],
+      "description": "Serena AI task management and project planning"
+    },
+    "basic-memory": {
+      "command": "uvx",
+      "args": [
+        "basic-memory",
+        "mcp"
+      ],
+      "env": {
+        "BASIC_MEMORY_PROJECT_DIR": "D:\\sistem manajemen aset sekolah project\\data\\basic-memory"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "write_note",
+        "read_note",
+        "view_note",
+        "edit_note",
+        "delete_note",
+        "search_notes",
+        "list_entities",
+        "get_entity",
+        "search_entities",
+        "list_relations",
+        "create_graph",
+        "list_projects",
+        "get_project",
+        "set_project"
+      ],
+      "description": "Basic Memory - persistent knowledge base dengan Markdown files dan knowledge graph"
+    },
+    "maxential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@bam-devcrew/maxential-thinking-mcp"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "think",
+        "revise",
+        "complete",
+        "branch",
+        "switch_branch",
+        "list_branches",
+        "get_branch",
+        "close_branch",
+        "merge_branch",
+        "get_thought",
+        "get_history",
+        "reset",
+        "tag",
+        "search",
+        "export",
+        "visualize"
+      ],
+      "description": "Advanced branching reasoning dengan git-like workflow, tagging, search, dan Mermaid visualization"
+    },
+    "next-ai-drawio": {
+      "command": "npx",
+      "args": [
+        "@next-ai-drawio/mcp-server@latest"
+      ],
+      "env": {},
+      "disabled": true,
+      "autoApprove": [
+        "start_session",
+        "create_new_diagram",
+        "edit_diagram",
+        "get_diagram",
+        "export_diagram"
+      ],
+      "description": "AI-powered Draw.io diagram creation with real-time browser preview via MCP"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ],
+      "env": {},
+      "disabled": true,
+      "autoApprove": [
+        "browser_navigate",
+        "browser_take_screenshot",
+        "browser_snapshot",
+        "browser_click",
+        "browser_fill",
+        "browser_wait_for",
+        "browser_handle_dialog",
+        "browser_evaluate",
+        "browser_press_key"
+      ],
+      "description": "Browser automation with Playwright for visual validation and web testing"
+    },
+    "awslabs.aws-diagram-mcp-server": {
+      "command": "uvx",
+      "args": [
+        "awslabs.aws-diagram-mcp-server"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "generate_diagram",
+        "list_icons",
+        "get_diagram_examples"
+      ],
+      "description": "AWS Architecture Diagram generator using Python diagrams package with official AWS icons"
+    },
+    "awslabs.aws-documentation-mcp-server": {
+      "command": "uvx",
+      "args": [
+        "awslabs.aws-documentation-mcp-server@latest"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "search_documentation",
+        "read_documentation",
+        "recommend"
+      ],
+      "description": "AWS Documentation search and best practices recommendations"
+    },
+    "sqlite": {
+      "args": [
+        "mcp-server-sqlite",
+        "--db-path",
+        "C:\\ProgramData\\Simanis62\\simanis62.db"
+      ],
+      "command": "uvx",
+      "disabled": false
+    }
+  }
+}

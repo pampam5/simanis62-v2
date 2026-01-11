@@ -1,0 +1,21 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+pydantic
+pydantic-settings
+
+# Security
+bcrypt
+passlib[bcrypt]
+
+# Monitoring
+sentry-sdk[fastapi]
+
+# Development & Code Quality
+ruff
+mypy
+pytest
+pytest-cov
+pytest-asyncio
+pre-commit
+httpx

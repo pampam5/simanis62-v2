@@ -1,0 +1,149 @@
+<mxGraphModel>
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    
+    <!-- Title -->
+    <mxCell id="title" value="COMPONENT &amp; DEPLOYMENT DIAGRAM - SIMANIS62 V2" style="text;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+      <mxGeometry x="150" y="10" width="500" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- COMPONENT LAYER -->
+    <mxCell id="comp-label" value="COMPONENT ARCHITECTURE" style="text;fontSize=14;fontStyle=1;align=left;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="40" y="60" width="240" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- UI Layer -->
+    <mxCell id="ui-layer" value="UI LAYER" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="110" width="240" height="120" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="wpf-comp" value="«component»&#xa;WPF Client&#xa;(.NET 8 + MVVM)" style="rounded=0;fillColor=#ffffff;strokeColor=#6c8ebf;fontStyle=1;align=center;" vertex="1" parent="ui-layer">
+      <mxGeometry x="40" y="50" width="160" height="50" as="geometry"/>
+    </mxCell>
+    
+    <!-- Business Layer -->
+    <mxCell id="biz-layer" value="BUSINESS LAYER" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="320" y="110" width="240" height="120" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="api-comp" value="«component»&#xa;FastAPI Server&#xa;(Python 3.12)" style="rounded=0;fillColor=#ffffff;strokeColor=#82b366;fontStyle=1;align=center;" vertex="1" parent="biz-layer">
+      <mxGeometry x="40" y="50" width="160" height="50" as="geometry"/>
+    </mxCell>
+    
+    <!-- Data Layer -->
+    <mxCell id="data-layer" value="DATA LAYER" style="swimlane;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="600" y="110" width="180" height="120" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="db-comp" value="«component»&#xa;SQLite DB&#xa;(WAL Mode)" style="shape=cylinder3;fillColor=#ffffff;strokeColor=#d6b656;fontStyle=1;align=center;" vertex="1" parent="data-layer">
+      <mxGeometry x="40" y="45" width="100" height="60" as="geometry"/>
+    </mxCell>
+    
+    <!-- Utility Layer -->
+    <mxCell id="util-layer" value="UTILITY LAYER" style="swimlane;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="320" y="260" width="240" height="120" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="excel-comp" value="«component»&#xa;Excel Generator&#xa;(ClosedXML)" style="rounded=0;fillColor=#ffffff;strokeColor=#9673a6;fontStyle=1;align=center;" vertex="1" parent="util-layer">
+      <mxGeometry x="40" y="50" width="160" height="50" as="geometry"/>
+    </mxCell>
+    
+    <!-- Dependencies -->
+    <mxCell id="dep1" value="HTTP/REST&#xa;(port 8000)" style="endArrow=open;dashed=1;strokeWidth=2;" edge="1" parent="1" source="wpf-comp" target="api-comp">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="dep2" value="SQLModel ORM" style="endArrow=open;dashed=1;strokeWidth=2;" edge="1" parent="1" source="api-comp" target="db-comp">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="dep3" value="uses" style="endArrow=open;dashed=1;strokeWidth=2;" edge="1" parent="1" source="api-comp" target="excel-comp">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- DEPLOYMENT TOPOLOGY -->
+    <mxCell id="deploy-label" value="DEPLOYMENT TOPOLOGY" style="text;fontSize=14;fontStyle=1;align=left;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+      <mxGeometry x="40" y="420" width="240" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- Single User Deployment -->
+    <mxCell id="single-label" value="SINGLE USER (Default)" style="text;fontSize=12;fontStyle=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="40" y="470" width="180" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="single-pc" value="«device»&#xa;PC Sekolah&#xa;(Windows 10+)" style="shape=cube;whiteSpace=wrap;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;size=10;" vertex="1" parent="1">
+      <mxGeometry x="40" y="510" width="180" height="100" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="single-wpf" value="«artifact»&#xa;Simanis62.WPF.exe" style="rounded=0;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="60" y="540" width="140" height="30" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="single-api" value="«artifact»&#xa;Simanis62.API.exe" style="rounded=0;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="60" y="575" width="140" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- Multi User Deployment -->
+    <mxCell id="multi-label" value="MULTI USER (Optional)" style="text;fontSize=12;fontStyle=1;align=center;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+      <mxGeometry x="280" y="470" width="480" height="25" as="geometry"/>
+    </mxCell>
+    
+    <!-- Server Node -->
+    <mxCell id="server-pc" value="«device»&#xa;Server PC&#xa;(Windows 10+)" style="shape=cube;whiteSpace=wrap;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;size=10;" vertex="1" parent="1">
+      <mxGeometry x="480" y="510" width="180" height="120" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="server-api" value="«artifact»&#xa;Simanis62.API.exe" style="rounded=0;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="500" y="545" width="140" height="30" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="server-db" value="«artifact»&#xa;simanis62.db" style="shape=cylinder3;fillColor=#ffffff;strokeColor=#d6b656;size=10;" vertex="1" parent="1">
+      <mxGeometry x="520" y="585" width="100" height="35" as="geometry"/>
+    </mxCell>
+    
+    <!-- Client Nodes -->
+    <mxCell id="client1-pc" value="«device»&#xa;Client PC 1" style="shape=cube;whiteSpace=wrap;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;size=10;" vertex="1" parent="1">
+      <mxGeometry x="280" y="510" width="160" height="80" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="client1-wpf" value="«artifact»&#xa;Simanis62.WPF.exe" style="rounded=0;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="295" y="545" width="130" height="30" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="client2-pc" value="«device»&#xa;Client PC 2" style="shape=cube;whiteSpace=wrap;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;size=10;" vertex="1" parent="1">
+      <mxGeometry x="280" y="610" width="160" height="80" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="client2-wpf" value="«artifact»&#xa;Simanis62.WPF.exe" style="rounded=0;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="295" y="645" width="130" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- Communication Paths -->
+    <mxCell id="comm1" value="HTTP/REST&#xa;192.168.x.x:8000" style="endArrow=classic;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="client1-pc" target="server-pc">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="comm2" value="HTTP/REST&#xa;192.168.x.x:8000" style="endArrow=classic;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="client2-pc" target="server-pc">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Legend -->
+    <mxCell id="legend" value="LEGEND" style="swimlane;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="640" width="180" height="100" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="leg1" value="Component: Software unit" style="text;fontSize=10;align=left;" vertex="1" parent="legend">
+      <mxGeometry x="10" y="30" width="160" height="15" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="leg2" value="Artifact: Deployable file" style="text;fontSize=10;align=left;" vertex="1" parent="legend">
+      <mxGeometry x="10" y="50" width="160" height="15" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="leg3" value="Device: Physical hardware" style="text;fontSize=10;align=left;" vertex="1" parent="legend">
+      <mxGeometry x="10" y="70" width="160" height="15" as="geometry"/>
+    </mxCell>
+    
+  </root>
+</mxGraphModel>

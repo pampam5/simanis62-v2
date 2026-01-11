@@ -1,0 +1,254 @@
+<mxGraphModel>
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    
+    <!-- TITLE -->
+    <mxCell id="title" value="Activity Diagram: Proses Kelola Data Aset (CRUD)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="180" y="10" width="440" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- SWIMLANE: Admin Sekolah -->
+    <mxCell id="swimlane" value="Admin Sekolah" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="40" y="50" width="720" height="650" as="geometry"/>
+    </mxCell>
+    
+    <!-- INITIAL NODE -->
+    <mxCell id="initial" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="swimlane">
+      <mxGeometry x="350" y="20" width="30" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Buka Menu Aset -->
+    <mxCell id="act_menu" value="Buka Menu Aset" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="swimlane">
+      <mxGeometry x="285" y="70" width="160" height="45" as="geometry"/>
+    </mxCell>
+    
+    <!-- DECISION: Pilih Aksi -->
+    <mxCell id="dec_aksi" value="Pilih&#xa;Aksi?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="swimlane">
+      <mxGeometry x="325" y="135" width="80" height="60" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Tambah Aset Baru -->
+    <mxCell id="act_tambah" value="Klik Tambah Baru" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="swimlane">
+      <mxGeometry x="80" y="145" width="140" height="45" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Edit Aset -->
+    <mxCell id="act_edit" value="Pilih Aset → Klik Edit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="swimlane">
+      <mxGeometry x="295" y="215" width="140" height="45" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Hapus Aset -->
+    <mxCell id="act_hapus" value="Pilih Aset → Klik Hapus" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="swimlane">
+      <mxGeometry x="500" y="145" width="160" height="45" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Isi Form Aset Baru -->
+    <mxCell id="act_form_baru" value="Isi Form Aset Baru&#xa;(Nama, Kode, Golongan, Kondisi, dll)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="swimlane">
+      <mxGeometry x="55" y="215" width="190" height="55" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Isi Form Edit -->
+    <mxCell id="act_form_edit" value="Edit Data di Form&#xa;(Update field yang perlu)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="swimlane">
+      <mxGeometry x="280" y="290" width="170" height="55" as="geometry"/>
+    </mxCell>
+    
+    <!-- DECISION: Konfirmasi Hapus -->
+    <mxCell id="dec_hapus" value="Konfirmasi&#xa;Hapus?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swimlane">
+      <mxGeometry x="540" y="210" width="80" height="60" as="geometry"/>
+    </mxCell>
+    
+    <!-- MERGE POINT after forms -->
+    <mxCell id="merge1" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#000000;" vertex="1" parent="swimlane">
+      <mxGeometry x="230" y="370" width="20" height="20" as="geometry"/>
+    </mxCell>
+    
+    <!-- DECISION: Form Valid? -->
+    <mxCell id="dec_valid" value="Data&#xa;Valid?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swimlane">
+      <mxGeometry x="200" y="410" width="80" height="60" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Tampilkan Error Validasi -->
+    <mxCell id="act_error" value="Tampilkan Error Validasi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swimlane">
+      <mxGeometry x="55" y="420" width="130" height="45" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Simpan ke Database (Create/Update) -->
+    <mxCell id="act_simpan" value="Simpan ke Database" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swimlane">
+      <mxGeometry x="295" y="490" width="140" height="45" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Soft Delete -->
+    <mxCell id="act_softdelete" value="Soft Delete Aset&#xa;(Update is_deleted = true)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swimlane">
+      <mxGeometry x="505" y="290" width="170" height="55" as="geometry"/>
+    </mxCell>
+    
+    <!-- MERGE POINT final -->
+    <mxCell id="merge2" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#000000;" vertex="1" parent="swimlane">
+      <mxGeometry x="355" y="555" width="20" height="20" as="geometry"/>
+    </mxCell>
+    
+    <!-- ACTIVITY: Tampilkan Notifikasi Sukses -->
+    <mxCell id="act_notif" value="Tampilkan Notifikasi Sukses" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swimlane">
+      <mxGeometry x="285" y="590" width="160" height="45" as="geometry"/>
+    </mxCell>
+    
+    <!-- FINAL NODE Cancelled -->
+    <mxCell id="final_cancel" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="swimlane">
+      <mxGeometry x="665" y="225" width="30" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- FINAL NODE Success -->
+    <mxCell id="final_success" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="swimlane">
+      <mxGeometry x="350" y="650" width="30" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- FLOWS -->
+    <!-- Initial -> Menu -->
+    <mxCell id="f1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="initial" target="act_menu">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Menu -> Decision Aksi -->
+    <mxCell id="f2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_menu" target="dec_aksi">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Decision Aksi -> Tambah [Tambah] -->
+    <mxCell id="f3" value="[Tambah]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="dec_aksi" target="act_tambah">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Decision Aksi -> Edit [Edit] -->
+    <mxCell id="f4" value="[Edit]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="dec_aksi" target="act_edit">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Decision Aksi -> Hapus [Hapus] -->
+    <mxCell id="f5" value="[Hapus]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="dec_aksi" target="act_hapus">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Tambah -> Form Baru -->
+    <mxCell id="f6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_tambah" target="act_form_baru">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Edit -> Form Edit -->
+    <mxCell id="f7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_edit" target="act_form_edit">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Hapus -> Decision Konfirmasi -->
+    <mxCell id="f8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_hapus" target="dec_hapus">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Decision Konfirmasi -> Cancel [Batal] -->
+    <mxCell id="f9" value="[Batal]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="dec_hapus" target="final_cancel">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Decision Konfirmasi -> Soft Delete [Ya] -->
+    <mxCell id="f10" value="[Ya]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="dec_hapus" target="act_softdelete">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Form Baru -> Merge1 -->
+    <mxCell id="f11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_form_baru" target="merge1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="150" y="380"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    
+    <!-- Form Edit -> Merge1 -->
+    <mxCell id="f12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_form_edit" target="merge1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="365" y="380"/>
+          <mxPoint x="240" y="380"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    
+    <!-- Merge1 -> Decision Valid -->
+    <mxCell id="f13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="merge1" target="dec_valid">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Decision Valid -> Error [Tidak] -->
+    <mxCell id="f14" value="[Tidak]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="dec_valid" target="act_error">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Error -> Merge1 (Loop) -->
+    <mxCell id="f15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_error" target="merge1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="40" y="443"/>
+          <mxPoint x="40" y="380"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    
+    <!-- Decision Valid -> Simpan [Ya] -->
+    <mxCell id="f16" value="[Ya]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="dec_valid" target="act_simpan">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Simpan -> Merge2 -->
+    <mxCell id="f17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_simpan" target="merge2">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Soft Delete -> Merge2 -->
+    <mxCell id="f18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_softdelete" target="merge2">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="590" y="565"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    
+    <!-- Merge2 -> Notifikasi -->
+    <mxCell id="f19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="merge2" target="act_notif">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- Notifikasi -> Final Success -->
+    <mxCell id="f20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="swimlane" source="act_notif" target="final_success">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <!-- LEGEND -->
+    <mxCell id="legend_title" value="Keterangan:" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="720" width="100" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="leg1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+      <mxGeometry x="40" y="745" width="20" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="leg1_t" value="= Aktivitas User" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+      <mxGeometry x="65" y="745" width="95" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="leg2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="170" y="745" width="20" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="leg2_t" value="= Aktivitas Sistem" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+      <mxGeometry x="195" y="745" width="105" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="leg3" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+      <mxGeometry x="310" y="743" width="24" height="24" as="geometry"/>
+    </mxCell>
+    <mxCell id="leg3_t" value="= Keputusan" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+      <mxGeometry x="340" y="745" width="80" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="leg4" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+      <mxGeometry x="430" y="743" width="24" height="24" as="geometry"/>
+    </mxCell>
+    <mxCell id="leg4_t" value="= Validasi" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+      <mxGeometry x="460" y="745" width="70" height="20" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -1,0 +1,87 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.3.0">
+  <diagram id="RLC9vHato0Hb6KWlUH1i" name="Page-1">
+    <mxGraphModel dx="1744" dy="946" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="users" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="«table»&#xa;USERS" vertex="1">
+          <mxGeometry height="150" width="220" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="users-attr" parent="users" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ username: VARCHAR(50) «UK»&#xa;+ password_hash: VARCHAR(255)&#xa;+ full_name: VARCHAR(200)&#xa;+ role: ENUM (Admin/Viewer)&#xa;+ status: ENUM" vertex="1">
+          <mxGeometry height="110" width="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ruangan" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="«table»&#xa;RUANGAN" vertex="1">
+          <mxGeometry height="110" width="220" x="40" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="ruangan-attr" parent="ruangan" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ kode_ruangan: VARCHAR «UK»&#xa;+ nama_ruangan: VARCHAR(100)&#xa;+ penanggung_jawab: VARCHAR" vertex="1">
+          <mxGeometry height="70" width="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="aset" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#fff2cc;strokeColor=#d6b656;" value="«table»&#xa;ASET" vertex="1">
+          <mxGeometry height="240" width="520" x="360" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="Mj0Ku67uMmr8B_NOS32u-2" parent="aset" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ ruangan_id: UUID «FK»&#xa;+ created_by: UUID «FK»&#xa;+ kode_barang: VARCHAR «UK»&#xa;+ nama_barang: VARCHAR(200)&#xa;+ nomor_register: INT&#xa;+ kategori_kib: ENUM (A-F)&#xa;+ tahun_perolehan: INT&#xa;+ harga: BIGINT&#xa;+ kondisi: ENUM&#xa;+ status: ENUM" vertex="1">
+          <mxGeometry height="200" width="260" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="aset-attr" parent="aset" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ ruangan_id: UUID «FK»&#xa;+ created_by: UUID «FK»&#xa;+ kode_barang: VARCHAR «UK»&#xa;+ nama_barang: VARCHAR(200)&#xa;+ nomor_register: INT&#xa;+ kategori_kib: ENUM (A-F)&#xa;+ tahun_perolehan: INT&#xa;+ harga: BIGINT&#xa;+ kondisi: ENUM&#xa;+ status: ENUM" vertex="1">
+          <mxGeometry height="200" width="260" x="260" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kib_a" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#f5f5f5;strokeColor=#666666;" value="«table»&#xa;ASET_KIB_A (Tanah)" vertex="1">
+          <mxGeometry height="110" width="200" x="40" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="kib_a-attr" parent="kib_a" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ aset_id: UUID «FK, UK»&#xa;+ luas_m2: DECIMAL&#xa;+ alamat_lokasi: VARCHAR&#xa;+ sertifikat: VARCHAR" vertex="1">
+          <mxGeometry height="70" width="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kib_c" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#f5f5f5;strokeColor=#666666;" value="«table»&#xa;ASET_KIB_C (Gedung)" vertex="1">
+          <mxGeometry height="110" width="410" x="620" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="kib_b" parent="kib_c" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#f5f5f5;strokeColor=#666666;" value="«table»&#xa;ASET_KIB_B (Peralatan)" vertex="1">
+          <mxGeometry height="280" width="210" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kib_b-attr" parent="kib_b" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ aset_id: UUID «FK, UK»&#xa;+ satuan: VARCHAR&#xa;+ ukuran_cc: VARCHAR&#xa;+ merk: VARCHAR&#xa;+ tipe: VARCHAR&#xa;+ bahan: VARCHAR&#xa;+ nomor_rangka: VARCHAR&#xa;+ nomor_mesin: VARCHAR&#xa;+ nomor_polisi: VARCHAR&#xa;+ kapitalisasi: DECIMAL&#xa;+ total_harga: DECIMAL&#xa;+ tanggal_dokumen: DATE" vertex="1">
+          <mxGeometry height="240" width="210" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kib_c-attr" parent="kib_c" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ aset_id: UUID «FK, UK»&#xa;+ luas_m2: DECIMAL&#xa;+ alamat_lokasi: VARCHAR&#xa;+ bertingkat: INT" vertex="1">
+          <mxGeometry height="70" width="200" x="210" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="mutasi" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#e1d5e7;strokeColor=#9673a6;" value="«table»&#xa;RIWAYAT_MUTASI" vertex="1">
+          <mxGeometry height="180" width="240" x="1000" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="mutasi-attr" parent="mutasi" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ aset_id: UUID «FK»&#xa;+ ruangan_asal_id: UUID «FK»&#xa;+ ruangan_tujuan_id: UUID «FK»&#xa;+ user_id: UUID «FK»&#xa;+ tanggal_mutasi: DATE&#xa;+ status_mutasi: ENUM&#xa;+ alasan: VARCHAR" vertex="1">
+          <mxGeometry height="140" width="240" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="audit" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#ffe6cc;strokeColor=#d79b00;" value="«table»&#xa;AUDIT_TRAIL" vertex="1">
+          <mxGeometry height="140" width="240" x="930" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="audit-attr" parent="audit" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: UUID «PK»&#xa;+ user_id: UUID «FK»&#xa;+ table_name: VARCHAR&#xa;+ record_id: UUID&#xa;+ operation: ENUM&#xa;+ old_value: JSON&#xa;+ new_value: JSON&#xa;+ timestamp: DATETIME" vertex="1">
+          <mxGeometry height="100" width="240" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_users_aset" edge="1" parent="1" source="users" style=" edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;endArrow=ERmany;startArrow=ERone;" target="aset" value="created_by">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_ruangan_aset" edge="1" parent="1" source="ruangan" style=" edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;endArrow=ERmany;startArrow=ERone;" target="aset" value="lokasi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_aset_kiba" edge="1" parent="1" source="aset" style=" edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;endArrow=ERzeroToOne;startArrow=ERone;" target="kib_a" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_aset_kibb" edge="1" parent="1" source="aset" style=" edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;endArrow=ERzeroToOne;startArrow=ERone;" target="kib_b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_aset_kibc" edge="1" parent="1" source="aset" style=" edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;endArrow=ERzeroToOne;startArrow=ERone;" target="kib_c" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_aset_mutasi" edge="1" parent="1" source="aset" style=" edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;endArrow=ERmany;startArrow=ERone;" target="mutasi" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_users_audit" edge="1" parent="1" source="users" style=" edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;endArrow=ERmany;startArrow=ERone;" target="audit" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="150" />
+              <mxPoint x="320" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

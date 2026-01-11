@@ -1,0 +1,196 @@
+<mxfile host="embed.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.3.0">
+  <diagram id="qMFwB84DTzZQ80Y99jVb" name="Page-1">
+    <mxGraphModel dx="2048" dy="1938" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="boundary" parent="1" style="swimlane;startSize=30;fillColor=none;strokeColor=#666666;fontStyle=1;fontSize=14;" value="SIMANIS62 - Sistem Manajemen Aset Sekolah" vertex="1">
+          <mxGeometry height="780" width="900" x="160" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-login" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Login" vertex="1">
+          <mxGeometry height="50" width="120" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-lihat" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Lihat Daftar Aset" vertex="1">
+          <mxGeometry height="50" width="120" x="40" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-detail" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Lihat Detail Aset" vertex="1">
+          <mxGeometry height="50" width="120" x="40" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-cari" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Cari Aset" vertex="1">
+          <mxGeometry height="50" width="120" x="40" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-tambah" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Tambah Aset" vertex="1">
+          <mxGeometry height="50" width="120" x="220" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-ubah" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Ubah Data Aset" vertex="1">
+          <mxGeometry height="50" width="120" x="220" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-hapus" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Hapus Aset" vertex="1">
+          <mxGeometry height="50" width="120" x="220" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-mutasi" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Mutasi Aset" vertex="1">
+          <mxGeometry height="50" width="120" x="220" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-user" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Kelola User" vertex="1">
+          <mxGeometry height="50" width="120" x="220" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kib" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Generate&#xa;Laporan KIB" vertex="1">
+          <mxGeometry height="60" width="130" x="420" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kir" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Generate&#xa;Laporan KIR" vertex="1">
+          <mxGeometry height="60" width="130" x="420" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-ekspor" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Ekspor ke Excel" vertex="1">
+          <mxGeometry height="50" width="130" x="420" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kib-a" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=2;fontSize=10;" value="KIB A&#xa;(Tanah)" vertex="1">
+          <mxGeometry height="45" width="100" x="620" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kib-b" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=2;fontSize=10;" value="KIB B&#xa;(Peralatan)" vertex="1">
+          <mxGeometry height="45" width="100" x="750" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kib-c" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=2;fontSize=10;" value="KIB C&#xa;(Gedung)" vertex="1">
+          <mxGeometry height="45" width="100" x="620" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kib-d" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=2;fontSize=10;" value="KIB D&#xa;(Jalan)" vertex="1">
+          <mxGeometry height="45" width="100" x="750" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kib-e" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=2;fontSize=10;" value="KIB E&#xa;(Aset Tetap)" vertex="1">
+          <mxGeometry height="45" width="100" x="620" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kib-f" parent="boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=2;fontSize=10;" value="KIB F&#xa;(Konstruksi)" vertex="1">
+          <mxGeometry height="45" width="100" x="750" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-box" parent="boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="150" width="200" x="40" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" parent="boundary" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;" value="LEGENDA" vertex="1">
+          <mxGeometry height="20" width="100" x="90" y="505" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-green" parent="boundary" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="18" width="25" x="55" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-green-txt" parent="boundary" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;" value="Semua Aktor" vertex="1">
+          <mxGeometry height="20" width="100" x="90" y="532" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-blue" parent="boundary" style="ellipse;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="" vertex="1">
+          <mxGeometry height="18" width="25" x="55" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-blue-txt" parent="boundary" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;" value="Admin Only" vertex="1">
+          <mxGeometry height="20" width="100" x="90" y="557" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-purple" parent="boundary" style="ellipse;fillColor=#e1d5e7;strokeColor=#9673a6;" value="" vertex="1">
+          <mxGeometry height="18" width="25" x="55" y="585" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-purple-txt" parent="boundary" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;" value="Admin + Kepsek" vertex="1">
+          <mxGeometry height="20" width="120" x="90" y="582" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-gray" parent="boundary" style="ellipse;fillColor=#f5f5f5;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="18" width="25" x="55" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-gray-txt" parent="boundary" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;" value="«extend» KIB" vertex="1">
+          <mxGeometry height="20" width="100" x="90" y="607" as="geometry" />
+        </mxCell>
+        <mxCell id="note-regulasi" parent="boundary" style="shape=note;whiteSpace=wrap;html=1;size=14;verticalAlign=top;align=left;spacingLeft=5;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="Berdasarkan:&#xa;Permendagri 19/2016&#xa;(update 47/2021, 7/2024)" vertex="1">
+          <mxGeometry height="60" width="150" x="620" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-admin" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Admin Sekolah" vertex="1">
+          <mxGeometry height="80" width="40" x="50" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-guru" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Guru&#xa;(Viewer)" vertex="1">
+          <mxGeometry height="80" width="40" x="50" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-kepsek" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Kepala Sekolah" vertex="1">
+          <mxGeometry height="80" width="40" x="50" y="-130" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-login" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-lihat" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-lihat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-detail" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-detail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-cari" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-cari">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-tambah" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-tambah">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-ubah" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-ubah">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-hapus" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-hapus">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-mutasi" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-mutasi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-user" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-kib" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-kib">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-kir" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-kir">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-admin-ekspor" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;" target="uc-ekspor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-guru-login" edge="1" parent="1" source="actor-guru" style="endArrow=none;html=1;strokeColor=#82b366;" target="uc-login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-guru-lihat" edge="1" parent="1" source="actor-guru" style="endArrow=none;html=1;strokeColor=#82b366;" target="uc-lihat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-guru-detail" edge="1" parent="1" source="actor-guru" style="endArrow=none;html=1;strokeColor=#82b366;" target="uc-detail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-guru-cari" edge="1" parent="1" source="actor-guru" style="endArrow=none;html=1;strokeColor=#82b366;" target="uc-cari">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kepsek-login" edge="1" parent="1" source="actor-kepsek" style="endArrow=none;html=1;strokeColor=#9673a6;" target="uc-login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kepsek-lihat" edge="1" parent="1" source="actor-kepsek" style="endArrow=none;html=1;strokeColor=#9673a6;" target="uc-lihat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kepsek-detail" edge="1" parent="1" source="actor-kepsek" style="endArrow=none;html=1;strokeColor=#9673a6;" target="uc-detail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kepsek-cari" edge="1" parent="1" source="actor-kepsek" style="endArrow=none;html=1;strokeColor=#9673a6;" target="uc-cari">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kepsek-kib" edge="1" parent="1" source="actor-kepsek" style="endArrow=none;html=1;strokeColor=#9673a6;" target="uc-kib">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kepsek-kir" edge="1" parent="1" source="actor-kepsek" style="endArrow=none;html=1;strokeColor=#9673a6;" target="uc-kir">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kepsek-ekspor" edge="1" parent="1" source="actor-kepsek" style="endArrow=none;html=1;strokeColor=#9673a6;" target="uc-ekspor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-kib-a" edge="1" parent="1" source="uc-kib-a" style="endArrow=open;dashed=1;html=1;fontStyle=2;fontSize=9;strokeColor=#666666;" target="uc-kib" value="«extend»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-kib-b" edge="1" parent="1" source="uc-kib-b" style="endArrow=open;dashed=1;html=1;fontStyle=2;fontSize=9;strokeColor=#666666;" target="uc-kib" value="«extend»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-kib-c" edge="1" parent="1" source="uc-kib-c" style="endArrow=open;dashed=1;html=1;fontStyle=2;fontSize=9;strokeColor=#666666;" target="uc-kib" value="«extend»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-kib-d" edge="1" parent="1" source="uc-kib-d" style="endArrow=open;dashed=1;html=1;fontStyle=2;fontSize=9;strokeColor=#666666;" target="uc-kib" value="«extend»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-kib-e" edge="1" parent="1" source="uc-kib-e" style="endArrow=open;dashed=1;html=1;fontStyle=2;fontSize=9;strokeColor=#666666;" target="uc-kib" value="«extend»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-kib-f" edge="1" parent="1" source="uc-kib-f" style="endArrow=open;dashed=1;html=1;fontStyle=2;fontSize=9;strokeColor=#666666;" target="uc-kib" value="«extend»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
