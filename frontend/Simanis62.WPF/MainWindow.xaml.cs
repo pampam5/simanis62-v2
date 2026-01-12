@@ -1,24 +1,46 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Microsoft.Extensions.DependencyInjection;
+using Simanis62.Services.Interfaces;
+using Simanis62.ViewModels;
+using Simanis62.Views;
 
-namespace simanis62
+namespace Simanis62;
+
+/// <summary>
+/// MainWindow - Shell utama aplikasi SIMANIS62.
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    private readonly INavigationService _navigationService;
+    private readonly MainViewModel _viewModel;
+
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+
+        _viewModel = App.Services.GetRequiredService<MainViewModel>();
+        _navigationService = App.Services.GetRequiredService<INavigationService>();
+
+        DataContext = _viewModel;
+
+        // Setup navigation
+        _navigationService.NavigationChanged += OnNavigationChanged;
+    }
+
+    private void OnNavigationChanged(string viewName)
+    {
+        UserControl? view = viewName switch
         {
-            InitializeComponent();
-        }
+            "Login" => App.Services.GetRequiredService<LoginView>(),
+            "Dashboard" => App.Services.GetRequiredService<DashboardView>(),
+            "AssetList" => App.Services.GetRequiredService<AssetListView>(),
+            "AssetForm" => App.Services.GetRequiredService<AssetFormView>(),
+            "KibReport" => App.Services.GetRequiredService<KibReportView>(),
+            "Mutation" => App.Services.GetRequiredService<MutationView>(),
+            _ => App.Services.GetRequiredService<DashboardView>()
+        };
+
+        ContentFrame.Content = view;
     }
 }

@@ -1031,7 +1031,7 @@ class AssetRepository(BaseRepository[Aset]):
         db_obj.status = StatusAset.DIHAPUS
         db_obj.deleted_by = str(deleted_by)
         db_obj.deleted_at = datetime.utcnow()
-        db_obj.alasan_hapus = delete_reason
+        db_obj.delete_reason = delete_reason
 
         await self.session.flush()
         await self.session.refresh(db_obj)

@@ -89,12 +89,7 @@ class DatabaseManager:
         )
 
         logger.info(
-            "Database initialized",
-            extra={
-                "database_path": str(db_path),
-                "journal_mode": "WAL",
-                "busy_timeout": 30000,
-            },
+            f"Database initialized at {db_path} with WAL mode (busy_timeout=30000ms)"
         )
 
     async def create_tables(self) -> None:

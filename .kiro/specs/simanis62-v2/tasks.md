@@ -134,9 +134,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ## Phase 2: Domain Models & Repositories
 
 ### Task 2.1: Base Models
-- [ ] Implement `app/models/base.py` dengan common fields
-- [ ] Create BaseModel dengan id, created_at, updated_at
-- [ ] Setup UUID primary key generation
+- [x] Implement `app/models/base.py` dengan common fields
+- [x] Create BaseModel dengan id, created_at, updated_at
+- [x] Setup UUID primary key generation
 
 **Files:**
 - `backend/app/models/__init__.py`
@@ -146,10 +146,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 
 
 ### Task 2.2: User Model
-- [ ] Implement `app/models/user.py`
-- [ ] Create User SQLModel dengan fields: username, password_hash, nama_lengkap, role, dapat_ekspor, status
-- [ ] Create UserRole enum (Admin, Viewer)
-- [ ] Add audit fields (dibuat_oleh, dibuat_pada, diubah_oleh, diubah_pada)
+- [x] Implement `app/models/user.py`
+- [x] Create User SQLModel dengan fields: username, password_hash, nama_lengkap, role, dapat_ekspor, status
+- [x] Create UserRole enum (Admin, Viewer)
+- [x] Add timestamps (created_at, updated_at)
+
+> **CATATAN**: Model User menggunakan `created_at` dan `updated_at` (bukan `dibuat_oleh`, `dibuat_pada`, dll). User tidak memiliki field `created_by`/`updated_by` karena user adalah entitas yang membuat/mengupdate dirinya sendiri.
 
 **Files:**
 - `backend/app/models/user.py`
@@ -159,9 +161,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 2.3: Ruangan Model
-- [ ] Implement `app/models/ruangan.py`
-- [ ] Create Ruangan SQLModel dengan fields: kode_ruangan, nama_ruangan, gedung, lantai
-- [ ] Add relationship ke Aset
+- [x] Implement `app/models/ruangan.py`
+- [x] Create Ruangan SQLModel dengan fields: kode_ruangan, nama_ruangan, keterangan
+- [x] Add timestamps (created_at, updated_at)
+- [x] Add relationship ke Aset dan RiwayatMutasi
+
+> **CATATAN**: Model Ruangan TIDAK memiliki field `gedung` atau `lantai`. Informasi lokasi dapat disimpan di field `keterangan` jika diperlukan.
 
 **Files:**
 - `backend/app/models/ruangan.py`
@@ -171,13 +176,13 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 2.4: Aset Model - Core Fields
-- [ ] Implement `app/models/aset.py`
-- [ ] Create Aset SQLModel dengan common fields untuk semua KIB
-- [ ] Create KategoriKIB enum (A, B, C, D, E, F)
-- [ ] Create StatusAset enum (Baru, Aktif, Mutasi, Rusak, Dihapus)
-- [ ] Create Kondisi enum (Baik, Rusak_Ringan, Rusak_Berat)
-- [ ] Add foreign key ke Ruangan
-- [ ] Add audit fields
+- [x] Implement `app/models/aset.py`
+- [x] Create Aset SQLModel dengan common fields untuk semua KIB
+- [x] Create KategoriKIB enum (A, B, C, D, E, F)
+- [x] Create StatusAset enum (Baru, Aktif, Mutasi, Rusak, Dihapus)
+- [x] Create Kondisi enum (Baik, Rusak_Ringan, Rusak_Berat)
+- [x] Add foreign key ke Ruangan
+- [x] Add audit fields
 
 **Files:**
 - `backend/app/models/aset.py`
@@ -187,25 +192,27 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 2.5: Aset Model - KIB-Specific Fields
-- [ ] Add KIB A fields (luas_m2, alamat_lokasi, status_hak_tanah, dll)
-- [ ] Add KIB B fields (ukuran_cc, satuan, merk, tipe, nomor_rangka, dll)
-- [ ] Add KIB C fields (bertingkat, beton, luas_lantai_m2, dll)
-- [ ] Add KIB D fields (jenis_konstruksi, panjang_km, lebar_m, dll)
-- [ ] Add KIB E fields (judul_pencipta, asal_daerah, jenis_hewan, dll)
-- [ ] Add KIB F fields (jenis_bangunan, info_dokumen, dll)
+- [x] Add KIB A fields (luas_m2, alamat_lokasi, status_hak_tanah, dll)
+- [x] Add KIB B fields (ukuran_cc, satuan, merk, tipe, nomor_rangka, dll)
+- [x] Add KIB C fields (bertingkat, beton, luas_lantai_m2, dll)
+- [x] Add KIB D fields (jenis_konstruksi, panjang_km, lebar_m, dll)
+- [x] Add KIB E fields (judul_pencipta, asal_daerah, jenis_hewan, dll)
+- [x] Add KIB F fields (jenis_bangunan, info_dokumen, dll)
 
 **Files:**
-- `backend/app/models/aset.py` (update)
+- `backend/app/models/aset_kib.py`
 
 **Acceptance Criteria:** REQ-7 sampai REQ-12 (KIB A-F)
 
 
 ### Task 2.6: Mutasi Model
-- [ ] Implement `app/models/mutasi.py`
-- [ ] Create Mutasi SQLModel dengan fields: aset_id, ruangan_asal, ruangan_tujuan, alasan_mutasi, tanggal_mutasi, status
-- [ ] Create StatusMutasi enum (Dalam_Proses, Selesai, Dibatalkan)
-- [ ] Add fields untuk cancellation (alasan_batal, dibatalkan_pada)
-- [ ] Add audit fields
+- [x] Implement `app/models/mutasi.py`
+- [x] Create RiwayatMutasi SQLModel dengan fields: aset_id, ruangan_asal_id, ruangan_tujuan_id, user_id, alasan, tanggal_mutasi, kondisi_saat_mutasi, status_mutasi
+- [x] Create StatusMutasi enum (Dalam_Proses, Selesai, Dibatalkan)
+- [x] Add fields untuk timestamps (mulai_mutasi, selesai_mutasi)
+- [x] Add field untuk cancellation (alasan_pembatalan)
+
+> **CATATAN**: Field pembatalan menggunakan `alasan_pembatalan` (bukan `alasan_batal`).
 
 **Files:**
 - `backend/app/models/mutasi.py`
@@ -215,9 +222,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 2.7: Audit Model
-- [ ] Implement `app/models/audit.py`
-- [ ] Create AuditTrail SQLModel untuk logging semua operasi
-- [ ] Fields: user_id, action, table_name, record_id, old_value, new_value, timestamp
+- [x] Implement `app/models/audit.py`
+- [x] Create AuditTrail SQLModel untuk logging semua operasi
+- [x] Fields: user_id, action, table_name, record_id, old_value, new_value, timestamp
 
 **Files:**
 - `backend/app/models/audit.py`
@@ -227,10 +234,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 2.8: Base Repository
-- [ ] Implement `app/repositories/base.py`
-- [ ] Create BaseRepository generic class dengan CRUD operations
-- [ ] Implement get_by_id, get_all, count, create, update, delete methods
-- [ ] Add pagination support
+- [x] Implement `app/repositories/base.py`
+- [x] Create BaseRepository generic class dengan CRUD operations
+- [x] Implement get_by_id, get_all, count, create, update, delete methods
+- [x] Add pagination support
 
 **Files:**
 - `backend/app/repositories/__init__.py`
@@ -241,9 +248,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 2.9: User Repository
-- [ ] Implement `app/repositories/user_repository.py`
-- [ ] Add get_by_username method
-- [ ] Add get_active_users method
+- [x] Implement `app/repositories/user_repository.py`
+- [x] Add get_by_username method
+- [x] Add get_active_users method
 
 **Files:**
 - `backend/app/repositories/user_repository.py`
@@ -252,12 +259,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 
 
 ### Task 2.10: Aset Repository
-- [ ] Implement `app/repositories/aset_repository.py`
-- [ ] Add get_by_kode_barang method
-- [ ] Add search method dengan multiple filters (keyword, kategori_kib, status, ruangan_id)
-- [ ] Add get_next_nomor_register method
-- [ ] Add get_for_kib_report method (status Aktif/Rusak only)
-- [ ] Add soft_delete method
+- [x] Implement `app/repositories/aset_repository.py`
+- [x] Add get_by_kode_barang method
+- [x] Add search method dengan multiple filters (keyword, kategori_kib, status, ruangan_id)
+- [x] Add get_next_nomor_register method
+- [x] Add get_for_kib_report method (status Aktif/Rusak only)
+- [x] Add soft_delete method
 
 **Files:**
 - `backend/app/repositories/aset_repository.py`
@@ -267,10 +274,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 2.11: Mutasi Repository
-- [ ] Implement `app/repositories/mutasi_repository.py`
-- [ ] Add get_by_aset_id method
-- [ ] Add get_pending_mutations method
-- [ ] Add get_mutation_history method
+- [x] Implement `app/repositories/mutasi_repository.py`
+- [x] Add get_by_aset_id method
+- [x] Add get_pending_mutations method
+- [x] Add get_mutation_history method
 
 **Files:**
 - `backend/app/repositories/mutasi_repository.py`
@@ -280,9 +287,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 2.12: Ruangan Repository
-- [ ] Implement `app/repositories/ruangan_repository.py`
-- [ ] Add get_by_kode method
-- [ ] Add get_assets_in_room method untuk KIR
+- [x] Implement `app/repositories/ruangan_repository.py`
+- [x] Add get_by_kode method
+- [x] Add get_assets_in_room method untuk KIR
 
 **Files:**
 - `backend/app/repositories/ruangan_repository.py`
@@ -294,10 +301,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ## Phase 3: Pydantic Schemas
 
 ### Task 3.1: Auth Schemas
-- [ ] Implement `app/schemas/auth.py`
-- [ ] Create LoginRequest schema
-- [ ] Create LoginResponse schema
-- [ ] Create UserResponse schema
+- [x] Implement `app/schemas/auth.py`
+- [x] Create LoginRequest schema
+- [x] Create LoginResponse schema
+- [x] Create UserResponse schema
 
 **Files:**
 - `backend/app/schemas/auth.py`
@@ -306,12 +313,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 
 
 ### Task 3.2: Aset Schemas - Core
-- [ ] Implement `app/schemas/aset.py`
-- [ ] Create AssetBase schema dengan common fields
-- [ ] Create AssetCreate schema dengan validators
-- [ ] Create AssetUpdate schema (partial update)
-- [ ] Create AssetResponse schema
-- [ ] Create AssetSearchParams schema
+- [x] Implement `app/schemas/aset.py`
+- [x] Create AssetBase schema dengan common fields
+- [x] Create AssetCreate schema dengan validators
+- [x] Create AssetUpdate schema (partial update)
+- [x] Create AssetResponse schema
+- [x] Create AssetSearchParams schema
 
 **Validators:**
 - kode_barang: format XX.XX.XX.XXXX
@@ -327,12 +334,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 3.3: Aset Schemas - KIB Specific
-- [ ] Create KIB A specific schemas dengan validators (luas_m2 > 0)
-- [ ] Create KIB B specific schemas dengan validators (satuan enum)
-- [ ] Create KIB C specific schemas dengan validators (kondisi B/KB/RB)
-- [ ] Create KIB D specific schemas dengan validators (panjang_km > 0)
-- [ ] Create KIB E specific schemas dengan validators (jumlah > 0)
-- [ ] Create KIB F specific schemas
+- [x] Create KIB A specific schemas dengan validators (luas_m2 > 0)
+- [x] Create KIB B specific schemas dengan validators (satuan enum)
+- [x] Create KIB C specific schemas dengan validators (kondisi B/KB/RB)
+- [x] Create KIB D specific schemas dengan validators (panjang_km > 0)
+- [x] Create KIB E specific schemas dengan validators (jumlah > 0)
+- [x] Create KIB F specific schemas
 
 **Files:**
 - `backend/app/schemas/aset.py` (update)
@@ -342,15 +349,15 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 3.4: Mutasi Schemas
-- [ ] Implement `app/schemas/mutasi.py`
-- [ ] Create MutationCreate schema dengan validators
-- [ ] Create MutationResponse schema
-- [ ] Create MutationCancelRequest schema
+- [x] Implement `app/schemas/mutasi.py`
+- [x] Create MutationCreate schema dengan validators
+- [x] Create MutationResponse schema
+- [x] Create MutationCancelRequest schema
 
 **Validators:**
-- alasan_mutasi: min 10 characters
+- alasan: min 10 characters
 - tanggal_mutasi: not in future
-- alasan_batal: min 10 characters
+- alasan_pembatalan: min 10 characters (untuk pembatalan mutasi)
 
 **Files:**
 - `backend/app/schemas/mutasi.py`
@@ -360,9 +367,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 3.5: KIB Report Schemas
-- [ ] Implement `app/schemas/kib.py`
-- [ ] Create KibReportResponse schema
-- [ ] Create KibExportRequest schema
+- [x] Implement `app/schemas/kib.py`
+- [x] Create KibReportResponse schema
+- [x] Create KibExportRequest schema
 
 **Files:**
 - `backend/app/schemas/kib.py`
@@ -371,10 +378,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 
 
 ### Task 3.6: User Management Schemas
-- [ ] Implement `app/schemas/user.py`
-- [ ] Create UserCreate schema dengan validators
-- [ ] Create UserUpdate schema
-- [ ] Create UserResponse schema
+- [x] Implement `app/schemas/user.py`
+- [x] Create UserCreate schema dengan validators
+- [x] Create UserUpdate schema
+- [x] Create UserResponse schema
 
 **Validators:**
 - username: unique
@@ -390,9 +397,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ## Phase 4: Service Layer
 
 ### Task 4.1: Base Service
-- [ ] Implement `app/services/base.py`
-- [ ] Create BaseService generic class
-- [ ] Setup logger per service
+- [x] Implement `app/services/base.py`
+- [x] Create BaseService generic class
+- [x] Setup logger per service
 
 **Files:**
 - `backend/app/services/__init__.py`
@@ -401,11 +408,11 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 4.2: Auth Service
-- [ ] Implement `app/services/auth_service.py`
-- [ ] Implement login method dengan credential validation
-- [ ] Implement logout method
-- [ ] Implement session verification
-- [ ] Add logging untuk login/logout events
+- [x] Implement `app/services/auth_service.py`
+- [x] Implement login method dengan credential validation
+- [x] Implement logout method
+- [x] Implement session verification
+- [x] Add logging untuk login/logout events
 
 **Files:**
 - `backend/app/services/auth_service.py`
@@ -415,13 +422,13 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 4.3: Aset Service - CRUD
-- [ ] Implement `app/services/aset_service.py`
-- [ ] Implement validation methods (_validate_kode_barang_format, _validate_tahun_perolehan, _validate_harga, _validate_delete_reason)
-- [ ] Implement create_asset method dengan auto nomor_register
-- [ ] Implement update_asset method dengan status auto-update based on kondisi
-- [ ] Implement delete_asset method (soft delete)
-- [ ] Implement get_asset_by_id method
-- [ ] Add comprehensive logging
+- [x] Implement `app/services/aset_service.py`
+- [x] Implement validation methods (_validate_kode_barang_format, _validate_tahun_perolehan, _validate_harga, _validate_delete_reason)
+- [x] Implement create_asset method dengan auto nomor_register
+- [x] Implement update_asset method dengan status auto-update based on kondisi
+- [x] Implement delete_asset method (soft delete)
+- [x] Implement get_asset_by_id method
+- [x] Add comprehensive logging
 
 **Files:**
 - `backend/app/services/aset_service.py`
@@ -430,10 +437,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 
 
 ### Task 4.4: Aset Service - Search
-- [ ] Implement search_assets method dengan multiple filters
-- [ ] Add pagination support
-- [ ] Implement exclude deleted for Viewer role
-- [ ] Ensure search performance < 5 seconds
+- [x] Implement search_assets method dengan multiple filters
+- [x] Add pagination support
+- [x] Implement exclude deleted for Viewer role
+- [x] Ensure search performance < 5 seconds
 
 **Files:**
 - `backend/app/services/aset_service.py` (update)
@@ -443,12 +450,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 4.5: Mutasi Service
-- [ ] Implement `app/services/mutasi_service.py`
-- [ ] Implement initiate_mutation method
-- [ ] Implement complete_mutation method
-- [ ] Implement cancel_mutation method
-- [ ] Add validation: same room rejection, asset in mutation check
-- [ ] Add logging untuk mutation events
+- [x] Implement `app/services/mutasi_service.py`
+- [x] Implement initiate_mutation method
+- [x] Implement complete_mutation method
+- [x] Implement cancel_mutation method
+- [x] Add validation: same room rejection, asset in mutation check
+- [x] Add logging untuk mutation events
 
 **Files:**
 - `backend/app/services/mutasi_service.py`
@@ -458,10 +465,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 4.6: KIB Service - Report Generation
-- [ ] Implement `app/services/kib_service.py`
-- [ ] Implement get_kib_report method untuk semua kategori (A-F)
-- [ ] Filter hanya status Aktif dan Rusak
-- [ ] Ensure generation < 10 seconds untuk 1000 assets
+- [x] Implement `app/services/kib_service.py`
+- [x] Implement get_kib_report method untuk semua kategori (A-F)
+- [x] Filter hanya status Aktif dan Rusak
+- [x] Ensure generation < 10 seconds untuk 1000 assets
 
 **Files:**
 - `backend/app/services/kib_service.py`
@@ -471,12 +478,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 4.7: KIB Service - Excel Export
-- [ ] Implement export_to_excel method menggunakan ClosedXML
-- [ ] Create template sesuai format BPAD DKI Jakarta
-- [ ] Add header dengan nama sekolah dan judul report
-- [ ] Add footer dengan total count dan value
-- [ ] Format currency dalam Rupiah penuh
-- [ ] Ensure export < 15 seconds untuk 1000 assets
+- [x] Implement export_to_excel method menggunakan ClosedXML
+- [x] Create template sesuai format BPAD DKI Jakarta
+- [x] Add header dengan nama sekolah dan judul report
+- [x] Add footer dengan total count dan value
+- [x] Format currency dalam Rupiah penuh
+- [x] Ensure export < 15 seconds untuk 1000 assets
 
 **Files:**
 - `backend/app/services/kib_service.py` (update)
@@ -487,12 +494,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 4.8: User Service
-- [ ] Implement `app/services/user_service.py`
-- [ ] Implement create_user method dengan password hashing
-- [ ] Implement update_user method
-- [ ] Implement deactivate_user method
-- [ ] Add validation: cannot delete self, cannot change own role
-- [ ] Add logging untuk user management events
+- [x] Implement `app/services/user_service.py`
+- [x] Implement create_user method dengan password hashing
+- [x] Implement update_user method
+- [x] Implement deactivate_user method
+- [x] Add validation: cannot delete self, cannot change own role
+- [x] Add logging untuk user management events
 
 **Files:**
 - `backend/app/services/user_service.py`
@@ -502,10 +509,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 4.9: Ruangan Service
-- [ ] Implement `app/services/ruangan_service.py`
-- [ ] Implement CRUD methods untuk ruangan
-- [ ] Implement get_kir_report method (Kartu Inventaris Ruangan)
-- [ ] Add logging
+- [x] Implement `app/services/ruangan_service.py`
+- [x] Implement CRUD methods untuk ruangan
+- [x] Implement get_kir_report method (Kartu Inventaris Ruangan)
+- [x] Add logging
 
 **Files:**
 - `backend/app/services/ruangan_service.py`
@@ -515,9 +522,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 4.10: Mutation Expiration Service
-- [ ] Implement query untuk cari pending mutations > 7 hari
-- [ ] Implement logic update status ke CANCELLED
-- [ ] Integrate dengan FastAPI startup event
+- [x] Implement query untuk cari pending mutations > 7 hari
+- [x] Implement logic update status ke CANCELLED
+- [x] Integrate dengan FastAPI startup event
 
 **Files:**
 - `backend/app/services/mutation_service.py`
@@ -530,11 +537,11 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ## Phase 5: API Endpoints
 
 ### Task 5.1: FastAPI Main Setup
-- [ ] Implement `app/main.py` dengan FastAPI app
-- [ ] Register all routers
-- [ ] Add middleware (ErrorHandling, CORS)
-- [ ] Add startup/shutdown events untuk database
-- [ ] Setup logging on startup
+- [x] Implement `app/main.py` dengan FastAPI app
+- [x] Register all routers
+- [x] Add middleware (ErrorHandling, CORS)
+- [x] Add startup/shutdown events untuk database
+- [x] Setup logging on startup
 
 **Files:**
 - `backend/app/main.py`
@@ -544,12 +551,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 5.2: API Dependencies
-- [ ] Implement `app/api/deps.py`
-- [ ] Create get_db dependency
-- [ ] Create get_current_user dependency
-- [ ] Create require_admin dependency
-- [ ] Create require_export_permission dependency
-- [ ] Create service dependencies
+- [x] Implement `app/api/deps.py`
+- [x] Create get_db dependency
+- [x] Create get_current_user dependency
+- [x] Create require_admin dependency
+- [x] Create require_export_permission dependency
+- [x] Create service dependencies
 
 **Files:**
 - `backend/app/api/deps.py`
@@ -559,10 +566,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 5.3: Auth API Endpoints
-- [ ] Implement `app/api/v1/auth.py`
-- [ ] POST /api/v1/auth/login
-- [ ] POST /api/v1/auth/logout
-- [ ] GET /api/v1/auth/me (current user info)
+- [x] Implement `app/api/v1/auth.py`
+- [x] POST /api/v1/auth/login
+- [x] POST /api/v1/auth/logout
+- [x] GET /api/v1/auth/me (current user info)
 
 **Files:**
 - `backend/app/api/v1/__init__.py`
@@ -573,12 +580,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 5.4: Aset API Endpoints
-- [ ] Implement `app/api/v1/aset.py`
-- [ ] GET /api/v1/aset (search with filters)
-- [ ] GET /api/v1/aset/{id} (get by ID)
-- [ ] POST /api/v1/aset (create - Admin only)
-- [ ] PUT /api/v1/aset/{id} (update - Admin only)
-- [ ] DELETE /api/v1/aset/{id} (soft delete - Admin only)
+- [x] Implement `app/api/v1/aset.py`
+- [x] GET /api/v1/aset (search with filters)
+- [x] GET /api/v1/aset/{id} (get by ID)
+- [x] POST /api/v1/aset (create - Admin only)
+- [x] PUT /api/v1/aset/{id} (update - Admin only)
+- [x] DELETE /api/v1/aset/{id} (soft delete - Admin only)
 
 **Files:**
 - `backend/app/api/v1/aset.py`
@@ -588,10 +595,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 5.5: KIB API Endpoints
-- [ ] Implement `app/api/v1/kib.py`
-- [ ] GET /api/v1/kib/{kategori} (get KIB report)
-- [ ] GET /api/v1/kib/{kategori}/export (export to Excel)
-- [ ] Add Admin/Kepala_Sekolah authorization (require_export_permission)
+- [x] Implement `app/api/v1/kib.py`
+- [x] GET /api/v1/kib/{kategori} (get KIB report)
+- [x] GET /api/v1/kib/{kategori}/export (export to Excel)
+- [x] Add Admin/Kepala_Sekolah authorization (require_export_permission)
 
 **Files:**
 - `backend/app/api/v1/kib.py`
@@ -601,12 +608,12 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 5.6: Mutasi API Endpoints
-- [ ] Implement `app/api/v1/mutasi.py`
-- [ ] POST /api/v1/mutasi (initiate mutation - Admin only)
-- [ ] GET /api/v1/mutasi (list mutations)
-- [ ] GET /api/v1/mutasi/{id} (get mutation detail)
-- [ ] PUT /api/v1/mutasi/{id}/complete (complete mutation - Admin only)
-- [ ] PUT /api/v1/mutasi/{id}/cancel (cancel mutation - Admin only)
+- [x] Implement `app/api/v1/mutasi.py`
+- [x] POST /api/v1/mutasi (initiate mutation - Admin only)
+- [x] GET /api/v1/mutasi (list mutations)
+- [x] GET /api/v1/mutasi/{id} (get mutation detail)
+- [x] PUT /api/v1/mutasi/{id}/complete (complete mutation - Admin only)
+- [x] PUT /api/v1/mutasi/{id}/cancel (cancel mutation - Admin only)
 
 **Files:**
 - `backend/app/api/v1/mutasi.py`
@@ -616,13 +623,13 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 5.7: Ruangan API Endpoints
-- [ ] Implement `app/api/v1/ruangan.py`
-- [ ] GET /api/v1/ruangan (list rooms)
-- [ ] GET /api/v1/ruangan/{id} (get room detail)
-- [ ] POST /api/v1/ruangan (create room - Admin only)
-- [ ] PUT /api/v1/ruangan/{id} (update room - Admin only)
-- [ ] DELETE /api/v1/ruangan/{id} (delete room - Admin only)
-- [ ] GET /api/v1/ruangan/{id}/kir (get KIR report for room)
+- [x] Implement `app/api/v1/ruangan.py`
+- [x] GET /api/v1/ruangan (list rooms)
+- [x] GET /api/v1/ruangan/{id} (get room detail)
+- [x] POST /api/v1/ruangan (create room - Admin only)
+- [x] PUT /api/v1/ruangan/{id} (update room - Admin only)
+- [x] DELETE /api/v1/ruangan/{id} (delete room - Admin only)
+- [x] GET /api/v1/ruangan/{id}/kir (get KIR report for room)
 
 **Files:**
 - `backend/app/api/v1/ruangan.py`
@@ -632,13 +639,13 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 5.8: User Management API Endpoints
-- [ ] Implement `app/api/v1/users.py`
-- [ ] GET /api/v1/users (list users - Admin only)
-- [ ] GET /api/v1/users/{id} (get user detail - Admin only)
-- [ ] POST /api/v1/users (create user - Admin only)
-- [ ] PUT /api/v1/users/{id} (update user - Admin only)
-- [ ] PUT /api/v1/users/{id}/deactivate (deactivate user - Admin only)
-- [ ] Add validation: cannot delete self, cannot change own role
+- [x] Implement `app/api/v1/users.py`
+- [x] GET /api/v1/users (list users - Admin only)
+- [x] GET /api/v1/users/{id} (get user detail - Admin only)
+- [x] POST /api/v1/users (create user - Admin only)
+- [x] PUT /api/v1/users/{id} (update user - Admin only)
+- [x] PUT /api/v1/users/{id}/deactivate (deactivate user - Admin only)
+- [x] Add validation: cannot delete self, cannot change own role
 
 **Files:**
 - `backend/app/api/v1/users.py`
@@ -648,10 +655,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 5.9: API Router Setup
-- [ ] Implement `app/api/v1/router.py`
-- [ ] Register all routers (auth, aset, kib, mutasi, ruangan, users)
-- [ ] Add API versioning prefix /api/v1
-- [ ] GET /api/v1/health (health check endpoint)
+- [x] Implement `app/api/v1/router.py`
+- [x] Register all routers (auth, aset, kib, mutasi, ruangan, users)
+- [x] Add API versioning prefix /api/v1
+- [x] GET /api/v1/health (health check endpoint)
 
 **Files:**
 - `backend/app/api/v1/router.py`
@@ -663,13 +670,13 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ## Phase 6: Frontend Implementation (WPF .NET 8)
 
 ### Task 6.1: Frontend Project Structure
-- [ ] Create WPF project dengan .NET 8
-- [ ] Setup directory structure sesuai design.md
-- [ ] Configure NuGet packages (CommunityToolkit.Mvvm, Refit, Polly, Serilog, MaterialDesignInXaml)
-- [ ] Setup App.xaml dengan DI container
+- [x] Create WPF project dengan .NET 8
+- [x] Setup directory structure sesuai design.md
+- [x] Configure NuGet packages (CommunityToolkit.Mvvm, Refit, Polly, Serilog, MaterialDesignInXaml)
+- [x] Setup App.xaml dengan DI container
 
 **Files:**
-- `frontend/Simanis62.WPF/Simanis62.WPF.csproj`
+- `frontend/Simanis62.WPF/Frontend.csproj`
 - `frontend/Simanis62.WPF/App.xaml`
 - `frontend/Simanis62.WPF/App.xaml.cs`
 
@@ -678,15 +685,14 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 6.2: Frontend Core Infrastructure
-- [ ] Implement `Core/Configuration/AppSettings.cs`
-- [ ] Implement `Core/Exceptions/` (SimanisException, ApiException, etc.)
-- [ ] Implement `Core/Logging/LoggingService.cs` dengan Serilog
-- [ ] Setup global exception handlers
+- [x] Implement `Core/Configuration/AppSettings.cs`
+- [x] Implement `Core/Exceptions/` (SimanisException, ApiException, etc.)
+- [x] Implement `Core/Logging/LoggingService.cs` dengan Serilog
+- [x] Setup global exception handlers
 
 **Files:**
 - `frontend/Simanis62.WPF/Core/Configuration/AppSettings.cs`
 - `frontend/Simanis62.WPF/Core/Exceptions/SimanisException.cs`
-- `frontend/Simanis62.WPF/Core/Exceptions/ApiException.cs`
 - `frontend/Simanis62.WPF/Core/Logging/LoggingService.cs`
 
 **Acceptance Criteria:** REQ-21 (Audit Trail logging)
@@ -694,10 +700,10 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 6.3: Frontend API Service
-- [ ] Implement `Services/Interfaces/IApiService.cs` dengan Refit
-- [ ] Implement `Services/ApiService.cs` dengan error handling
-- [ ] Setup Polly retry policies
-- [ ] Configure HttpClient dengan base URL dari config
+- [x] Implement `Services/Interfaces/IApiService.cs` dengan Refit
+- [x] Implement `Services/ApiService.cs` dengan error handling
+- [x] Setup Polly retry policies
+- [x] Configure HttpClient dengan base URL dari config
 
 **Files:**
 - `frontend/Simanis62.WPF/Services/Interfaces/IApiService.cs`
@@ -708,11 +714,11 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 6.4: Frontend Models
-- [ ] Implement `Models/User.cs`
-- [ ] Implement `Models/Asset.cs`
-- [ ] Implement `Models/Mutation.cs`
-- [ ] Implement `Models/Room.cs`
-- [ ] Implement `Models/ApiResponse.cs`
+- [x] Implement `Models/User.cs`
+- [x] Implement `Models/Asset.cs`
+- [x] Implement `Models/Mutation.cs`
+- [x] Implement `Models/Room.cs`
+- [x] Implement `Models/ApiResponse.cs`
 
 **Files:**
 - `frontend/Simanis62.WPF/Models/`
@@ -722,9 +728,9 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 6.5: Frontend ViewModelBase
-- [ ] Implement `ViewModels/Base/ViewModelBase.cs` dengan ObservableObject
-- [ ] Add IsBusy, ErrorMessage, HasError properties
-- [ ] Implement ExecuteAsync helper dengan error handling
+- [x] Implement `ViewModels/Base/ViewModelBase.cs` dengan ObservableObject
+- [x] Add IsBusy, ErrorMessage, HasError properties
+- [x] Implement ExecuteAsync helper dengan error handling
 
 **Files:**
 - `frontend/Simanis62.WPF/ViewModels/Base/ViewModelBase.cs`
@@ -734,98 +740,104 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 6.6: Login View & ViewModel
-- [ ] Implement `ViewModels/LoginViewModel.cs`
-- [ ] Implement `Views/LoginView.xaml`
-- [ ] Add username/password validation
-- [ ] Handle login errors dengan user-friendly messages
+- [x] Implement `ViewModels/LoginViewModel.cs`
+- [x] Implement `Views/LoginView.xaml`
+- [x] Add username/password validation
+- [x] Handle login errors dengan user-friendly messages
 
 **Files:**
 - `frontend/Simanis62.WPF/ViewModels/LoginViewModel.cs`
 - `frontend/Simanis62.WPF/Views/LoginView.xaml`
+- `frontend/Simanis62.WPF/Views/LoginView.xaml.cs`
 
 **Acceptance Criteria:** REQ-1 (Authentication < 2 detik)
 
 ---
 
 ### Task 6.7: Dashboard View & ViewModel
-- [ ] Implement `ViewModels/DashboardViewModel.cs`
-- [ ] Implement `Views/DashboardView.xaml`
-- [ ] Display summary statistics (total aset per kategori)
-- [ ] Add navigation to other views
+- [x] Implement `ViewModels/DashboardViewModel.cs`
+- [x] Implement `Views/DashboardView.xaml`
+- [x] Display summary statistics (total aset per kategori)
+- [x] Add navigation to other views
 
 **Files:**
 - `frontend/Simanis62.WPF/ViewModels/DashboardViewModel.cs`
 - `frontend/Simanis62.WPF/Views/DashboardView.xaml`
+- `frontend/Simanis62.WPF/Views/DashboardView.xaml.cs`
 
 **Acceptance Criteria:** REQ-3 (Asset viewing)
 
 ---
 
 ### Task 6.8: Asset List View & ViewModel
-- [ ] Implement `ViewModels/AssetListViewModel.cs`
-- [ ] Implement `Views/AssetListView.xaml`
-- [ ] Add search dengan filters (keyword, kategori_kib, status)
-- [ ] Add pagination (100 items per page)
-- [ ] Show/hide Edit/Delete buttons based on role
+- [x] Implement `ViewModels/AssetListViewModel.cs`
+- [x] Implement `Views/AssetListView.xaml`
+- [x] Add search dengan filters (keyword, kategori_kib, status)
+- [x] Add pagination (100 items per page)
+- [x] Show/hide Edit/Delete buttons based on role
 
 **Files:**
 - `frontend/Simanis62.WPF/ViewModels/AssetListViewModel.cs`
 - `frontend/Simanis62.WPF/Views/AssetListView.xaml`
+- `frontend/Simanis62.WPF/Views/AssetListView.xaml.cs`
 
 **Acceptance Criteria:** REQ-3, REQ-5 (Search < 5 detik)
 
 ---
 
 ### Task 6.9: Asset Form View & ViewModel
-- [ ] Implement `ViewModels/AssetFormViewModel.cs`
-- [ ] Implement `Views/AssetFormView.xaml`
-- [ ] Dynamic form fields based on kategori_kib
-- [ ] Client-side validation dengan error messages
-- [ ] Create and Update modes
+- [x] Implement `ViewModels/AssetFormViewModel.cs`
+- [x] Implement `Views/AssetFormView.xaml`
+- [x] Dynamic form fields based on kategori_kib
+- [x] Client-side validation dengan error messages
+- [x] Create and Update modes
 
 **Files:**
 - `frontend/Simanis62.WPF/ViewModels/AssetFormViewModel.cs`
 - `frontend/Simanis62.WPF/Views/AssetFormView.xaml`
+- `frontend/Simanis62.WPF/Views/AssetFormView.xaml.cs`
 
 **Acceptance Criteria:** REQ-2, REQ-4, REQ-20
 
 ---
 
 ### Task 6.10: KIB Report View & ViewModel
-- [ ] Implement `ViewModels/KibReportViewModel.cs`
-- [ ] Implement `Views/KibReportView.xaml`
-- [ ] Display KIB report dengan correct columns per kategori
-- [ ] Add export to Excel button
-- [ ] Show total count dan total value
+- [x] Implement `ViewModels/KibReportViewModel.cs`
+- [x] Implement `Views/KibReportView.xaml`
+- [x] Display KIB report dengan correct columns per kategori
+- [x] Add export to Excel button
+- [x] Show total count dan total value
 
 **Files:**
 - `frontend/Simanis62.WPF/ViewModels/KibReportViewModel.cs`
 - `frontend/Simanis62.WPF/Views/KibReportView.xaml`
+- `frontend/Simanis62.WPF/Views/KibReportView.xaml.cs`
 
 **Acceptance Criteria:** REQ-7 sampai REQ-13
 
 ---
 
 ### Task 6.11: Mutation View & ViewModel
-- [ ] Implement `ViewModels/MutationViewModel.cs`
-- [ ] Implement `Views/MutationView.xaml`
-- [ ] Form untuk initiate mutation
-- [ ] List pending mutations
-- [ ] Complete/Cancel mutation actions
+- [x] Implement `ViewModels/MutationViewModel.cs`
+- [x] Implement `Views/MutationView.xaml`
+- [x] Form untuk initiate mutation
+- [x] List pending mutations
+- [x] Complete/Cancel mutation actions
 
 **Files:**
 - `frontend/Simanis62.WPF/ViewModels/MutationViewModel.cs`
 - `frontend/Simanis62.WPF/Views/MutationView.xaml`
+- `frontend/Simanis62.WPF/Views/MutationView.xaml.cs`
 
 **Acceptance Criteria:** REQ-14, REQ-15, REQ-16
 
 ---
 
 ### Task 6.12: Navigation Service
-- [ ] Implement `Services/NavigationService.cs`
-- [ ] Setup navigation between views
-- [ ] Handle back navigation
-- [ ] Pass parameters between views
+- [x] Implement `Services/NavigationService.cs`
+- [x] Setup navigation between views
+- [x] Handle back navigation
+- [x] Pass parameters between views
 
 **Files:**
 - `frontend/Simanis62.WPF/Services/Interfaces/INavigationService.cs`
@@ -836,14 +848,15 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 ---
 
 ### Task 6.13: MainWindow & Shell
-- [ ] Implement `MainWindow.xaml` dengan navigation frame
-- [ ] Add sidebar menu
-- [ ] Add user info display
-- [ ] Add logout button
+- [x] Implement `MainWindow.xaml` dengan navigation frame
+- [x] Add sidebar menu
+- [x] Add user info display
+- [x] Add logout button
 
 **Files:**
 - `frontend/Simanis62.WPF/MainWindow.xaml`
 - `frontend/Simanis62.WPF/MainWindow.xaml.cs`
+- `frontend/Simanis62.WPF/ViewModels/MainViewModel.cs`
 
 **Acceptance Criteria:** REQ-1 (Logout)
 
@@ -999,16 +1012,16 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 
 | Phase | Tasks | Status |
 |-------|-------|--------|
-| Phase 1: Infrastructure | 8 tasks | ⬜ Not Started |
-| Phase 2: Domain Models | 12 tasks | ⬜ Not Started |
-| Phase 3: Schemas | 6 tasks | ⬜ Not Started |
-| Phase 4: Services | 9 tasks | ⬜ Not Started |
-| Phase 5: API Endpoints | 9 tasks | ⬜ Not Started |
-| Phase 6: Frontend | 13 tasks | ⬜ Not Started |
+| Phase 1: Infrastructure | 8 tasks | ✅ Complete |
+| Phase 2: Domain Models | 12 tasks | ✅ Complete |
+| Phase 3: Schemas | 6 tasks | ✅ Complete |
+| Phase 4: Services | 10 tasks | ✅ Complete |
+| Phase 5: API Endpoints | 9 tasks | ✅ Complete |
+| Phase 6: Frontend | 13 tasks | ✅ Complete |
 | Phase 7: Testing | 6 tasks | ⬜ Not Started |
 | Phase 8: Deployment | 4 tasks | ⬜ Not Started |
 
-**Total: 67 tasks**
+**Total: 68 tasks (58 completed)**
 
 ---
 
@@ -1039,4 +1052,4 @@ Dokumen ini berisi daftar task implementasi untuk SIMANIS62 V2 berdasarkan requi
 *Dokumen ini adalah bagian dari `.kiro/specs/simanis62-v2/` dan harus dibaca bersama dengan `requirements.md` dan `design.md`.*
 
 *Terakhir diupdate: 11 Januari 2026*
-*Versi: 1.1*
+*Versi: 1.3 - Phase 6 Frontend Complete*

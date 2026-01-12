@@ -10,7 +10,7 @@ import contextvars
 import json
 import logging
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any, ClassVar
@@ -24,6 +24,9 @@ from app.core.config import settings
 correlation_id_var: contextvars.ContextVar[str] = contextvars.ContextVar(
     "correlation_id", default=""
 )
+
+# Flag to prevent multiple initialization
+_logging_initialized = False
 
 
 class StructuredFormatter(logging.Formatter):
@@ -39,7 +42,7 @@ class StructuredFormatter(logging.Formatter):
             str: JSON string dari log data
         """
         log_data: dict[str, Any] = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
             "level": record.levelname,
             "logger": record.name,
             "message": record.getMessage(),
@@ -52,10 +55,6 @@ class StructuredFormatter(logging.Formatter):
         correlation_id = correlation_id_var.get()
         if correlation_id:
             log_data["correlation_id"] = correlation_id
-
-        # Tambahkan extra fields dari record
-        if hasattr(record, "extra"):
-            log_data.update(record.extra)
 
         # Tambahkan exception info jika ada
         if record.exc_info:
@@ -119,7 +118,17 @@ def setup_logging(
         log_file: Path ke log file. Defaults to settings.LOG_DIR/simanis62.log
         json_format: Gunakan JSON format (True) atau human-readable (False).
                      Defaults to not settings.DEBUG
+
+    Note:
+        This function can only be called once per process. Subsequent calls
+        will be ignored to prevent logging configuration conflicts.
     """
+    global _logging_initialized
+
+    # Prevent multiple initialization
+    if _logging_initialized:
+        return
+
     level = level or settings.LOG_LEVEL
     json_format = not settings.DEBUG if json_format is None else json_format
 
@@ -152,6 +161,9 @@ def setup_logging(
         backupCount=5,
         encoding="utf-8",
     )
+
+    # Mark as initialized
+    _logging_initialized = True
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(StructuredFormatter())
     root_logger.addHandler(file_handler)
@@ -178,14 +190,13 @@ def setup_logging(
         sentry_sdk.init(
             dsn=settings.glitchtip_dsn,
             integrations=[sentry_logging],
-            environment=settings.glitchtip_environment,
+            environment=settings.environment,
             before_send=filter_sensitive_data,
             traces_sample_rate=0.1,  # 10% performance monitoring
         )
 
-        root_logger.info(
-            "GlitchTip integration enabled",
-            extra={"environment": settings.glitchtip_environment},
+        logger.info(
+            f"GlitchTip integration enabled - environment: {settings.environment}"
         )
 
     # === Reduce noise dari library ===
@@ -193,13 +204,8 @@ def setup_logging(
     logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
 
     root_logger.info(
-        "Logging configured",
-        extra={
-            "level": level,
-            "log_file": log_file,
-            "json_format": json_format,
-            "glitchtip_enabled": bool(settings.glitchtip_dsn),
-        },
+        f"Logging configured - level: {level}, log_file: {log_file}, "
+        f"json_format: {json_format}, glitchtip_enabled: {bool(settings.glitchtip_dsn)}"
     )
 
 

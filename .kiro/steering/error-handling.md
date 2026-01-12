@@ -477,7 +477,7 @@ class AsetService:
             )
 
         try:
-            aset = Aset(**data.model_dump(), dibuat_oleh=user_id)
+            aset = Aset(**data.model_dump(), created_by=user_id)
             self.session.add(aset)
             self.session.commit()
             self.session.refresh(aset)

@@ -5,7 +5,7 @@
     "debug": true
   },
   "database": {
-    "path": "C:\\ProgramData\\Simanis62\\simanis62-dev.db"
+    "path": "D:/simanis62-v2/backend/simanis62-dev.db"
   },
   "logging": {
     "level": "DEBUG",

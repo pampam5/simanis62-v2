@@ -1,9 +1,26 @@
-﻿<Application x:Class="simanis62.App"
+﻿<Application x:Class="Simanis62.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:simanis62"
-             StartupUri="MainWindow.xaml">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:Simanis62">
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Material Design 3 Theme with Custom Colors -->
+                <materialDesign:CustomColorTheme BaseTheme="Light"
+                                                  PrimaryColor="#1565C0"
+                                                  SecondaryColor="#00897B" />
 
+                <!-- Material Design 3 Defaults -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+
+                <!-- Custom Application Styles -->
+                <ResourceDictionary Source="Resources/Styles/AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Global Converters -->
+            <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

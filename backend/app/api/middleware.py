@@ -7,10 +7,9 @@ untuk semua HTTP requests.
 
 import logging
 import time
-import traceback
 import uuid
 from collections.abc import Callable
-from datetime import datetime
+from datetime import UTC, datetime
 
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
@@ -57,14 +56,8 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
 
             # Log request completion
             logger.info(
-                "Request completed",
-                extra={
-                    "method": request.method,
-                    "path": request.url.path,
-                    "status_code": response.status_code,
-                    "duration_ms": round(duration_ms, 2),
-                    "correlation_id": correlation_id,
-                },
+                f"Request completed: {request.method} {request.url.path} "
+                f"[{response.status_code}] {duration_ms:.2f}ms (correlation_id={correlation_id})"
             )
 
             return response
@@ -72,15 +65,8 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
         except SimanisException as e:
             # Custom exception - log dan return structured response
             logger.warning(
-                f"Business error: {e.error_code}",
-                extra={
-                    "correlation_id": correlation_id,
-                    "error_code": e.error_code,
-                    "message": e.message,
-                    "details": e.details,
-                    "path": request.url.path,
-                    "method": request.method,
-                },
+                f"Business error: {e.error_code} - {e.message} "
+                f"({request.method} {request.url.path}, correlation_id={correlation_id})"
             )
 
             return JSONResponse(
@@ -91,7 +77,7 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
                     "message": e.message,
                     "details": e.details,
                     "correlation_id": correlation_id,
-                    "timestamp": datetime.utcnow().isoformat() + "Z",
+                    "timestamp": datetime.now(UTC).isoformat() + "Z",
                 },
                 headers={"X-Correlation-ID": correlation_id},
             )
@@ -99,13 +85,7 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
         except Exception as e:
             # Unexpected exception - log full traceback
             logger.error(
-                f"Unexpected error: {e!s}",
-                extra={
-                    "correlation_id": correlation_id,
-                    "path": request.url.path,
-                    "method": request.method,
-                    "traceback": traceback.format_exc(),
-                },
+                f"Unexpected error: {e!s} ({request.method} {request.url.path}, correlation_id={correlation_id})",
                 exc_info=True,
             )
 
@@ -117,7 +97,7 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
                     "message": "Terjadi kesalahan internal. Silakan hubungi administrator.",
                     "details": {"correlation_id": correlation_id},
                     "correlation_id": correlation_id,
-                    "timestamp": datetime.utcnow().isoformat() + "Z",
+                    "timestamp": datetime.now(UTC).isoformat() + "Z",
                 },
                 headers={"X-Correlation-ID": correlation_id},
             )
@@ -139,15 +119,11 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         correlation_id = getattr(request.state, "correlation_id", "unknown")
 
         # Log incoming request
+        client_host = request.client.host if request.client else "unknown"
+        query_str = f"?{request.query_params}" if request.query_params else ""
         logger.info(
-            "Incoming request",
-            extra={
-                "method": request.method,
-                "path": request.url.path,
-                "query_params": dict(request.query_params),
-                "client_host": request.client.host if request.client else None,
-                "correlation_id": correlation_id,
-            },
+            f"Incoming request: {request.method} {request.url.path}{query_str} "
+            f"from {client_host} (correlation_id={correlation_id})"
         )
 
         return await call_next(request)

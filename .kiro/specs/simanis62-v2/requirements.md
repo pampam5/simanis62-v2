@@ -94,19 +94,33 @@ SIMANIS62 V2 adalah sistem manajemen aset sekolah berbasis desktop yang dirancan
 - **info_dokumen**: Informasi dokumen (tanggal/nomor)
 
 #### Field Lokasi dan Mutasi
-- **ruangan_id**: Foreign key ke tabel ruangan
-- **ruangan_asal**: Ruangan asal mutasi
-- **ruangan_tujuan**: Ruangan tujuan mutasi
-- **alasan_mutasi**: Alasan perpindahan aset
-- **alasan_hapus**: Alasan penghapusan aset
+- **ruangan_id**: Foreign key ke tabel ruangan (lokasi aset saat ini)
+- **ruangan_asal_id**: FK ke ruangan asal mutasi
+- **ruangan_tujuan_id**: FK ke ruangan tujuan mutasi
+- **alasan**: Alasan perpindahan aset (min 10 karakter)
+- **kondisi_saat_mutasi**: Kondisi aset saat mutasi
+- **status_mutasi**: Status mutasi (Dalam Proses/Selesai/Dibatalkan)
+- **mulai_mutasi**: Timestamp mulai mutasi
+- **selesai_mutasi**: Timestamp selesai mutasi
+- **alasan_pembatalan**: Alasan pembatalan mutasi (jika dibatalkan)
+
+#### Field Ruangan
+- **kode_ruangan**: Kode unik ruangan (contoh: LAB-01, RG-02)
+- **nama_ruangan**: Nama ruangan (contoh: Lab Komputer, Ruang Guru)
+- **keterangan**: Deskripsi/catatan ruangan (opsional)
+
+> **CATATAN**: Model Ruangan TIDAK memiliki field `gedung` atau `lantai`. Jika diperlukan, informasi ini dapat disimpan di field `keterangan`.
 
 #### Field Audit Trail
-- **dibuat_oleh**: User ID yang membuat record
-- **dibuat_pada**: Timestamp pembuatan record
-- **diubah_oleh**: User ID yang mengubah record
-- **diubah_pada**: Timestamp perubahan record
-- **dihapus_oleh**: User ID yang menghapus record
-- **dihapus_pada**: Timestamp penghapusan record
+- **created_by**: User ID yang membuat record (FK ke users.id)
+- **created_at**: Timestamp pembuatan record
+- **updated_by**: User ID yang mengupdate record (FK ke users.id)
+- **updated_at**: Timestamp update terakhir
+- **deleted_by**: User ID yang menghapus record (FK ke users.id)
+- **deleted_at**: Timestamp penghapusan (soft delete)
+- **delete_reason**: Alasan penghapusan aset (min 20 karakter)
+
+> **CATATAN PENTING**: Field audit menggunakan bahasa Inggris (`created_by`, `created_at`, dll) untuk konsistensi dengan SQLModel/SQLAlchemy conventions. Ini berbeda dengan field bisnis yang menggunakan Bahasa Indonesia.
 
 #### Field User
 - **dapat_ekspor**: Flag untuk izin export (boolean)
@@ -404,7 +418,7 @@ SIMANIS62 V2 adalah sistem manajemen aset sekolah berbasis desktop yang dirancan
 1. WHEN Admin confirms mutation completion, THE System SHALL update asset ruangan_id to ruangan_tujuan
 2. WHEN Admin confirms mutation completion, THE System SHALL set asset status to "Aktif"
 3. WHEN Admin confirms mutation completion, THE System SHALL set mutation status to "Selesai"
-4. WHEN Admin confirms mutation completion, THE System SHALL record selesai_pada timestamp
+4. WHEN Admin confirms mutation completion, THE System SHALL record selesai_mutasi timestamp
 
 ### Requirement 16: Asset Mutation Cancellation
 
@@ -415,7 +429,9 @@ SIMANIS62 V2 adalah sistem manajemen aset sekolah berbasis desktop yang dirancan
 1. WHEN Admin cancels mutation with valid reason (min 10 characters), THE System SHALL set mutation status to "Dibatalkan"
 2. WHEN Admin cancels mutation, THE System SHALL set asset status back to "Aktif"
 3. WHEN Admin cancels mutation, THE System SHALL keep asset in ruangan_asal
-4. WHEN Admin cancels mutation, THE System SHALL record alasan_batal and dibatalkan_pada timestamp
+4. WHEN Admin cancels mutation, THE System SHALL record alasan_pembatalan field
+
+> **CATATAN**: Field pembatalan menggunakan `alasan_pembatalan` (bukan `alasan_batal` atau `dibatalkan_pada`). Timestamp pembatalan dapat dilihat dari `updated_at` pada record mutasi.
 
 ### Requirement 17: Room Inventory Report
 
@@ -436,7 +452,7 @@ SIMANIS62 V2 adalah sistem manajemen aset sekolah berbasis desktop yang dirancan
 1. WHEN Admin creates user with valid data, THE System SHALL save user with status "Aktif"
 2. WHEN Admin creates user with duplicate username, THE System SHALL reject creation with error message
 3. WHEN Admin creates user with password less than 8 characters, THE System SHALL reject creation with error message
-4. WHEN Admin updates user data, THE System SHALL save changes and update diubah_pada timestamp
+4. WHEN Admin updates user data, THE System SHALL save changes and update updated_at timestamp
 5. WHEN Admin deactivates user, THE System SHALL set user status to "Nonaktif"
 6. THE System SHALL NOT allow Admin to delete themselves
 7. THE System SHALL NOT allow Admin to change their own role
@@ -479,11 +495,13 @@ SIMANIS62 V2 adalah sistem manajemen aset sekolah berbasis desktop yang dirancan
 
 #### Acceptance Criteria
 
-1. WHEN user creates asset, THE System SHALL record dibuat_oleh user ID and dibuat_pada timestamp
-2. WHEN user updates asset, THE System SHALL record diubah_oleh user ID and diubah_pada timestamp
-3. WHEN user deletes asset, THE System SHALL record dihapus_oleh user ID and dihapus_pada timestamp
-4. WHEN user performs mutation, THE System SHALL record user ID and timestamps in mutation history
-5. THE System SHALL NOT allow modification or deletion of audit trail records
+1. WHEN user creates asset, THE System SHALL record created_by user ID and created_at timestamp
+2. WHEN user updates asset, THE System SHALL record updated_by user ID and updated_at timestamp
+3. WHEN user deletes asset, THE System SHALL record deleted_by user ID, deleted_at timestamp, and delete_reason
+4. WHEN user performs mutation, THE System SHALL record user_id and timestamps in riwayat_mutasi table
+5. THE System SHALL NOT allow modification or deletion of audit_trail records
+
+> **CATATAN**: Field audit menggunakan bahasa Inggris (`created_by`, `created_at`, `updated_by`, `updated_at`, `deleted_by`, `deleted_at`, `delete_reason`) untuk konsistensi dengan SQLModel/SQLAlchemy conventions.
 
 ### Requirement 22: Performance Requirements
 

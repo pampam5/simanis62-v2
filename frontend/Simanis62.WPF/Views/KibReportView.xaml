@@ -1,0 +1,157 @@
+<UserControl x:Class="Simanis62.Views.KibReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:Simanis62.Converters"
+             Background="{StaticResource BackgroundBrush}"
+             Loaded="OnLoaded">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="24,24,24,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="{Binding PageTitle}" Style="{StaticResource PageTitleStyle}" Margin="0"/>
+                <TextBlock Text="{Binding PageSubtitle}" Foreground="Gray" FontSize="14"/>
+            </StackPanel>
+            <Button Grid.Column="1"
+                    Command="{Binding ExportCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Visibility="{Binding CanExport, Converter={StaticResource BoolToVis}}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FileExcel" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="Export Excel"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Category Tabs -->
+        <materialDesign:Card Grid.Row="1" Margin="24,0,24,16" Padding="8">
+            <StackPanel Orientation="Horizontal">
+                <RadioButton Content="KIB A - Tanah"
+                             IsChecked="{Binding IsKibA}"
+                             Command="{Binding SelectKibCommand}"
+                             CommandParameter="A"
+                             Style="{StaticResource MaterialDesignTabRadioButtonLeft}"/>
+                <RadioButton Content="KIB B - Peralatan"
+                             IsChecked="{Binding IsKibB}"
+                             Command="{Binding SelectKibCommand}"
+                             CommandParameter="B"
+                             Style="{StaticResource MaterialDesignTabRadioButtonCenter}"/>
+                <RadioButton Content="KIB C - Gedung"
+                             IsChecked="{Binding IsKibC}"
+                             Command="{Binding SelectKibCommand}"
+                             CommandParameter="C"
+                             Style="{StaticResource MaterialDesignTabRadioButtonCenter}"/>
+                <RadioButton Content="KIB D - Jalan"
+                             IsChecked="{Binding IsKibD}"
+                             Command="{Binding SelectKibCommand}"
+                             CommandParameter="D"
+                             Style="{StaticResource MaterialDesignTabRadioButtonCenter}"/>
+                <RadioButton Content="KIB E - Aset Lain"
+                             IsChecked="{Binding IsKibE}"
+                             Command="{Binding SelectKibCommand}"
+                             CommandParameter="E"
+                             Style="{StaticResource MaterialDesignTabRadioButtonCenter}"/>
+                <RadioButton Content="KIB F - KDP"
+                             IsChecked="{Binding IsKibF}"
+                             Command="{Binding SelectKibCommand}"
+                             CommandParameter="F"
+                             Style="{StaticResource MaterialDesignTabRadioButtonRight}"/>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <!-- Data Grid -->
+        <materialDesign:Card Grid.Row="2" Margin="24,0,24,16" Padding="0">
+            <DataGrid ItemsSource="{Binding Assets}"
+                      Style="{StaticResource ModernDataGridStyle}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="No" Binding="{Binding RowNumber}" Width="50"/>
+                    <DataGridTextColumn Header="No. Register" Binding="{Binding NomorRegister}" Width="100"/>
+                    <DataGridTextColumn Header="Kode Barang" Binding="{Binding KodeBarang}" Width="140"/>
+                    <DataGridTextColumn Header="Nama Barang" Binding="{Binding NamaBarang}" Width="*"/>
+                    <DataGridTextColumn Header="Merk/Type" Binding="{Binding Merk}" Width="120"/>
+                    <DataGridTextColumn Header="Ukuran/CC" Binding="{Binding UkuranCc}" Width="80"/>
+                    <DataGridTextColumn Header="Bahan" Binding="{Binding Bahan}" Width="80"/>
+                    <DataGridTextColumn Header="Tahun" Binding="{Binding TahunPerolehan}" Width="60"/>
+                    <DataGridTextColumn Header="No. Pabrik" Binding="{Binding NomorPabrik}" Width="100"/>
+                    <DataGridTextColumn Header="No. Rangka" Binding="{Binding NomorRangka}" Width="100"/>
+                    <DataGridTextColumn Header="No. Mesin" Binding="{Binding NomorMesin}" Width="100"/>
+                    <DataGridTextColumn Header="No. Polisi" Binding="{Binding NomorPolisi}" Width="90"/>
+                    <DataGridTextColumn Header="No. BPKB" Binding="{Binding NomorBpkb}" Width="100"/>
+                    <DataGridTextColumn Header="Asal Usul" Binding="{Binding AsalUsul}" Width="100"/>
+                    <DataGridTextColumn Header="Harga" Binding="{Binding Harga, StringFormat=N0}" Width="120"/>
+                    <DataGridTextColumn Header="Kondisi" Binding="{Binding Kondisi}" Width="80"/>
+                    <DataGridTextColumn Header="Ruangan" Binding="{Binding NamaRuangan}" Width="120"/>
+                    <DataGridTextColumn Header="Keterangan" Binding="{Binding Keterangan}" Width="150"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </materialDesign:Card>
+
+        <!-- Summary Footer -->
+        <materialDesign:Card Grid.Row="3" Margin="24,0,24,24" Padding="16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Information"
+                                             VerticalAlignment="Center"
+                                             Foreground="{StaticResource PrimaryBrush}"
+                                             Margin="0,0,8,0"/>
+                    <TextBlock VerticalAlignment="Center">
+                        <Run Text="Format sesuai BPAD DKI Jakarta - 18 Kolom"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,32,0">
+                    <TextBlock Text="Total Aset: " FontWeight="Medium" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding TotalCount}"
+                               FontWeight="Bold"
+                               FontSize="18"
+                               Foreground="{StaticResource PrimaryBrush}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <TextBlock Text="Total Nilai: " FontWeight="Medium" VerticalAlignment="Center"/>
+                    <TextBlock FontWeight="Bold"
+                               FontSize="18"
+                               Foreground="{StaticResource SecondaryBrush}"
+                               VerticalAlignment="Center">
+                        <Run Text="Rp "/>
+                        <Run Text="{Binding TotalValue, StringFormat=N0}"/>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+
+        <!-- Loading Overlay -->
+        <Grid Grid.RowSpan="4" Style="{StaticResource LoadingOverlayStyle}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="100"
+                             Style="{StaticResource MaterialDesignCircularProgressBar}"/>
+                <TextBlock Text="{Binding LoadingMessage}" Margin="0,16,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -61,11 +61,14 @@ class Aset(SQLModel, table=True):
     kondisi: str  # Baik, Rusak Ringan, Rusak Berat
     status: str = Field(default="Baru")  # Baru, Aktif, Mutasi, Rusak, Dihapus
 
-    # Audit trail
-    dibuat_oleh: UUID
-    dibuat_pada: datetime = Field(default_factory=datetime.utcnow)
-    diubah_oleh: Optional[UUID] = None
-    diubah_pada: Optional[datetime] = None
+    # Audit trail (English field names for SQLModel/SQLAlchemy conventions)
+    created_by: UUID  # FK ke users.id
+    updated_by: Optional[UUID] = None
+    deleted_by: Optional[UUID] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    deleted_at: Optional[datetime] = None
+    delete_reason: Optional[str] = None  # Min 20 karakter untuk soft delete
 ```
 
 ### Authorization (RBAC)

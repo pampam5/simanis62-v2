@@ -18,8 +18,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Path dasar proyek
 _CURRENT_FILE = Path(__file__).resolve()
-BACKEND_DIR = _CURRENT_FILE.parents[3]  # .../simanis62-v2/backend
-PROJECT_ROOT = _CURRENT_FILE.parents[4]  # .../simanis62-v2
+BACKEND_DIR = _CURRENT_FILE.parents[2]  # backend
+PROJECT_ROOT = _CURRENT_FILE.parents[3]  # simanis62-v2
 CONFIG_DIR = PROJECT_ROOT / "configs"
 ENV_FILE = BACKEND_DIR / ".env"
 
@@ -69,6 +69,11 @@ class Settings(BaseSettings):
     secret_key: str = Field("change_me", alias="SECRET_KEY")
     glitchtip_dsn: str | None = Field(None, alias="GLITCHTIP_DSN")
 
+    # Application settings
+    nama_sekolah: str = Field("SDN 01 Jakarta Timur", alias="NAMA_SEKOLAH")
+    session_timeout_hours: int = Field(2, alias="SESSION_TIMEOUT_HOURS")
+    export_dir: str = Field("exports", alias="EXPORT_DIR")
+
     # Nested config sections
     api: ApiSettings = ApiSettings()
     database: DatabaseSettings = DatabaseSettings()
@@ -94,6 +99,23 @@ class Settings(BaseSettings):
     @property
     def LOG_LEVEL(self) -> str:
         return self.logging.level.upper()
+
+    @property
+    def LOG_FILE(self) -> str:
+        """Path ke file log utama."""
+        log_dir = Path(self.LOG_DIR)
+        log_dir.mkdir(parents=True, exist_ok=True)
+        return str(log_dir / "simanis62.log")
+
+    @property
+    def APP_VERSION(self) -> str:
+        """Versi aplikasi."""
+        return "2.0.0"
+
+    @property
+    def ENVIRONMENT(self) -> str:
+        """Environment name."""
+        return self.environment
 
 
 def _load_json_config(environment: str) -> dict[str, Any]:

@@ -80,3 +80,10 @@ node_modules/
 *.dll
 *.so
 *.dylib
+
+# .NET / C#
+bin/
+obj/
+*.user
+*.suo
+*.userprefs

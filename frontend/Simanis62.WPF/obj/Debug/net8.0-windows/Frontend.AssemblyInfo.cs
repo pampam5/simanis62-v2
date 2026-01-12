@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("Frontend")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Simanis62")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+be1283d6e20067cf4ca3e60c33f83a9d012114d8")]
-[assembly: System.Reflection.AssemblyProductAttribute("Frontend")]
-[assembly: System.Reflection.AssemblyTitleAttribute("Frontend")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+842ad8cc330e7052726505afe2322250075452db")]
+[assembly: System.Reflection.AssemblyProductAttribute("Simanis62")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Simanis62")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]

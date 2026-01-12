@@ -1,0 +1,223 @@
+<UserControl x:Class="Simanis62.Views.AssetFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:Simanis62.Converters"
+             Background="{StaticResource BackgroundBrush}"
+             Loaded="OnLoaded">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVis"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+            <StackPanel MaxWidth="800">
+                <!-- Header -->
+                <Grid Margin="0,0,0,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Command="{Binding GoBackCommand}"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            ToolTip="Kembali"
+                            Margin="0,0,16,0">
+                        <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
+                    </Button>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding PageTitle}"
+                               Style="{StaticResource PageTitleStyle}"
+                               VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- Form Card -->
+                <materialDesign:Card Padding="24">
+                    <StackPanel>
+                        <!-- Basic Info Section -->
+                        <TextBlock Text="Informasi Dasar" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,16"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Kategori KIB -->
+                            <ComboBox Grid.Row="0" Grid.Column="0"
+                                      ItemsSource="{Binding KategoriOptions}"
+                                      SelectedItem="{Binding KategoriKib}"
+                                      materialDesign:HintAssist.Hint="Kategori KIB *"
+                                      Style="{StaticResource FormComboBoxStyle}"
+                                      IsEnabled="{Binding IsNewAsset}"/>
+
+                            <!-- Kode Barang -->
+                            <TextBox Grid.Row="0" Grid.Column="2"
+                                     Text="{Binding KodeBarang, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Kode Barang * (XX.XX.XX.XXXX)"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Nama Barang -->
+                            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                     Text="{Binding NamaBarang, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Nama Barang *"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Ruangan -->
+                            <ComboBox Grid.Row="2" Grid.Column="0"
+                                      ItemsSource="{Binding Rooms}"
+                                      SelectedItem="{Binding SelectedRuangan}"
+                                      DisplayMemberPath="NamaRuangan"
+                                      materialDesign:HintAssist.Hint="Ruangan *"
+                                      Style="{StaticResource FormComboBoxStyle}"/>
+
+                            <!-- Tahun Perolehan -->
+                            <TextBox Grid.Row="2" Grid.Column="2"
+                                     Text="{Binding TahunPerolehan, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Tahun Perolehan *"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Harga -->
+                            <TextBox Grid.Row="3" Grid.Column="0"
+                                     Text="{Binding Harga, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                                     materialDesign:HintAssist.Hint="Harga (Rp) *"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Kondisi -->
+                            <ComboBox Grid.Row="3" Grid.Column="2"
+                                      ItemsSource="{Binding KondisiOptions}"
+                                      SelectedItem="{Binding Kondisi}"
+                                      materialDesign:HintAssist.Hint="Kondisi *"
+                                      Style="{StaticResource FormComboBoxStyle}"/>
+                        </Grid>
+
+                        <!-- Additional Info Section -->
+                        <TextBlock Text="Informasi Tambahan" Style="{StaticResource SectionTitleStyle}" Margin="0,24,0,16"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Merk -->
+                            <TextBox Grid.Row="0" Grid.Column="0"
+                                     Text="{Binding Merk, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Merk/Type"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Ukuran/CC -->
+                            <TextBox Grid.Row="0" Grid.Column="2"
+                                     Text="{Binding UkuranCc, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Ukuran/CC"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Bahan -->
+                            <TextBox Grid.Row="1" Grid.Column="0"
+                                     Text="{Binding Bahan, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Bahan"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Nomor Pabrik -->
+                            <TextBox Grid.Row="1" Grid.Column="2"
+                                     Text="{Binding NomorPabrik, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Nomor Pabrik"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Nomor Rangka -->
+                            <TextBox Grid.Row="2" Grid.Column="0"
+                                     Text="{Binding NomorRangka, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Nomor Rangka"
+                                     Style="{StaticResource FormFieldStyle}"/>
+
+                            <!-- Nomor Mesin -->
+                            <TextBox Grid.Row="2" Grid.Column="2"
+                                     Text="{Binding NomorMesin, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Nomor Mesin"
+                                     Style="{StaticResource FormFieldStyle}"/>
+                        </Grid>
+
+                        <!-- Asal Usul Section -->
+                        <TextBlock Text="Asal Usul" Style="{StaticResource SectionTitleStyle}" Margin="0,24,0,16"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Asal Usul -->
+                            <ComboBox Grid.Column="0"
+                                      ItemsSource="{Binding AsalUsulOptions}"
+                                      SelectedItem="{Binding AsalUsul}"
+                                      materialDesign:HintAssist.Hint="Asal Usul"
+                                      Style="{StaticResource FormComboBoxStyle}"/>
+
+                            <!-- Nomor BAST -->
+                            <TextBox Grid.Column="2"
+                                     Text="{Binding NomorBast, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Nomor BAST"
+                                     Style="{StaticResource FormFieldStyle}"/>
+                        </Grid>
+
+                        <!-- Keterangan -->
+                        <TextBox Text="{Binding Keterangan, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Keterangan"
+                                 Style="{StaticResource FormFieldStyle}"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 MinHeight="80"
+                                 VerticalContentAlignment="Top"
+                                 Margin="0,16,0,0"/>
+
+                        <!-- Error Message -->
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Style="{StaticResource ErrorMessageStyle}"
+                                   Margin="0,16,0,0"/>
+
+                        <!-- Action Buttons -->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="0,24,0,0">
+                            <Button Content="Batal"
+                                    Command="{Binding GoBackCommand}"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Margin="0,0,16,0"/>
+                            <Button Content="{Binding SaveButtonText}"
+                                    Command="{Binding SaveCommand}"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    IsEnabled="{Binding IsNotBusy}"
+                                    Visibility="{Binding CanEdit, Converter={StaticResource BoolToVis}}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Loading Overlay -->
+        <Grid Style="{StaticResource LoadingOverlayStyle}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="100"
+                             Style="{StaticResource MaterialDesignCircularProgressBar}"/>
+                <TextBlock Text="Menyimpan..." Margin="0,16,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -6,7 +6,7 @@ berbasis in-memory store dengan automatic expiration.
 """
 
 import secrets
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from passlib.context import CryptContext
@@ -76,13 +76,13 @@ def create_session(user_id: str) -> str:
     session_token = secrets.token_hex(32)
 
     # Calculate expiration time
-    expires_at = datetime.utcnow() + timedelta(hours=settings.session_timeout_hours)
+    expires_at = datetime.now(UTC) + timedelta(hours=settings.session_timeout_hours)
 
     # Store session
     _sessions[session_token] = {
         "user_id": user_id,
         "expires_at": expires_at,
-        "created_at": datetime.utcnow(),
+        "created_at": datetime.now(UTC),
     }
 
     return session_token
@@ -114,7 +114,7 @@ def verify_session(session_token: str) -> str | None:
         return None
 
     # Check expiration
-    if datetime.utcnow() > session["expires_at"]:
+    if datetime.now(UTC) > session["expires_at"]:
         # Session expired, remove it
         destroy_session(session_token)
         return None
@@ -155,7 +155,7 @@ def cleanup_expired_sessions() -> int:
         Function ini sebaiknya dipanggil secara periodic
         (misalnya setiap jam via background task).
     """
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
     expired_tokens = [
         token for token, session in _sessions.items() if now > session["expires_at"]
     ]
@@ -172,7 +172,7 @@ def get_active_sessions_count() -> int:
     Returns:
         int: Jumlah session yang masih valid
     """
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
     return sum(1 for session in _sessions.values() if now <= session["expires_at"])
 
 
