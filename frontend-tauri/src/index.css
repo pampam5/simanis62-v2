@@ -1,0 +1,53 @@
+@import "tailwindcss";
+@import "./styles/glass.css";
+
+/* Tailwind v4 Theme Configuration */
+@theme {
+  /* Colors */
+  --color-primary: var(--bg-primary);
+  --color-secondary: var(--bg-secondary);
+  --color-tertiary: var(--bg-tertiary);
+
+  --color-primary-foreground: var(--text-primary);
+  --color-secondary-foreground: var(--text-secondary);
+  --color-tertiary-foreground: var(--text-tertiary);
+
+  --color-muted: var(--bg-tertiary);
+  --color-muted-foreground: var(--text-secondary);
+
+  --color-border: var(--border-light);
+
+  /* Apple System Colors */
+  --color-blue: var(--accent-blue);
+  --color-green: var(--accent-green);
+  --color-red: var(--accent-red);
+  --color-orange: var(--accent-orange);
+  --color-yellow: var(--accent-yellow);
+  --color-purple: var(--accent-purple);
+  --color-pink: var(--accent-pink);
+
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    /* Force light mode */
+    color-scheme: light;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

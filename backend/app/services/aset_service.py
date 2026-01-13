@@ -8,7 +8,7 @@ Module ini menyediakan AsetService untuk:
 """
 
 import re
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,7 +30,6 @@ from app.schemas.aset import (
     AsetCreate,
     AsetDeleteRequest,
     AsetResponse,
-    AsetSearchParams,
     AsetUpdate,
 )
 from app.schemas.response import PaginatedResponse
@@ -286,7 +285,7 @@ class AsetService(BaseService[Aset, AsetRepository]):
         # Build update dict
         update_data = data.model_dump(exclude_unset=True)
         update_data["updated_by"] = user_id
-        update_data["updated_at"] = datetime.utcnow()
+        update_data["updated_at"] = datetime.now(UTC)
 
         # Auto-update status based on kondisi
         if data.kondisi is not None:

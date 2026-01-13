@@ -4,7 +4,7 @@ Model ini mendefinisikan tabel ruangan untuk tracking lokasi fisik aset.
 """
 
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
@@ -61,11 +61,11 @@ class Ruangan(SQLModel, table=True):
 
     # Timestamps
     created_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(UTC),
         description="Timestamp pembuatan ruangan",
     )
     updated_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(UTC),
         description="Timestamp update terakhir",
     )
 

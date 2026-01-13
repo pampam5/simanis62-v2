@@ -1,3 +1,4 @@
+using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Serilog;
 using Simanis62.Core.Exceptions;
@@ -58,10 +59,31 @@ public abstract partial class ViewModelBase : ObservableObject
             SetError(ex.Message);
             await DialogService.ShowErrorAsync("Akses Ditolak", ex.Message);
         }
+        catch (ApiConnectionException ex)
+        {
+            SetError(ex.Message);
+            Log.Warning(ex, "API connection error");
+            await DialogService.ShowErrorAsync("Koneksi Gagal", 
+                "Tidak dapat terhubung ke server.\n\nPastikan backend sudah berjalan dan coba lagi.");
+        }
         catch (SimanisException ex)
         {
             SetError(ex.Message);
             Log.Warning(ex, "Business error: {ErrorCode}", ex.ErrorCode);
+        }
+        catch (HttpRequestException ex)
+        {
+            SetError("Tidak dapat terhubung ke server");
+            Log.Warning(ex, "HTTP request error");
+            await DialogService.ShowErrorAsync("Koneksi Gagal", 
+                "Tidak dapat terhubung ke server.\n\nPastikan backend sudah berjalan dan coba lagi.");
+        }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            SetError("Request timeout");
+            Log.Warning(ex, "Request timeout");
+            await DialogService.ShowErrorAsync("Timeout", 
+                "Request memakan waktu terlalu lama. Silakan coba lagi.");
         }
         catch (Exception ex)
         {
@@ -99,10 +121,34 @@ public abstract partial class ViewModelBase : ObservableObject
             await DialogService.ShowErrorAsync("Akses Ditolak", ex.Message);
             return default;
         }
+        catch (ApiConnectionException ex)
+        {
+            SetError(ex.Message);
+            Log.Warning(ex, "API connection error");
+            await DialogService.ShowErrorAsync("Koneksi Gagal", 
+                "Tidak dapat terhubung ke server.\n\nPastikan backend sudah berjalan dan coba lagi.");
+            return default;
+        }
         catch (SimanisException ex)
         {
             SetError(ex.Message);
             Log.Warning(ex, "Business error: {ErrorCode}", ex.ErrorCode);
+            return default;
+        }
+        catch (HttpRequestException ex)
+        {
+            SetError("Tidak dapat terhubung ke server");
+            Log.Warning(ex, "HTTP request error");
+            await DialogService.ShowErrorAsync("Koneksi Gagal", 
+                "Tidak dapat terhubung ke server.\n\nPastikan backend sudah berjalan dan coba lagi.");
+            return default;
+        }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            SetError("Request timeout");
+            Log.Warning(ex, "Request timeout");
+            await DialogService.ShowErrorAsync("Timeout", 
+                "Request memakan waktu terlalu lama. Silakan coba lagi.");
             return default;
         }
         catch (Exception ex)

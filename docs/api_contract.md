@@ -2339,3 +2339,203 @@ Dokumen ini **SIAP** digunakan sebagai panduan implementasi dengan:
 
 *Dokumen ini merupakan bagian dari dokumentasi arsitektur Simanis62 V2.*
 *Referensi: 6 dokumen arsitektur (Tujuan Bisnis, Masalah Inti, Alur Kerja, STAKEHOLDERS, Data Schema, Tech Stack)*
+ted** - Complete request/response examples
+
+### 16.3 Kepatuhan Regulasi
+
+API ini dirancang untuk mendukung kepatuhan terhadap:
+- **Permendagri No. 19/2016** - Pedoman Pengelolaan BMD
+- **Permendagri No. 47/2021** - Perubahan Permendagri 19/2016
+- **Permendagri No. 7/2024** - Perubahan Kedua
+- **Format BPAD DKI Jakarta** - 18 kolom KIB B
+
+---
+
+## 17. Setup Endpoints (First-Run Configuration)
+
+### 17.1 Overview
+
+Setup endpoints digunakan untuk konfigurasi pertama kali saat aplikasi baru diinstal. Endpoints ini memungkinkan pembuatan akun Administrator pertama tanpa memerlukan autentikasi.
+
+**Catatan Keamanan:**
+- Endpoints ini TIDAK memerlukan autentikasi (karena belum ada user)
+- Setelah admin pertama dibuat, endpoints ini akan menolak request berikutnya
+- Hanya dapat digunakan sekali saat database masih kosong
+
+### 17.2 Check Setup Status
+
+**Endpoint:** `GET /api/v1/setup/status`
+
+**Permission:** Public (No authentication required)
+
+**Description:** Mengecek apakah setup pertama kali diperlukan. Mengembalikan `needs_setup: true` jika belum ada user di database.
+
+**Success Response (200 OK) - Setup Needed:**
+```json
+{
+  "success": true,
+  "data": {
+    "needs_setup": true,
+    "message": "Belum ada administrator. Silakan buat akun administrator pertama."
+  }
+}
+```
+
+**Success Response (200 OK) - Setup Already Done:**
+```json
+{
+  "success": true,
+  "data": {
+    "needs_setup": false,
+    "message": "Setup sudah selesai. Silakan login."
+  }
+}
+```
+
+**Notes:**
+- Endpoint ini selalu mengembalikan 200 OK
+- Digunakan oleh frontend untuk menentukan apakah menampilkan Setup Wizard atau Login screen
+
+---
+
+### 17.3 Create First Admin
+
+**Endpoint:** `POST /api/v1/setup/admin`
+
+**Permission:** Public (No authentication required, but only works when no users exist)
+
+**Description:** Membuat akun Administrator pertama. Hanya dapat dipanggil sekali saat database masih kosong.
+
+**Request Body:**
+```json
+{
+  "username": "admin",
+  "password": "password123",
+  "nama_lengkap": "Administrator Sekolah"
+}
+```
+
+**Validation Rules:**
+- `username`: 5-50 characters, alphanumeric + underscore, required
+- `password`: Minimum 8 characters, must contain letters and numbers, required
+- `nama_lengkap`: 1-200 characters, required
+
+**Success Response (201 Created):**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "username": "admin",
+    "nama_lengkap": "Administrator Sekolah",
+    "role": "Admin",
+    "status": "Aktif",
+    "dapat_ekspor": true,
+    "created_at": "2026-01-12T10:30:00Z"
+  },
+  "message": "Administrator berhasil dibuat. Silakan login dengan akun yang baru dibuat."
+}
+```
+
+**Error Response (400 Bad Request) - Validation Error:**
+```json
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Terdapat kesalahan validasi",
+    "errors": [
+      {
+        "field": "password",
+        "message": "Password harus minimal 8 karakter dan mengandung huruf dan angka"
+      }
+    ]
+  }
+}
+```
+
+**Error Response (409 Conflict) - Setup Already Done:**
+```json
+{
+  "success": false,
+  "error": {
+    "code": "SETUP_ALREADY_DONE",
+    "message": "Setup sudah selesai. Tidak dapat membuat admin baru melalui endpoint ini. Gunakan endpoint /api/v1/users untuk menambah user baru."
+  }
+}
+```
+
+**Notes:**
+- User yang dibuat otomatis memiliki role "Admin" dan `dapat_ekspor: true`
+- Password di-hash dengan bcrypt sebelum disimpan
+- Setelah berhasil, endpoint ini akan menolak semua request berikutnya
+
+---
+
+### 17.4 Setup Endpoints Summary
+
+| Method | Endpoint | Permission | Description |
+|--------|----------|------------|-------------|
+| GET | /api/v1/setup/status | Public | Check if setup needed |
+| POST | /api/v1/setup/admin | Public* | Create first admin |
+
+*Only works when no users exist in database
+
+---
+
+### 17.5 Setup Flow Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     APPLICATION STARTUP                          │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+                ┌───────────────────────┐
+                │  GET /api/v1/setup/   │
+                │       status          │
+                └───────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              │                               │
+              ▼                               ▼
+    ┌─────────────────┐             ┌─────────────────┐
+    │ needs_setup:    │             │ needs_setup:    │
+    │     true        │             │     false       │
+    └─────────────────┘             └─────────────────┘
+              │                               │
+              ▼                               ▼
+    ┌─────────────────┐             ┌─────────────────┐
+    │  Show Setup     │             │  Show Login     │
+    │    Wizard       │             │    Screen       │
+    └─────────────────┘             └─────────────────┘
+              │
+              ▼
+    ┌─────────────────┐
+    │ POST /api/v1/   │
+    │  setup/admin    │
+    └─────────────────┘
+              │
+              ▼
+    ┌─────────────────┐
+    │ Admin Created   │
+    │ → Show Login    │
+    └─────────────────┘
+```
+
+---
+
+## 18. Changelog
+
+| Versi | Tanggal | Penulis | Keterangan |
+|-------|---------|---------|------------|
+| 1.0 | 6 Januari 2026 | Architecture Engineer | API contract awal berdasarkan analisis RAG 6 dokumen arsitektur |
+| 2.0 | 10 Januari 2026 | Kiro AI | Sinkronisasi dengan data_schema.md v2.0: Update KIB B 13 field, fix naming convention (dapat_ekspor), fix kode_barang length (13 char) |
+| **2.1** | **12 Januari 2026** | **Kiro AI** | **Tambah Setup Endpoints (Section 17) untuk First-Run Configuration: GET /api/v1/setup/status, POST /api/v1/setup/admin** |
+
+---
+
+*Dokumen ini adalah bagian dari dokumentasi teknis SIMANIS62 V2 dan harus dibaca bersama dengan `data_schema.md`, `tech_stack.md`, dan `STAKEHOLDERS.md`.*
+
+*Terakhir diupdate: 12 Januari 2026*
+*Versi: 2.1*

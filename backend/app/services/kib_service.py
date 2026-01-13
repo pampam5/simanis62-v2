@@ -5,7 +5,7 @@ Module ini menyediakan KibService untuk:
 - Export ke Excel dengan format BPAD DKI Jakarta
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -146,7 +146,7 @@ class KibService(BaseService[Aset, AsetRepository]):
         return KibReportResponse(
             kategori_kib=kategori_kib,
             nama_sekolah=settings.nama_sekolah,
-            tanggal_cetak=datetime.utcnow(),
+            tanggal_cetak=datetime.now(UTC),
             summary=summary,
             items=items,
         )

@@ -9,7 +9,7 @@ Model ini mendefinisikan:
 """
 
 import uuid
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
@@ -215,11 +215,11 @@ class Aset(SQLModel, table=True):
 
     # Timestamps
     created_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(UTC),
         description="Timestamp pembuatan aset",
     )
     updated_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(UTC),
         description="Timestamp update terakhir",
     )
     deleted_at: datetime | None = Field(

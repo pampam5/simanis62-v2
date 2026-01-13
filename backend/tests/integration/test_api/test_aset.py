@@ -8,89 +8,10 @@ Tests untuk:
 - DELETE /api/v1/aset/{id} (soft delete)
 """
 
-from datetime import UTC, datetime
-from uuid import uuid4
-
 import pytest
-import pytest_asyncio
 from httpx import AsyncClient
 
-from app.models.aset import Aset, KategoriKIB, Kondisi, StatusAset
-from app.models.ruangan import Ruangan
-from app.models.user import User, UserRole, UserStatus
-
-
-@pytest_asyncio.fixture
-async def admin_user(db_session):
-    """Create admin user untuk tests."""
-    user = User(
-        id=uuid4(),  # UUID object, not string
-        username="admin",
-        password_hash="$2b$12$mock_hash_admin123",
-        nama_lengkap="Admin User",
-        role=UserRole.ADMIN,
-        status=UserStatus.AKTIF,
-        dapat_ekspor=True,
-        created_at=datetime.now(UTC),
-    )
-    db_session.add(user)
-    await db_session.commit()
-    return user
-
-
-@pytest_asyncio.fixture
-async def viewer_user(db_session):
-    """Create viewer user untuk tests."""
-    user = User(
-        id=uuid4(),  # UUID object, not string
-        username="viewer",
-        password_hash="$2b$12$mock_hash_viewer123",
-        nama_lengkap="Viewer User",
-        role=UserRole.VIEWER,
-        status=UserStatus.AKTIF,
-        dapat_ekspor=False,
-        created_at=datetime.now(UTC),
-    )
-    db_session.add(user)
-    await db_session.commit()
-    return user
-
-
-@pytest_asyncio.fixture
-async def test_ruangan(db_session):
-    """Create test ruangan."""
-    ruangan = Ruangan(
-        id=uuid4(),  # UUID object, not string
-        kode_ruangan="R001",
-        nama_ruangan="Ruang Test",
-        created_at=datetime.now(UTC),
-    )
-    db_session.add(ruangan)
-    await db_session.commit()
-    return ruangan
-
-
-@pytest_asyncio.fixture
-async def test_aset(db_session, admin_user, test_ruangan):
-    """Create test aset."""
-    aset = Aset(
-        id=uuid4(),  # UUID object, not string
-        nama_barang="Laptop Test",
-        kode_barang="02.06.01.0001",
-        nomor_register=1,  # nomor_register is int, not string
-        kategori_kib=KategoriKIB.B,
-        tahun_perolehan=2024,
-        asal_usul="Pembelian",
-        harga=15_000_000,
-        kondisi=Kondisi.BAIK,
-        status=StatusAset.AKTIF,
-        ruangan_id=test_ruangan.id,  # UUID object, not string
-        created_by=admin_user.id,  # UUID object, not string
-        created_at=datetime.now(UTC),
-    )
-    db_session.add(aset)
-    await db_session.commit()
-    return aset
+from app.models.user import User
 
 
 @pytest.mark.asyncio

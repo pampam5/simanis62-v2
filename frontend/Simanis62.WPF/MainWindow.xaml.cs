@@ -38,6 +38,7 @@ public partial class MainWindow : Window
             "AssetForm" => App.Services.GetRequiredService<AssetFormView>(),
             "KibReport" => App.Services.GetRequiredService<KibReportView>(),
             "Mutation" => App.Services.GetRequiredService<MutationView>(),
+            "SetupWizard" => App.Services.GetRequiredService<SetupWizardView>(),
             _ => App.Services.GetRequiredService<DashboardView>()
         };
 

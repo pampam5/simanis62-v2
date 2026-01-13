@@ -1,0 +1,624 @@
+/**
+ * SIMANIS62 - Liquid Glass Effects
+ * macOS Sequoia Liquid Glass Style 2025
+ * 
+ * Based on Apple Human Interface Guidelines and UI/UX Trends 2025
+ * 
+ * @see .kiro/steering/design-system.md Section 13 & 14
+ */
+
+/* ============================================
+   1. CSS Custom Properties
+   ============================================ */
+
+:root {
+    /* ---- Font Stack (Geist Sans / Mono) ---- */
+    --font-sans: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'Geist Mono', 'SF Mono', 'ui-monospace', 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+    --font-display: 'Geist Sans', var(--font-sans);
+
+    /* ---- Base Typography (2025 Hybrid Scale) ---- */
+    --text-base-size: 14px;
+    /* Updated to 14px for modern readability */
+    --text-scale-ratio: 1.25;
+
+    /* ---- Liquid Glass Properties (Sequoia) ---- */
+    --glass-blur-base: 25px;
+    --glass-blur-thick: 60px;
+    --glass-blur-thin: 15px;
+
+    --glass-saturation: 180%;
+    --glass-saturation-high: 210%;
+
+    /* Sequoia Materials */
+    --mat-base: rgba(255, 255, 255, 0.76);
+    /* Window/App Background */
+    --mat-thick: rgba(255, 255, 255, 0.88);
+    /* Popovers, Menus */
+    --mat-thin: rgba(255, 255, 255, 0.45);
+    /* Overlays */
+    --mat-chrome: rgba(255, 255, 255, 0.65);
+    /* Toolbars, Title bars */
+    --mat-sidebar: rgba(235, 235, 240, 0.65);
+    /* Sidebar specific */
+
+    /* ---- Shadows & Depth (Sequoia Ambient) ---- */
+    --rim-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.45);
+    --rim-sidebar: inset -1px 0 0 0 rgba(0, 0, 0, 0.05);
+    /* Separator implied by light/shadow */
+
+    --shadow-ambient: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.25), 0 0 1px rgba(0, 0, 0, 0.1);
+    --shadow-popover: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.05);
+
+    /* ---- Light Mode Background Colors ---- */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F5F5F7;
+    /* Apple System Gray 6 */
+    --bg-tertiary: #EFEFF4;
+    /* Apple System Gray 5 */
+
+    /* ---- Text Colors (Light Mode) ---- */
+    --text-primary: #1D1D1F;
+    /* Apple almost-black */
+    --text-secondary: #86868B;
+    --text-tertiary: rgba(60, 60, 67, 0.45);
+    --text-quaternary: rgba(60, 60, 67, 0.25);
+
+    /* ============================================
+       Apple Sequoia System Colors (Vibrant)
+       ============================================ */
+
+    --accent-blue: #007AFF;
+    --accent-green: #34C759;
+    --accent-indigo: #5856D6;
+    --accent-orange: #FF9500;
+    --accent-pink: #FF2D55;
+    --accent-purple: #AF52DE;
+    --accent-red: #FF3B30;
+    --accent-teal: #5AC8FA;
+    --accent-yellow: #FFCC00;
+
+    /* Semantic mapping */
+    --color-focus: rgba(0, 122, 255, 0.5);
+
+    /* ---- Borders & Separators ---- */
+    --border-light: rgba(0, 0, 0, 0.06);
+    --border-medium: rgba(0, 0, 0, 0.12);
+
+    /* ---- Transitions ---- */
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --transition-fast: 0.15s var(--ease-out-expo);
+    --transition-normal: 0.25s var(--ease-out-expo);
+}
+
+/* ============================================
+   2. Dark Mode Colors
+   ============================================ */
+
+.dark {
+    /* Sequoia Materials (Dark) */
+    --mat-base: rgba(30, 30, 30, 0.72);
+    --mat-thick: rgba(40, 40, 40, 0.85);
+    --mat-thin: rgba(60, 60, 60, 0.45);
+    --mat-chrome: rgba(40, 40, 40, 0.65);
+    --mat-sidebar: rgba(28, 28, 30, 0.65);
+
+    --rim-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+    --rim-sidebar: inset -1px 0 0 0 rgba(255, 255, 255, 0.08);
+
+    --bg-primary: #000000;
+    --bg-secondary: #1C1C1E;
+
+    --text-primary: #F5F5F7;
+    --text-secondary: #98989D;
+
+    --border-light: rgba(255, 255, 255, 0.08);
+    --border-medium: rgba(255, 255, 255, 0.15);
+
+    /* Dark Mode Accents (Slightly Lighter) */
+    --accent-blue: #0A84FF;
+    --accent-green: #30D158;
+    --accent-indigo: #5E5CE6;
+    --accent-orange: #FF9F0A;
+    --accent-pink: #FF375F;
+    --accent-purple: #BF5AF2;
+    --accent-red: #FF453A;
+    --accent-teal: #64D2FF;
+    --accent-yellow: #FFD60A;
+}
+
+/* ============================================
+   3. Base Glass Utilities
+   ============================================ */
+
+/* Standard App Background */
+.glass-base {
+    background: var(--mat-base);
+    backdrop-filter: blur(var(--glass-blur-base)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur-base)) saturate(var(--glass-saturation));
+    box-shadow: var(--shadow-ambient);
+    position: relative;
+}
+
+/* High-Contrast Menus/Popovers */
+.glass-thick {
+    background: var(--mat-thick);
+    backdrop-filter: blur(var(--glass-blur-thick)) saturate(var(--glass-saturation-high));
+    -webkit-backdrop-filter: blur(var(--glass-blur-thick)) saturate(var(--glass-saturation-high));
+    box-shadow: var(--shadow-popover);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--rim-highlight), var(--shadow-popover);
+}
+
+/* Toolbars / Window Chrome */
+.glass-chrome {
+    background: var(--mat-chrome);
+    backdrop-filter: blur(30px) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(30px) saturate(var(--glass-saturation));
+    border-bottom: 1px solid var(--border-light);
+}
+
+/* Sidebar Specific */
+.glass-sidebar {
+    background: var(--mat-sidebar);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow: var(--rim-sidebar);
+}
+
+/* Standard Content Card */
+.glass-card {
+    background: var(--mat-chrome);
+    /* Use Chrome material for cards */
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Tinted Button (New Sequoia Style) */
+.btn-tinted-blue {
+    background-color: rgba(0, 122, 255, 0.12);
+    color: var(--accent-blue);
+    transition: all 0.2s ease;
+}
+
+.btn-tinted-blue:hover {
+    background-color: rgba(0, 122, 255, 0.2);
+    transform: scale(1.01);
+}
+
+.dark .btn-tinted-blue {
+    background-color: rgba(10, 132, 255, 0.15);
+    color: var(--accent-blue);
+}
+
+/* ============================================
+   4. Typography Utilities
+   ============================================ */
+body {
+    font-family: var(--font-sans);
+    font-size: var(--text-base-size);
+    /* 13px base */
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+}
+
+.text-title-1 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.text-title-2 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+}
+
+.text-title-3 {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+
+.text-body {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+.text-caption {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* SF Pro Rounded for specific numeric displays */
+.font-rounded {
+    font-family: 'SF Pro Rounded', var(--font-sans);
+}
+
+/* High Contrast */
+@media (prefers-contrast: high) {
+    :root {
+        --text-primary: #000000;
+        --text-secondary: #000000;
+        --border-light: rgba(0, 0, 0, 0.2);
+    }
+
+
+    :root {
+        --text-primary: #000000;
+        --text-secondary: #1C1C1E;
+        --border-default: rgba(0, 0, 0, 0.3);
+    }
+
+    .dark {
+        --text-primary: #FFFFFF;
+        --text-secondary: #F5F5F7;
+        --border-default: rgba(255, 255, 255, 0.3);
+    }
+
+    .glass-panel,
+    .glass-card,
+    .glass-modal {
+        border-width: 2px;
+    }
+}
+
+/* ============================================
+   8. Print Styles
+   ============================================ */
+
+@media print {
+
+    .glass-panel,
+    .glass-sidebar,
+    .glass-card,
+    .glass-modal,
+    .glass-button,
+    .glass-toolbar,
+    .glass-input {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: white;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+
+/* ============================================
+   9. Status & Kondisi Badge Classes
+   SIMANIS62 Specific Components
+   ============================================ */
+
+/* Base Badge Style */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+}
+
+/* Badge Sizes */
+.badge-sm {
+    padding: 3px 10px;
+    font-size: 13px;
+}
+
+.badge-lg {
+    padding: 5px 14px;
+    font-size: 15px;
+}
+
+/* Status Badges */
+.badge-status-baru {
+    background: var(--status-baru-bg);
+    color: var(--status-baru);
+}
+
+.badge-status-aktif {
+    background: var(--status-aktif-bg);
+    color: var(--status-aktif);
+}
+
+.badge-status-mutasi {
+    background: var(--status-mutasi-bg);
+    color: var(--status-mutasi);
+}
+
+.badge-status-rusak {
+    background: var(--status-rusak-bg);
+    color: var(--status-rusak);
+}
+
+.badge-status-dihapus {
+    background: var(--status-dihapus-bg);
+    color: var(--status-dihapus);
+}
+
+/* Kondisi Badges */
+.badge-kondisi-baik {
+    background: var(--kondisi-baik-bg);
+    color: var(--kondisi-baik);
+}
+
+.badge-kondisi-rusak-ringan {
+    background: var(--kondisi-rusak-ringan-bg);
+    color: var(--kondisi-rusak-ringan);
+}
+
+.badge-kondisi-rusak-berat {
+    background: var(--kondisi-rusak-berat-bg);
+    color: var(--kondisi-rusak-berat);
+}
+
+/* Semantic Badges */
+.badge-success {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.badge-warning {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.badge-error {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.badge-info {
+    background: var(--color-info-bg);
+    color: var(--color-info);
+}
+
+/* Badge with border variant */
+.badge-outlined {
+    background: transparent;
+    border: 1px solid currentColor;
+}
+
+/* Badge sizes */
+.badge-sm {
+    padding: 1px 6px;
+    font-size: 10px;
+}
+
+.badge-lg {
+    padding: 4px 12px;
+    font-size: 12px;
+}
+
+/* ============================================
+   10. Accent Button Variants
+   ============================================ */
+
+.btn-accent-blue {
+    background: var(--accent-blue);
+    color: white;
+    box-shadow: var(--shadow-blue);
+}
+
+.btn-accent-blue:hover {
+    filter: brightness(1.1);
+}
+
+.btn-accent-green {
+    background: var(--accent-green);
+    color: white;
+    box-shadow: var(--shadow-green);
+}
+
+.btn-accent-green:hover {
+    filter: brightness(1.1);
+}
+
+.btn-accent-red {
+    background: var(--accent-red);
+    color: white;
+    box-shadow: var(--shadow-red);
+}
+
+.btn-accent-red:hover {
+    filter: brightness(1.1);
+}
+
+.btn-accent-orange {
+    background: var(--accent-orange);
+    color: white;
+    box-shadow: var(--shadow-orange);
+}
+
+.btn-accent-orange:hover {
+    filter: brightness(1.1);
+}
+
+/* Soft/Tinted Button Variants */
+.btn-soft-blue {
+    background: var(--color-info-bg);
+    color: var(--accent-blue);
+}
+
+.btn-soft-blue:hover {
+    background: var(--color-selected-strong);
+}
+
+.btn-soft-green {
+    background: var(--color-success-bg);
+    color: var(--accent-green);
+}
+
+.btn-soft-green:hover {
+    background: rgba(52, 199, 89, 0.2);
+}
+
+.dark .btn-soft-green:hover {
+    background: rgba(48, 209, 88, 0.25);
+}
+
+.btn-soft-red {
+    background: var(--color-error-bg);
+    color: var(--accent-red);
+}
+
+.btn-soft-red:hover {
+    background: rgba(255, 59, 48, 0.2);
+}
+
+.dark .btn-soft-red:hover {
+    background: rgba(255, 69, 58, 0.25);
+}
+
+/* ============================================
+   11. Interactive State Classes
+   ============================================ */
+
+.interactive {
+    transition: background var(--transition-fast);
+}
+
+.interactive:hover {
+    background: var(--color-hover);
+}
+
+.interactive:active {
+    background: var(--color-active);
+}
+
+.interactive.selected {
+    background: var(--color-selected);
+}
+
+.interactive.selected:hover {
+    background: var(--color-selected-strong);
+}
+
+/* Row hover for tables */
+.row-hover:hover {
+    background: var(--color-hover);
+}
+
+.row-selected {
+    background: var(--color-selected);
+}
+
+/* ============================================
+   12. Color Utility Classes
+   ============================================ */
+
+/* Text Colors */
+.text-accent-blue {
+    color: var(--accent-blue);
+}
+
+.text-accent-green {
+    color: var(--accent-green);
+}
+
+.text-accent-red {
+    color: var(--accent-red);
+}
+
+.text-accent-orange {
+    color: var(--accent-orange);
+}
+
+.text-accent-yellow {
+    color: var(--accent-yellow);
+}
+
+.text-accent-purple {
+    color: var(--accent-purple);
+}
+
+.text-accent-pink {
+    color: var(--accent-pink);
+}
+
+.text-accent-teal {
+    color: var(--accent-teal);
+}
+
+.text-accent-indigo {
+    color: var(--accent-indigo);
+}
+
+/* Background Colors */
+.bg-accent-blue {
+    background: var(--accent-blue);
+}
+
+.bg-accent-green {
+    background: var(--accent-green);
+}
+
+.bg-accent-red {
+    background: var(--accent-red);
+}
+
+.bg-accent-orange {
+    background: var(--accent-orange);
+}
+
+.bg-accent-yellow {
+    background: var(--accent-yellow);
+}
+
+.bg-accent-purple {
+    background: var(--accent-purple);
+}
+
+/* Gray Scale */
+.bg-gray-1 {
+    background: var(--gray-1);
+}
+
+.bg-gray-2 {
+    background: var(--gray-2);
+}
+
+.bg-gray-3 {
+    background: var(--gray-3);
+}
+
+.bg-gray-4 {
+    background: var(--gray-4);
+}
+
+.bg-gray-5 {
+    background: var(--gray-5);
+}
+
+.bg-gray-6 {
+    background: var(--gray-6);
+}
+
+.text-gray-1 {
+    color: var(--gray-1);
+}
+
+.text-gray-2 {
+    color: var(--gray-2);
+}
+
+.text-gray-3 {
+    color: var(--gray-3);
+}

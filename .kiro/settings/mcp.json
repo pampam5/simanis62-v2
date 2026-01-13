@@ -29,7 +29,10 @@
         "read_file",
         "list_directory",
         "search_files",
-        "read_text_file"
+        "read_text_file",
+        "read_multiple_files",
+        "read_media_file",
+        "list_allowed_directories"
       ],
       "description": "Direct access ke dokumentasi dan source code Simanis62 V2"
     },
@@ -50,20 +53,45 @@
       "description": "Structured reasoning untuk complex problem solving"
     },
     "serena": {
-      "command": "npx",
+      "command": "cmd",
       "args": [
-        "-y",
-        "@serenaai/mcp-server-serena"
+        "/c",
+        "set PATH=C:\\Program Files\\Git\\cmd;%PATH% && C:\\Users\\24riz\\.local\\bin\\uvx.exe --from git+https://github.com/oraios/serena serena start-mcp-server"
       ],
       "env": {},
       "disabled": false,
       "autoApprove": [
-        "serena_create_task",
-        "serena_list_tasks",
-        "serena_update_task",
-        "serena_get_task"
+        "find_symbol",
+        "find_referencing_symbols",
+        "insert_after_symbol",
+        "replace_symbol",
+        "get_current_config",
+        "check_onboarding_performed",
+        "activate_project",
+        "initial_instructions",
+        "list_dir",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "search_for_pattern",
+        "replace_content",
+        "replace_content",
+        "replace_content",
+        "replace_symbol_body",
+        "replace_symbol_body",
+        "switch_modes",
+        "execute_shell_command",
+        "get_symbols_overview",
+        "find_file",
+        "write_memory",
+        "think_about_whether_you_are_done",
+        "read_memory",
+        "edit_memory",
+        "create_text_file",
+        "think_about_task_adherence"
       ],
-      "description": "Serena AI task management and project planning"
+      "description": "Serena AI coding agent toolkit (Oraios)"
     },
     "basic-memory": {
       "command": "uvx",
@@ -74,7 +102,7 @@
       "env": {
         "BASIC_MEMORY_PROJECT_DIR": "D:\\sistem manajemen aset sekolah project\\data\\basic-memory"
       },
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "write_note",
         "read_note",
@@ -148,7 +176,7 @@
         "@playwright/mcp@latest"
       ],
       "env": {},
-      "disabled": true,
+      "disabled": false,
       "autoApprove": [
         "browser_navigate",
         "browser_take_screenshot",
@@ -159,7 +187,10 @@
         "browser_handle_dialog",
         "browser_evaluate",
         "browser_press_key",
-        "browser_type"
+        "browser_type",
+        "browser_console_messages",
+        "browser_close",
+        "browser_resize"
       ],
       "description": "Browser automation with Playwright for visual validation and web testing"
     },
@@ -202,7 +233,7 @@
         "C:\\ProgramData\\Simanis62\\simanis62.db"
       ],
       "command": "uvx",
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "list_tables"
       ]
@@ -214,7 +245,7 @@
         "D:\\simanis62-v2\\dbhub.toml"
       ],
       "env": {},
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "list_tables",
         "describe_table",
@@ -234,7 +265,7 @@
       "env": {
         "PYTHONPATH": "d:\\simanis62-v2\\tools\\mcp-debugpy\\src"
       },
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "ensure_demo_program",
         "read_text_file",
@@ -254,6 +285,64 @@
         "dap_shutdown"
       ],
       "description": "Interactive Python debugging MCP server using debugpy"
+    },
+    "sv-excel-agent": {
+      "command": "d:\\simanis62-v2\\tools\\sv-excel-agent\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "excel_mcp.excel_server"
+      ],
+      "cwd": "d:\\simanis62-v2\\tools\\sv-excel-agent",
+      "env": {
+        "PYTHONPATH": "d:\\simanis62-v2\\tools\\sv-excel-agent"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "get_workbook_info",
+        "get_sheets",
+        "get_range_data",
+        "set_range_data",
+        "create_sheet",
+        "insert_rows",
+        "insert_columns"
+      ],
+      "description": "Excel Agent MCP server for interacting with Excel workbooks"
+    },
+    "wpf-testing": {
+      "command": "D:\\simanis62-v2\\tools\\wpf-testing-mcp\\bin\\Release\\WpfTestingMcp.Server.exe",
+      "args": [],
+      "env": {},
+      "disabled": true,
+      "autoApprove": [
+        "connect_app",
+        "list_sessions",
+        "close_session",
+        "find_element",
+        "get_element_properties",
+        "get_available_patterns",
+        "click_element",
+        "type_text",
+        "press_key",
+        "press_key_combo",
+        "scroll_element",
+        "get_value",
+        "set_value",
+        "wait",
+        "capture_screenshot",
+        "compare_screenshots",
+        "navigate_visual_tree",
+        "wait_for_property",
+        "capture_and_view",
+        "launch_snoop",
+        "get_snapshot",
+        "wait_for_element",
+        "assert_element",
+        "start_recording",
+        "record_action",
+        "generate_test_code",
+        "stop_recording"
+      ],
+      "description": "WPF Testing MCP server - UI automation untuk testing aplikasi WPF Simanis62"
     }
   }
 }

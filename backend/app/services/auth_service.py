@@ -10,20 +10,15 @@ from datetime import UTC, datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.auth import create_session, destroy_session, validate_session
 from app.core.exceptions import (
     InvalidCredentialsError,
     SessionExpiredError,
     UserNotFoundError,
 )
-from app.core.security import (
-    create_session,
-    destroy_session,
-    verify_password,
-    verify_session,
-)
+from app.core.security import verify_password
 from app.models.user import User, UserStatus
 from app.repositories.user_repository import UserRepository
-from app.schemas.auth import LoginRequest, LoginResponse, SessionInfo, UserResponse
 from app.services.base import BaseService
 
 
@@ -152,16 +147,24 @@ class AuthService(BaseService[User, UserRepository]):
             SessionExpiredError: Jika session invalid atau expired.
             UserNotFoundError: Jika user tidak ditemukan.
         """
-        user_id = verify_session(session_token)
+        user_id_str = verify_session(session_token)
 
-        if not user_id:
+        if not user_id_str:
+            raise SessionExpiredError()
+
+        # Convert string user_id to UUID
+        import uuid
+        try:
+            user_id = uuid.UUID(user_id_str)
+        except (ValueError, AttributeError):
+            self.log_error(f"Invalid UUID format in session: {user_id_str}")
             raise SessionExpiredError()
 
         user = await self.repository.get_by_id(user_id)
 
         if not user:
-            self.log_error(f"User not found for valid session: {user_id}")
-            raise UserNotFoundError(user_id)
+            self.log_error(f"User not found for valid session: {user_id_str}")
+            raise UserNotFoundError(user_id_str)
 
         if user.status != UserStatus.AKTIF:
             self.log_warning(f"Inactive user tried to access: {user.username}")

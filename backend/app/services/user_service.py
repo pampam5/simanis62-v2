@@ -6,7 +6,7 @@ Module ini menyediakan UserService untuk:
 - User management validations
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -200,7 +200,7 @@ class UserService(BaseService[User, UserRepository]):
             update_data["password_hash"] = hash_password(update_data["password"])
             del update_data["password"]
 
-        update_data["updated_at"] = datetime.utcnow()
+        update_data["updated_at"] = datetime.now(UTC)
 
         updated = await self.repository.update(user_id, update_data)
         if not updated:
@@ -240,7 +240,7 @@ class UserService(BaseService[User, UserRepository]):
         # Deactivate
         update_data = {
             "status": UserStatus.NONAKTIF,
-            "updated_at": datetime.utcnow(),
+            "updated_at": datetime.now(UTC),
         }
 
         updated = await self.repository.update(user_id, update_data)

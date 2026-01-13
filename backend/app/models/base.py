@@ -6,7 +6,7 @@ Module ini menyediakan:
 """
 
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlmodel import Field, SQLModel
 
@@ -29,13 +29,13 @@ class TimestampMixin(SQLModel):
     """
 
     created_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(UTC),
         description="Timestamp pembuatan record",
     )
     updated_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(UTC),
         description="Timestamp update terakhir",
-        sa_column_kwargs={"onupdate": datetime.utcnow},
+        sa_column_kwargs={"onupdate": lambda: datetime.now(UTC)},
     )
 
 

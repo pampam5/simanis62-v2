@@ -5,7 +5,7 @@ Menggabungkan semua routers dan menyediakan health check endpoint.
 """
 
 import logging
-from datetime import datetime
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, status
 
@@ -18,6 +18,7 @@ from .auth import router as auth_router
 from .kib import router as kib_router
 from .mutasi import router as mutasi_router
 from .ruangan import router as ruangan_router
+from .setup import router as setup_router
 from .users import router as users_router
 
 logger = logging.getLogger(__name__)
@@ -26,6 +27,7 @@ logger = logging.getLogger(__name__)
 api_router = APIRouter(prefix="/api/v1")
 
 # Include all routers
+api_router.include_router(setup_router)  # Setup first (no auth required)
 api_router.include_router(auth_router)
 api_router.include_router(aset_router)
 api_router.include_router(kib_router)
@@ -57,5 +59,5 @@ async def health_check() -> HealthResponse:
         version=settings.APP_VERSION,
         environment=settings.ENVIRONMENT,
         database=db_health,
-        timestamp=datetime.utcnow().isoformat() + "Z",
+        timestamp=datetime.now(UTC).isoformat() + "Z",
     )

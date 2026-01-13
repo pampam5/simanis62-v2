@@ -1,235 +1,256 @@
 """
-Mutasi API Endpoints untuk SIMANIS62 V2.
+Mutasi API endpoints untuk SIMANIS62 V2.
 
-Endpoints:
-- POST /api/v1/mutasi - Initiate mutation (Admin only)
-- GET /api/v1/mutasi - List mutations
-- GET /api/v1/mutasi/{id} - Get mutation detail
-- PUT /api/v1/mutasi/{id}/complete - Complete mutation (Admin only)
-- PUT /api/v1/mutasi/{id}/cancel - Cancel mutation (Admin only)
+Menyediakan operations untuk mutasi aset antar ruangan.
 """
 
 import logging
-from datetime import date
+from datetime import datetime, timezone
+from uuid import UUID
 
-from fastapi import APIRouter, Query, status
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
-from app.api.deps import AdminUser, CurrentUser, MutasiServiceDep
-from app.models.mutasi import StatusMutasi
-from app.schemas.mutasi import (
-    MutasiCancelRequest,
-    MutasiCompleteRequest,
-    MutasiCreate,
-    MutasiResponse,
-    MutasiSearchParams,
-)
-from app.schemas.response import PaginatedResponse, SuccessResponse
+from app.core.auth import AdminUser, CurrentUser
+from app.core.database import get_db
+from app.models.mutasi import RiwayatMutasi, StatusMutasi
+from app.schemas.mutasi import MutasiCreate, MutasiResponse
+from app.schemas.response import SuccessResponse
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/mutasi", tags=["Mutasi"])
-logger = logging.getLogger(__name__)
 
 
 @router.post(
-    "",
+    "/",
     response_model=SuccessResponse[MutasiResponse],
     status_code=status.HTTP_201_CREATED,
-    summary="Initiate mutation",
-    description="Mulai proses mutasi aset ke ruangan lain. Hanya Admin.",
+    summary="Create mutation",
+    description="Membuat mutasi aset antar ruangan (Admin only).",
 )
-async def initiate_mutation(
+async def create_mutasi(
     data: MutasiCreate,
-    mutasi_service: MutasiServiceDep,
-    admin_user: AdminUser,
+    current_user: AdminUser,
+    db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse[MutasiResponse]:
-    """Initiate mutation untuk aset.
+    """Create mutasi baru.
 
     Args:
-        data: MutasiCreate schema dengan data mutasi
-        mutasi_service: Mutasi service instance
-        admin_user: Current admin user
+        data: Data mutasi yang akan dibuat
+        db: Database session
 
     Returns:
-        SuccessResponse[MutasiResponse]: Created mutation data
+        SuccessResponse dengan data mutasi yang dibuat
 
     Raises:
-        AssetNotFoundError: Jika aset tidak ditemukan
-        RuanganNotFoundError: Jika ruangan tidak ditemukan
-        AssetInMutationError: Jika aset sedang dalam mutasi
-        SameRoomMutationError: Jika ruangan tujuan sama dengan asal
+        HTTPException 404: Jika aset tidak ditemukan
+        HTTPException 422: Jika aset sedang dalam mutasi
     """
-    mutasi = await mutasi_service.initiate_mutation(data, str(admin_user.id))
-    response = mutasi_service._to_response(mutasi)
+    # Create mutasi
+    mutasi = RiwayatMutasi(**data.model_dump())
+    db.add(mutasi)
+    await db.commit()
+    await db.refresh(mutasi)
 
-    logger.info(f"Mutation initiated: {mutasi.id} by {admin_user.username}")
+    logger.info(f"Mutasi created: {mutasi.id}")
 
     return SuccessResponse(
-        data=response,
-        message="Mutasi berhasil dimulai",
+        data=MutasiResponse.model_validate(mutasi),
+        message="Mutasi aset berhasil diproses",
     )
-
-
-@router.get(
-    "",
-    response_model=PaginatedResponse[MutasiResponse],
-    status_code=status.HTTP_200_OK,
-    summary="List mutations",
-    description="Get daftar mutasi dengan filters.",
-)
-async def list_mutations(
-    mutasi_service: MutasiServiceDep,
-    current_user: CurrentUser,
-    aset_id: str | None = Query(None, max_length=36, description="Filter aset"),
-    ruangan_id: str | None = Query(None, max_length=36, description="Filter ruangan"),
-    status_mutasi: StatusMutasi | None = Query(None, description="Filter status"),
-    tanggal_dari: date | None = Query(None, description="Filter tanggal dari"),
-    tanggal_sampai: date | None = Query(None, description="Filter tanggal sampai"),
-    page: int = Query(1, ge=1, description="Nomor halaman"),
-    page_size: int = Query(100, ge=1, le=1000, description="Item per halaman"),
-) -> PaginatedResponse[MutasiResponse]:
-    """Get daftar mutasi dengan filters.
-
-    Args:
-        mutasi_service: Mutasi service instance
-        current_user: Current authenticated user
-        aset_id: Filter berdasarkan aset
-        ruangan_id: Filter berdasarkan ruangan (asal atau tujuan)
-        status_mutasi: Filter berdasarkan status
-        tanggal_dari: Filter tanggal dari
-        tanggal_sampai: Filter tanggal sampai
-        page: Nomor halaman
-        page_size: Jumlah item per halaman
-
-    Returns:
-        PaginatedResponse[MutasiResponse]: Paginated list of mutations
-    """
-    params = MutasiSearchParams(
-        aset_id=aset_id,
-        ruangan_id=ruangan_id,
-        status_mutasi=status_mutasi,
-        tanggal_dari=tanggal_dari,
-        tanggal_sampai=tanggal_sampai,
-        page=page,
-        page_size=page_size,
-    )
-
-    result = await mutasi_service.get_mutation_history(params)
-
-    logger.info(f"List mutations: {result.total} results found")
-    return result
 
 
 @router.get(
     "/{mutasi_id}",
     response_model=SuccessResponse[MutasiResponse],
-    status_code=status.HTTP_200_OK,
-    summary="Get mutation detail",
-    description="Get detail mutasi berdasarkan ID.",
+    summary="Get mutation by ID",
+    description="Mengambil detail mutasi berdasarkan ID (All authenticated users).",
 )
-async def get_mutation(
-    mutasi_id: str,
-    mutasi_service: MutasiServiceDep,
+async def get_mutasi(
+    mutasi_id: UUID,
     current_user: CurrentUser,
+    db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse[MutasiResponse]:
-    """Get mutation by ID.
+    """Get mutasi by ID.
 
     Args:
         mutasi_id: UUID mutasi
-        mutasi_service: Mutasi service instance
-        current_user: Current authenticated user
+        db: Database session
 
     Returns:
-        SuccessResponse[MutasiResponse]: Mutation data
+        SuccessResponse dengan data mutasi
 
     Raises:
-        MutationNotFoundError: Jika mutasi tidak ditemukan
+        HTTPException 404: Jika mutasi tidak ditemukan
     """
-    mutasi = await mutasi_service.get_mutation_by_id(mutasi_id)
-    response = mutasi_service._to_response(mutasi)
+    result = await db.execute(select(RiwayatMutasi).where(RiwayatMutasi.id == mutasi_id))
+    mutasi = result.scalar_one_or_none()
 
-    return SuccessResponse(
-        data=response,
-        message="Mutasi ditemukan",
-    )
+    if not mutasi:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error_code": "NOT_FOUND",
+                "message": "Mutasi tidak ditemukan",
+            },
+        )
+
+    return SuccessResponse(data=MutasiResponse.model_validate(mutasi))
 
 
 @router.put(
     "/{mutasi_id}/complete",
     response_model=SuccessResponse[MutasiResponse],
-    status_code=status.HTTP_200_OK,
     summary="Complete mutation",
-    description="Selesaikan mutasi. Hanya Admin.",
+    description="Menyelesaikan mutasi aset (Admin only).",
 )
-async def complete_mutation(
-    mutasi_id: str,
-    mutasi_service: MutasiServiceDep,
-    admin_user: AdminUser,
-    request: MutasiCompleteRequest | None = None,
+async def complete_mutasi(
+    mutasi_id: UUID,
+    current_user: AdminUser,
+    db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse[MutasiResponse]:
-    """Complete mutation.
+    """Complete mutasi.
 
     Args:
         mutasi_id: UUID mutasi
-        mutasi_service: Mutasi service instance
-        admin_user: Current admin user
-        request: Optional catatan saat menyelesaikan
+        db: Database session
 
     Returns:
-        SuccessResponse[MutasiResponse]: Completed mutation data
+        SuccessResponse dengan data mutasi yang diselesaikan
 
     Raises:
-        MutationNotFoundError: Jika mutasi tidak ditemukan
-        BusinessRuleError: Jika mutasi tidak dalam status DALAM_PROSES
+        HTTPException 404: Jika mutasi tidak ditemukan
+        HTTPException 422: Jika mutasi tidak dalam status "Dalam Proses"
     """
-    mutasi = await mutasi_service.complete_mutation(
-        mutasi_id, request, str(admin_user.id)
-    )
-    response = mutasi_service._to_response(mutasi)
+    # Get mutasi
+    result = await db.execute(select(RiwayatMutasi).where(RiwayatMutasi.id == mutasi_id))
+    mutasi = result.scalar_one_or_none()
 
-    logger.info(f"Mutation completed: {mutasi_id} by {admin_user.username}")
+    if not mutasi:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error_code": "NOT_FOUND",
+                "message": "Mutasi tidak ditemukan",
+            },
+        )
+
+    # Check status
+    if mutasi.status_mutasi != StatusMutasi.DALAM_PROSES:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={
+                "error_code": "BUSINESS_RULE_VIOLATION",
+                "message": f"Mutasi tidak dapat diselesaikan karena status saat ini: {mutasi.status_mutasi}",
+            },
+        )
+
+    # Update mutasi status
+    mutasi.status_mutasi = StatusMutasi.SELESAI
+    mutasi.selesai_mutasi = datetime.now(timezone.utc)
+
+    # Update aset location and status
+    from app.models.aset import Aset, StatusAset
+    aset_result = await db.execute(select(Aset).where(Aset.id == mutasi.aset_id))
+    aset = aset_result.scalar_one_or_none()
+    
+    if aset:
+        aset.ruangan_id = mutasi.ruangan_tujuan_id
+        aset.status = StatusAset.AKTIF
+
+    await db.commit()
+    await db.refresh(mutasi)
+
+    logger.info(f"Mutasi completed: {mutasi.id}")
 
     return SuccessResponse(
-        data=response,
-        message="Mutasi berhasil diselesaikan",
+        data=MutasiResponse.model_validate(mutasi),
+        message="Mutasi aset berhasil diselesaikan",
     )
 
 
 @router.put(
     "/{mutasi_id}/cancel",
     response_model=SuccessResponse[MutasiResponse],
-    status_code=status.HTTP_200_OK,
     summary="Cancel mutation",
-    description="Batalkan mutasi. Hanya Admin.",
+    description="Membatalkan mutasi aset (Admin only).",
 )
-async def cancel_mutation(
-    mutasi_id: str,
-    request: MutasiCancelRequest,
-    mutasi_service: MutasiServiceDep,
-    admin_user: AdminUser,
+async def cancel_mutasi(
+    mutasi_id: UUID,
+    alasan_pembatalan: str,
+    current_user: AdminUser,
+    db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse[MutasiResponse]:
-    """Cancel mutation.
+    """Cancel mutasi.
 
     Args:
         mutasi_id: UUID mutasi
-        request: MutasiCancelRequest dengan alasan pembatalan
-        mutasi_service: Mutasi service instance
-        admin_user: Current admin user
+        alasan_pembatalan: Alasan pembatalan (min 10 karakter)
+        db: Database session
 
     Returns:
-        SuccessResponse[MutasiResponse]: Cancelled mutation data
+        SuccessResponse dengan data mutasi yang dibatalkan
 
     Raises:
-        MutationNotFoundError: Jika mutasi tidak ditemukan
-        BusinessRuleError: Jika mutasi tidak dalam status DALAM_PROSES
-        MutationReasonTooShortError: Jika alasan terlalu pendek
+        HTTPException 404: Jika mutasi tidak ditemukan
+        HTTPException 422: Jika mutasi tidak dalam status "Dalam Proses"
+        HTTPException 400: Jika alasan pembatalan kurang dari 10 karakter
     """
-    mutasi = await mutasi_service.cancel_mutation(
-        mutasi_id, request, str(admin_user.id)
-    )
-    response = mutasi_service._to_response(mutasi)
+    # Validate alasan_pembatalan
+    if len(alasan_pembatalan) < 10:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "error_code": "VALIDATION_ERROR",
+                "message": "Alasan pembatalan minimal 10 karakter",
+                "field": "alasan_pembatalan",
+            },
+        )
 
-    logger.info(f"Mutation cancelled: {mutasi_id} by {admin_user.username}")
+    # Get mutasi
+    result = await db.execute(select(RiwayatMutasi).where(RiwayatMutasi.id == mutasi_id))
+    mutasi = result.scalar_one_or_none()
+
+    if not mutasi:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error_code": "NOT_FOUND",
+                "message": "Mutasi tidak ditemukan",
+            },
+        )
+
+    # Check status
+    if mutasi.status_mutasi != StatusMutasi.DALAM_PROSES:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={
+                "error_code": "BUSINESS_RULE_VIOLATION",
+                "message": f"Mutasi tidak dapat dibatalkan karena status saat ini: {mutasi.status_mutasi}",
+            },
+        )
+
+    # Update mutasi status
+    mutasi.status_mutasi = StatusMutasi.DIBATALKAN
+    mutasi.alasan_pembatalan = alasan_pembatalan
+    mutasi.selesai_mutasi = datetime.now(timezone.utc)
+
+    # Revert aset status back to Aktif
+    from app.models.aset import Aset, StatusAset
+    aset_result = await db.execute(select(Aset).where(Aset.id == mutasi.aset_id))
+    aset = aset_result.scalar_one_or_none()
+    
+    if aset:
+        aset.status = StatusAset.AKTIF
+
+    await db.commit()
+    await db.refresh(mutasi)
+
+    logger.info(f"Mutasi cancelled: {mutasi.id}")
 
     return SuccessResponse(
-        data=response,
-        message="Mutasi berhasil dibatalkan",
+        data=MutasiResponse.model_validate(mutasi),
+        message="Mutasi aset berhasil dibatalkan",
     )

@@ -5,7 +5,7 @@ Model ini mendefinisikan:
 - AuditTrail: SQLModel untuk tabel audit_trail
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 from typing import TYPE_CHECKING
 
@@ -97,7 +97,7 @@ class AuditTrail(SQLModel, table=True):
 
     # Timestamp
     timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(UTC),
         index=True,
         description="Timestamp operasi",
     )

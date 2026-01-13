@@ -8,8 +8,8 @@ inclusion: always
 
 ```
 ┌─────────────────┐     HTTP/REST     ┌─────────────────┐     SQLModel     ┌─────────────┐
-│   WPF Client    │ ◄──────────────► │  FastAPI Server │ ◄──────────────► │   SQLite    │
-│   (.NET 8)      │     Port 8000     │   (Python 3.12) │       ORM        │  (WAL Mode) │
+│  Tauri Client   │ ◄──────────────► │  FastAPI Server │ ◄──────────────► │   SQLite    │
+│ (React + Rust)  │     Port 8000     │   (Python 3.12) │       ORM        │  (WAL Mode) │
 └─────────────────┘                   └─────────────────┘                  └─────────────┘
 ```
 
@@ -24,30 +24,36 @@ inclusion: always
 | Validasi | Pydantic | v2 | Data validation |
 | Auth | bcrypt | Latest | Password hashing |
 
-## Frontend Stack
+## Frontend Stack (Tauri)
 
 | Komponen | Teknologi | Versi | Keterangan |
 |----------|-----------|-------|------------|
-| Framework | WPF | .NET 8 | Desktop UI |
-| Pattern | MVVM | CommunityToolkit | MVVM implementation |
-| HTTP Client | Refit | Latest | Type-safe REST client |
-| Resilience | Polly | Latest | Retry policies |
-| UI Kit | MaterialDesignInXaml | Latest | Material Design |
+| Desktop Runtime | Tauri | v2.x | Rust-based, small bundle |
+| UI Framework | React | 19.x | Component-based UI |
+| Language | TypeScript | 5.x | Type safety |
+| Package Manager | **Bun** | Latest | 🚀 Fastest |
+| Styling | Tailwind CSS | 4.x | Utility-first CSS |
+| Components | shadcn/ui | Latest | Customizable components |
+| State | Zustand | Latest | Simple state management |
+| Data Fetching | TanStack Query | v5 | Server state |
+| Tables | TanStack Table | v8 | Powerful data tables |
+| Forms | React Hook Form + Zod | Latest | Form validation |
+| Icons | Lucide React | Latest | Icon library |
 
 ## Reporting Stack
 
 | Komponen | Teknologi | Keterangan |
 |----------|-----------|------------|
-| Excel | ClosedXML | Generate .xlsx |
-| PDF | QuestPDF | Generate PDF reports |
+| Excel | xlsx (SheetJS) | Generate .xlsx di frontend |
+| PDF | jsPDF atau react-pdf | Generate PDF reports |
 
 ## Packaging & Deployment
 
 | Komponen | Teknologi | Keterangan |
 |----------|-----------|------------|
 | Backend Bundle | PyInstaller | Bundle ke single EXE |
-| Frontend Bundle | .NET Single-File | Self-contained EXE |
-| Installer | Inno Setup | MSI/EXE installer |
+| Frontend Bundle | Tauri | ~2-10MB installer |
+| Installer | Tauri bundler | MSI/NSIS/DMG/DEB |
 | Auto-Update | Velopack | Delta updates, rollback |
 
 ## Monitoring & Support Stack

@@ -1,142 +1,274 @@
 """
-User Management API Endpoints untuk SIMANIS62 V2.
+Users API endpoints untuk SIMANIS62 V2.
 
-Endpoints:
-- GET /api/v1/users - List users (Admin only)
-- GET /api/v1/users/{id} - Get user detail (Admin only)
-- POST /api/v1/users - Create user (Admin only)
-- PUT /api/v1/users/{id} - Update user (Admin only)
-- PUT /api/v1/users/{id}/deactivate - Deactivate user (Admin only)
+Menyediakan user management operations (Admin only).
 """
 
 import logging
+from uuid import UUID
 
-from fastapi import APIRouter, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
-from app.api.deps import AdminUser, UserServiceDep
-from app.models.user import UserRole, UserStatus
-from app.schemas.auth import UserResponse
+from app.core.auth import AdminUser
+from app.core.database import get_db
+from app.models.user import User, UserRole, UserStatus
 from app.schemas.response import PaginatedResponse, SuccessResponse
-from app.schemas.user import (
-    UserCreate,
-    UserDeactivateRequest,
-    UserSearchParams,
-    UserUpdate,
-)
+from app.schemas.user import UserCreate, UserResponse, UserUpdate
 
-router = APIRouter(prefix="/users", tags=["User Management"])
 logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/users", tags=["Users"])
+
+
+@router.post(
+    "/",
+    response_model=SuccessResponse[UserResponse],
+    status_code=status.HTTP_201_CREATED,
+    summary="Create new user",
+    description="Membuat user baru (Admin only).",
+)
+async def create_user(
+    data: UserCreate,
+    admin_user: AdminUser,
+    db: AsyncSession = Depends(get_db),
+) -> SuccessResponse[UserResponse]:
+    """Create user baru.
+
+    Args:
+        data: Data user yang akan dibuat
+        db: Database session
+
+    Returns:
+        SuccessResponse dengan data user yang dibuat
+
+    Raises:
+        HTTPException 409: Jika username sudah digunakan
+    """
+    # Check duplicate username
+    result = await db.execute(select(User).where(User.username == data.username))
+    if result.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={
+                "error_code": "DUPLICATE_ENTRY",
+                "message": f"Username '{data.username}' sudah digunakan",
+                "field": "username",
+            },
+        )
+
+    # Create user with hashed password
+    from app.core.security import hash_password
+    
+    user_data = data.model_dump(exclude={"password"})
+    user_data["password_hash"] = hash_password(data.password)
+    user = User(**user_data)
+    db.add(user)
+    await db.commit()
+    await db.refresh(user)
+
+    logger.info(f"User created: {user.id} - {user.username}")
+
+    return SuccessResponse(
+        data=UserResponse.model_validate(user),
+        message="User berhasil dibuat",
+    )
 
 
 @router.get(
-    "",
+    "/",
     response_model=PaginatedResponse[UserResponse],
-    status_code=status.HTTP_200_OK,
     summary="List users",
-    description="Get daftar users dengan filters. Hanya Admin.",
+    description="Mengambil list users dengan pagination (Admin only).",
 )
 async def list_users(
-    user_service: UserServiceDep,
     admin_user: AdminUser,
-    keyword: str | None = Query(None, max_length=100, description="Search keyword"),
-    role: UserRole | None = Query(None, description="Filter role"),
-    user_status: UserStatus | None = Query(
-        None, alias="status", description="Filter status"
-    ),
-    dapat_ekspor: bool | None = Query(None, description="Filter izin export"),
-    page: int = Query(1, ge=1, description="Nomor halaman"),
-    page_size: int = Query(100, ge=1, le=1000, description="Item per halaman"),
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(100, ge=1, le=1000, description="Items per page"),
+    role: UserRole | None = Query(None, description="Filter by role"),
+    status_filter: UserStatus | None = Query(None, alias="status", description="Filter by status"),
+    db: AsyncSession = Depends(get_db),
 ) -> PaginatedResponse[UserResponse]:
-    """Get daftar users dengan filters."""
-    params = UserSearchParams(
-        keyword=keyword,
-        role=role,
-        status=user_status,
-        dapat_ekspor=dapat_ekspor,
+    """List users dengan pagination.
+
+    Args:
+        page: Page number (default: 1)
+        page_size: Items per page (default: 100, max: 1000)
+        role: Filter by role
+        status_filter: Filter by status
+        db: Database session
+
+    Returns:
+        PaginatedResponse dengan list users
+    """
+    # Build query
+    query = select(User)
+
+    # Apply filters
+    if role:
+        query = query.where(User.role == role)
+    if status_filter:
+        query = query.where(User.status == status_filter)
+
+    # Count total
+    count_result = await db.execute(select(User).where(*query.whereclause.clauses if query.whereclause else []))
+    total = len(count_result.all())
+
+    # Apply pagination
+    offset = (page - 1) * page_size
+    query = query.offset(offset).limit(page_size)
+
+    # Execute query
+    result = await db.execute(query)
+    users = result.scalars().all()
+
+    # Calculate total pages
+    total_pages = (total + page_size - 1) // page_size
+
+    return PaginatedResponse(
+        data=[UserResponse.model_validate(u) for u in users],
+        total=total,
         page=page,
         page_size=page_size,
+        total_pages=total_pages,
     )
-
-    result = await user_service.search_users(params)
-    logger.info(f"List users: {result.total} results found")
-    return result
 
 
 @router.get(
     "/{user_id}",
     response_model=SuccessResponse[UserResponse],
-    status_code=status.HTTP_200_OK,
-    summary="Get user detail",
-    description="Get detail user berdasarkan ID. Hanya Admin.",
+    summary="Get user by ID",
+    description="Mengambil detail user berdasarkan ID (Admin only).",
 )
 async def get_user(
-    user_id: str,
-    user_service: UserServiceDep,
+    user_id: UUID,
     admin_user: AdminUser,
+    db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse[UserResponse]:
-    """Get user by ID."""
-    user = await user_service.get_user_by_id(user_id)
-    response = user_service._to_response(user)
-    return SuccessResponse(data=response, message="User ditemukan")
+    """Get user by ID.
 
+    Args:
+        user_id: UUID user
+        db: Database session
 
-@router.post(
-    "",
-    response_model=SuccessResponse[UserResponse],
-    status_code=status.HTTP_201_CREATED,
-    summary="Create user",
-    description="Buat user baru. Hanya Admin.",
-)
-async def create_user(
-    data: UserCreate,
-    user_service: UserServiceDep,
-    admin_user: AdminUser,
-) -> SuccessResponse[UserResponse]:
-    """Create user baru."""
-    user = await user_service.create_user(data, str(admin_user.id))
-    response = user_service._to_response(user)
+    Returns:
+        SuccessResponse dengan data user
 
-    logger.info(f"User created: {user.id} by {admin_user.username}")
-    return SuccessResponse(data=response, message="User berhasil ditambahkan")
+    Raises:
+        HTTPException 404: Jika user tidak ditemukan
+    """
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error_code": "NOT_FOUND",
+                "message": "User tidak ditemukan",
+            },
+        )
+
+    return SuccessResponse(data=UserResponse.model_validate(user))
 
 
 @router.put(
     "/{user_id}",
     response_model=SuccessResponse[UserResponse],
-    status_code=status.HTTP_200_OK,
     summary="Update user",
-    description="Update user. Hanya Admin. Tidak bisa mengubah role sendiri.",
+    description="Update data user (Admin only).",
 )
 async def update_user(
-    user_id: str,
+    user_id: UUID,
     data: UserUpdate,
-    user_service: UserServiceDep,
     admin_user: AdminUser,
+    db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse[UserResponse]:
-    """Update user."""
-    user = await user_service.update_user(user_id, data, str(admin_user.id))
-    response = user_service._to_response(user)
+    """Update user.
 
-    logger.info(f"User updated: {user_id} by {admin_user.username}")
-    return SuccessResponse(data=response, message="User berhasil diupdate")
+    Args:
+        user_id: UUID user
+        data: Data update
+        db: Database session
+
+    Returns:
+        SuccessResponse dengan data user yang diupdate
+
+    Raises:
+        HTTPException 404: Jika user tidak ditemukan
+    """
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error_code": "NOT_FOUND",
+                "message": "User tidak ditemukan",
+            },
+        )
+
+    # Update fields
+    update_data = data.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(user, field, value)
+
+    await db.commit()
+    await db.refresh(user)
+
+    logger.info(f"User updated: {user.id}")
+
+    return SuccessResponse(
+        data=UserResponse.model_validate(user),
+        message="User berhasil diperbarui",
+    )
 
 
 @router.put(
     "/{user_id}/deactivate",
     response_model=SuccessResponse[UserResponse],
-    status_code=status.HTTP_200_OK,
     summary="Deactivate user",
-    description="Nonaktifkan user. Hanya Admin. Tidak bisa menonaktifkan diri sendiri.",
+    description="Nonaktifkan user (soft delete, Admin only).",
 )
 async def deactivate_user(
-    user_id: str,
-    user_service: UserServiceDep,
+    user_id: UUID,
     admin_user: AdminUser,
-    request: UserDeactivateRequest | None = None,
+    db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse[UserResponse]:
-    """Deactivate user."""
-    user = await user_service.deactivate_user(user_id, request, str(admin_user.id))
-    response = user_service._to_response(user)
+    """Deactivate user (soft delete).
 
-    logger.info(f"User deactivated: {user_id} by {admin_user.username}")
-    return SuccessResponse(data=response, message="User berhasil dinonaktifkan")
+    Args:
+        user_id: UUID user
+        db: Database session
+
+    Returns:
+        SuccessResponse dengan data user yang dinonaktifkan
+
+    Raises:
+        HTTPException 404: Jika user tidak ditemukan
+    """
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error_code": "NOT_FOUND",
+                "message": "User tidak ditemukan",
+            },
+        )
+
+    # Deactivate
+    user.status = UserStatus.NONAKTIF
+    await db.commit()
+    await db.refresh(user)
+
+    logger.info(f"User deactivated: {user_id}")
+
+    return SuccessResponse(
+        data=UserResponse.model_validate(user),
+        message="User berhasil dinonaktifkan",
+    )

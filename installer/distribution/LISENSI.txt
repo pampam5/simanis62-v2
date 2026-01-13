@@ -1,0 +1,148 @@
+================================================================================
+                         LISENSI SIMANIS62 V2
+              Sistem Manajemen Aset Sekolah
+================================================================================
+
+PERJANJIAN LISENSI PENGGUNA AKHIR (EULA)
+End User License Agreement
+
+Dengan menginstal atau menggunakan perangkat lunak SIMANIS62 V2 ("Perangkat 
+Lunak"), Anda menyetujui syarat dan ketentuan lisensi ini.
+
+================================================================================
+                         1. PEMBERIAN LISENSI
+================================================================================
+
+SIMANIS62 Team ("Pemberi Lisensi") memberikan kepada Anda ("Pengguna") lisensi 
+non-eksklusif dan tidak dapat dipindahtangankan untuk menggunakan Perangkat 
+Lunak ini pada satu (1) komputer untuk keperluan pengelolaan aset sekolah.
+
+================================================================================
+                         2. BATASAN PENGGUNAAN
+================================================================================
+
+Pengguna TIDAK DIPERBOLEHKAN untuk:
+
+a) Menyalin, memodifikasi, atau mendistribusikan Perangkat Lunak tanpa izin 
+   tertulis dari Pemberi Lisensi.
+
+b) Melakukan reverse engineering, dekompilasi, atau disassembly terhadap 
+   Perangkat Lunak.
+
+c) Menyewakan, menyewabelikan, atau meminjamkan Perangkat Lunak kepada pihak 
+   ketiga.
+
+d) Menggunakan Perangkat Lunak untuk tujuan ilegal atau melanggar hukum.
+
+e) Menghapus atau mengubah pemberitahuan hak cipta atau tanda kepemilikan 
+   lainnya pada Perangkat Lunak.
+
+================================================================================
+                         3. HAK KEKAYAAN INTELEKTUAL
+================================================================================
+
+Perangkat Lunak ini dilindungi oleh undang-undang hak cipta dan perjanjian 
+internasional. Pemberi Lisensi memiliki semua hak, kepemilikan, dan kepentingan 
+atas Perangkat Lunak, termasuk semua hak kekayaan intelektual di dalamnya.
+
+================================================================================
+                         4. PENAFIAN JAMINAN
+================================================================================
+
+PERANGKAT LUNAK INI DISEDIAKAN "SEBAGAIMANA ADANYA" TANPA JAMINAN APAPUN, BAIK 
+TERSURAT MAUPUN TERSIRAT, TERMASUK NAMUN TIDAK TERBATAS PADA JAMINAN KELAYAKAN 
+UNTUK DIPERDAGANGKAN, KESESUAIAN UNTUK TUJUAN TERTENTU, DAN TIDAK MELANGGAR 
+HAK PIHAK KETIGA.
+
+================================================================================
+                         5. BATASAN TANGGUNG JAWAB
+================================================================================
+
+DALAM KEADAAN APAPUN, PEMBERI LISENSI TIDAK BERTANGGUNG JAWAB ATAS KERUSAKAN 
+LANGSUNG, TIDAK LANGSUNG, INSIDENTAL, KHUSUS, KONSEKUENSIAL, ATAU HUKUMAN 
+(TERMASUK NAMUN TIDAK TERBATAS PADA KEHILANGAN DATA, KEHILANGAN KEUNTUNGAN, 
+ATAU GANGGUAN BISNIS) YANG TIMBUL DARI PENGGUNAAN ATAU KETIDAKMAMPUAN 
+MENGGUNAKAN PERANGKAT LUNAK INI.
+
+================================================================================
+                         6. KEPATUHAN REGULASI
+================================================================================
+
+Perangkat Lunak ini dirancang untuk membantu kepatuhan terhadap:
+- Permendagri No. 19/2016 tentang Pedoman Pengelolaan BMD
+- Permendagri No. 47/2021 tentang Perubahan Permendagri 19/2016
+- Permendagri No. 7/2024 tentang Perubahan Kedua
+- Format BPAD DKI Jakarta untuk Kartu Inventaris Barang (KIB)
+
+Namun, Pengguna tetap bertanggung jawab penuh untuk memastikan kepatuhan 
+terhadap semua regulasi yang berlaku.
+
+================================================================================
+                         7. PRIVASI DAN KEAMANAN DATA
+================================================================================
+
+a) Semua data yang dimasukkan ke dalam Perangkat Lunak disimpan secara lokal 
+   di komputer Pengguna.
+
+b) Perangkat Lunak dapat mengirimkan laporan error anonim ke server monitoring 
+   untuk tujuan perbaikan bug. Data sensitif (password, data aset, data 
+   pribadi) TIDAK dikirimkan.
+
+c) Pengguna bertanggung jawab untuk menjaga keamanan data dan melakukan backup 
+   secara berkala.
+
+================================================================================
+                         8. DUKUNGAN TEKNIS
+================================================================================
+
+Dukungan teknis tersedia melalui:
+- Remote support via RustDesk (dengan persetujuan Pengguna)
+- Pembaruan otomatis melalui sistem Velopack
+
+================================================================================
+                         9. PENGAKHIRAN
+================================================================================
+
+Lisensi ini berlaku sampai diakhiri. Lisensi akan berakhir secara otomatis 
+jika Pengguna melanggar ketentuan apapun dalam perjanjian ini. Setelah 
+pengakhiran, Pengguna harus menghapus semua salinan Perangkat Lunak.
+
+================================================================================
+                         10. HUKUM YANG BERLAKU
+================================================================================
+
+Perjanjian ini diatur oleh dan ditafsirkan sesuai dengan hukum Republik 
+Indonesia. Setiap sengketa yang timbul dari perjanjian ini akan diselesaikan 
+melalui musyawarah mufakat, dan jika tidak tercapai, akan diselesaikan melalui 
+pengadilan yang berwenang di Indonesia.
+
+================================================================================
+                         11. KETENTUAN UMUM
+================================================================================
+
+a) Jika ada ketentuan dalam perjanjian ini yang dinyatakan tidak sah atau 
+   tidak dapat dilaksanakan, ketentuan lainnya tetap berlaku penuh.
+
+b) Kegagalan Pemberi Lisensi untuk melaksanakan hak apapun dalam perjanjian 
+   ini tidak dianggap sebagai pengabaian hak tersebut.
+
+c) Perjanjian ini merupakan keseluruhan perjanjian antara Pengguna dan 
+   Pemberi Lisensi terkait Perangkat Lunak.
+
+================================================================================
+                         INFORMASI KONTAK
+================================================================================
+
+SIMANIS62 Team
+Email: support@simanis62.id
+Website: https://github.com/simanis62
+
+================================================================================
+
+Versi Lisensi: 1.0
+Tanggal Efektif: Januari 2026
+
+Dengan menginstal Perangkat Lunak ini, Anda menyatakan telah membaca, memahami, 
+dan menyetujui semua syarat dan ketentuan dalam perjanjian lisensi ini.
+
+================================================================================

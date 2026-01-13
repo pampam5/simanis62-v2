@@ -59,7 +59,7 @@ class RuanganRepository(BaseRepository[Ruangan]):
         """Get semua aset dalam ruangan tertentu (untuk KIR report).
 
         Args:
-            ruangan_id: UUID ruangan.
+            ruangan_id: UUID ruangan (as string).
             include_deleted: Jika True, termasuk aset yang dihapus.
             skip: Jumlah record yang di-skip (offset).
             limit: Maksimum jumlah record yang dikembalikan.
@@ -67,7 +67,9 @@ class RuanganRepository(BaseRepository[Ruangan]):
         Returns:
             List of assets dalam ruangan.
         """
-        query = select(Aset).where(Aset.ruangan_id == ruangan_id)
+        from uuid import UUID
+        ruangan_uuid = UUID(ruangan_id)
+        query = select(Aset).where(Aset.ruangan_id == ruangan_uuid)
 
         if not include_deleted:
             query = query.where(Aset.status != StatusAset.DIHAPUS)
@@ -84,14 +86,16 @@ class RuanganRepository(BaseRepository[Ruangan]):
         """Count jumlah aset dalam ruangan.
 
         Args:
-            ruangan_id: UUID ruangan.
+            ruangan_id: UUID ruangan (as string).
             include_deleted: Jika True, termasuk aset yang dihapus.
 
         Returns:
             Jumlah aset dalam ruangan.
         """
+        from uuid import UUID
+        ruangan_uuid = UUID(ruangan_id)
         query = (
-            select(func.count()).select_from(Aset).where(Aset.ruangan_id == ruangan_id)
+            select(func.count()).select_from(Aset).where(Aset.ruangan_id == ruangan_uuid)
         )
 
         if not include_deleted:

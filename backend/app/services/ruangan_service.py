@@ -5,9 +5,10 @@ Module ini menyediakan RuanganService untuk:
 - Get KIR (Kartu Inventaris Ruangan) report
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.exceptions import (
@@ -22,94 +23,54 @@ from app.schemas.response import PaginatedResponse
 from app.services.base import BaseService
 
 
-class RuanganCreate:
+class RuanganCreate(BaseModel):
     """Schema untuk membuat ruangan baru."""
 
-    def __init__(
-        self,
-        kode_ruangan: str,
-        nama_ruangan: str,
-        keterangan: str | None = None,
-    ):
-        self.kode_ruangan = kode_ruangan
-        self.nama_ruangan = nama_ruangan
-        self.keterangan = keterangan
+    kode_ruangan: str = Field(..., min_length=1, max_length=50)
+    nama_ruangan: str = Field(..., min_length=1, max_length=200)
+    keterangan: str | None = None
 
 
-class RuanganUpdate:
+class RuanganUpdate(BaseModel):
     """Schema untuk update ruangan."""
 
-    def __init__(
-        self,
-        nama_ruangan: str | None = None,
-        keterangan: str | None = None,
-    ):
-        self.nama_ruangan = nama_ruangan
-        self.keterangan = keterangan
+    nama_ruangan: str | None = Field(None, min_length=1, max_length=200)
+    keterangan: str | None = None
 
 
-class RuanganResponse:
+class RuanganResponse(BaseModel):
     """Schema untuk response ruangan."""
 
-    def __init__(
-        self,
-        id: str,
-        kode_ruangan: str,
-        nama_ruangan: str,
-        keterangan: str | None,
-        jumlah_aset: int,
-        created_at: datetime,
-        updated_at: datetime,
-    ):
-        self.id = id
-        self.kode_ruangan = kode_ruangan
-        self.nama_ruangan = nama_ruangan
-        self.keterangan = keterangan
-        self.jumlah_aset = jumlah_aset
-        self.created_at = created_at
-        self.updated_at = updated_at
+    id: str
+    kode_ruangan: str
+    nama_ruangan: str
+    keterangan: str | None
+    jumlah_aset: int
+    created_at: datetime
+    updated_at: datetime | None
 
 
-class KirReportItem:
+class KirReportItem(BaseModel):
     """Schema untuk item KIR report."""
 
-    def __init__(
-        self,
-        nomor_urut: int,
-        kode_barang: str,
-        nama_barang: str,
-        nomor_register: int,
-        kondisi: str,
-        tahun_perolehan: int,
-        harga: int,
-        keterangan: str | None,
-    ):
-        self.nomor_urut = nomor_urut
-        self.kode_barang = kode_barang
-        self.nama_barang = nama_barang
-        self.nomor_register = nomor_register
-        self.kondisi = kondisi
-        self.tahun_perolehan = tahun_perolehan
-        self.harga = harga
-        self.keterangan = keterangan
+    nomor_urut: int
+    kode_barang: str
+    nama_barang: str
+    nomor_register: int
+    kondisi: str
+    tahun_perolehan: int
+    harga: int
+    keterangan: str | None
 
 
-class KirReportResponse:
+class KirReportResponse(BaseModel):
     """Schema untuk KIR report response."""
 
-    def __init__(
-        self,
-        ruangan: RuanganResponse,
-        total_aset: int,
-        total_nilai: int,
-        items: list[KirReportItem],
-        tanggal_cetak: datetime,
-    ):
-        self.ruangan = ruangan
-        self.total_aset = total_aset
-        self.total_nilai = total_nilai
-        self.items = items
-        self.tanggal_cetak = tanggal_cetak
+    ruangan: RuanganResponse
+    total_aset: int
+    total_nilai: int
+    items: list[KirReportItem]
+    tanggal_cetak: datetime
 
 
 class RuanganService(BaseService[Ruangan, RuanganRepository]):
@@ -230,8 +191,12 @@ class RuanganService(BaseService[Ruangan, RuanganRepository]):
         """
         self.log_info(f"Updating ruangan: {ruangan_id}")
 
+        # Convert string to UUID
+        from uuid import UUID
+        ruangan_uuid = UUID(ruangan_id)
+
         # Get existing ruangan
-        ruangan = await self.repository.get_by_id(ruangan_id)
+        ruangan = await self.repository.get_by_id(ruangan_uuid)
         if not ruangan:
             raise RuanganNotFoundError(ruangan_id)
 
@@ -242,9 +207,9 @@ class RuanganService(BaseService[Ruangan, RuanganRepository]):
         if data.keterangan is not None:
             update_data["keterangan"] = data.keterangan
 
-        update_data["updated_at"] = datetime.utcnow()
+        update_data["updated_at"] = datetime.now(UTC)
 
-        updated = await self.repository.update(ruangan_id, update_data)
+        updated = await self.repository.update(ruangan_uuid, update_data)
         if not updated:
             raise RuanganNotFoundError(ruangan_id)
         await self.commit()
@@ -267,8 +232,12 @@ class RuanganService(BaseService[Ruangan, RuanganRepository]):
         """
         self.log_info(f"Deleting ruangan: {ruangan_id}")
 
+        # Convert string to UUID
+        from uuid import UUID
+        ruangan_uuid = UUID(ruangan_id)
+
         # Get existing ruangan
-        ruangan = await self.repository.get_by_id(ruangan_id)
+        ruangan = await self.repository.get_by_id(ruangan_uuid)
         if not ruangan:
             raise RuanganNotFoundError(ruangan_id)
 
@@ -276,7 +245,7 @@ class RuanganService(BaseService[Ruangan, RuanganRepository]):
         await self._validate_no_assets(ruangan_id)
 
         # Delete
-        deleted = await self.repository.delete(ruangan_id)
+        deleted = await self.repository.delete(ruangan_uuid)
         await self.commit()
 
         self.log_info(f"Ruangan deleted: id={ruangan_id}")
@@ -294,7 +263,11 @@ class RuanganService(BaseService[Ruangan, RuanganRepository]):
         Raises:
             RuanganNotFoundError: Jika ruangan tidak ditemukan.
         """
-        ruangan = await self.repository.get_by_id(ruangan_id)
+        # Convert string to UUID
+        from uuid import UUID
+        ruangan_uuid = UUID(ruangan_id)
+
+        ruangan = await self.repository.get_by_id(ruangan_uuid)
         if not ruangan:
             raise RuanganNotFoundError(ruangan_id)
         return ruangan
@@ -347,8 +320,12 @@ class RuanganService(BaseService[Ruangan, RuanganRepository]):
         """
         self.log_info(f"Generating KIR report for ruangan: {ruangan_id}")
 
+        # Convert string to UUID
+        from uuid import UUID
+        ruangan_uuid = UUID(ruangan_id)
+
         # Get ruangan
-        ruangan = await self.repository.get_by_id(ruangan_id)
+        ruangan = await self.repository.get_by_id(ruangan_uuid)
         if not ruangan:
             raise RuanganNotFoundError(ruangan_id)
 
@@ -374,7 +351,7 @@ class RuanganService(BaseService[Ruangan, RuanganRepository]):
             total_aset=total_aset,
             total_nilai=total_nilai,
             items=items,
-            tanggal_cetak=datetime.utcnow(),
+            tanggal_cetak=datetime.now(UTC),
         )
 
     def _to_response(self, ruangan: Ruangan, jumlah_aset: int = 0) -> RuanganResponse:

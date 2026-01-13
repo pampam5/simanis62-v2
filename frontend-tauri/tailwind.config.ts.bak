@@ -1,0 +1,194 @@
+import type { Config } from 'tailwindcss';
+
+export default {
+  darkMode: 'class',
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {
+      // ============================================
+      // Apple System Colors (Official HIG Values)
+      // ============================================
+      colors: {
+        // Accent Colors - Light Mode
+        apple: {
+          blue: {
+            DEFAULT: '#007AFF',
+            light: '#007AFF',
+            dark: '#0A84FF',
+          },
+          green: {
+            DEFAULT: '#34C759',
+            light: '#34C759',
+            dark: '#30D158',
+          },
+          indigo: {
+            DEFAULT: '#5856D6',
+            light: '#5856D6',
+            dark: '#5E5CE6',
+          },
+          orange: {
+            DEFAULT: '#FF9500',
+            light: '#FF9500',
+            dark: '#FF9F0A',
+          },
+          pink: {
+            DEFAULT: '#FF2D55',
+            light: '#FF2D55',
+            dark: '#FF375F',
+          },
+          purple: {
+            DEFAULT: '#AF52DE',
+            light: '#AF52DE',
+            dark: '#BF5AF2',
+          },
+          red: {
+            DEFAULT: '#FF3B30',
+            light: '#FF3B30',
+            dark: '#FF453A',
+          },
+          teal: {
+            DEFAULT: '#5AC8FA',
+            light: '#5AC8FA',
+            dark: '#64D2FF',
+          },
+          yellow: {
+            DEFAULT: '#FFCC00',
+            light: '#FFCC00',
+            dark: '#FFD60A',
+          },
+          cyan: {
+            DEFAULT: '#32ADE6',
+            light: '#32ADE6',
+            dark: '#64D2FF',
+          },
+          mint: {
+            DEFAULT: '#00C7BE',
+            light: '#00C7BE',
+            dark: '#63E6E2',
+          },
+        },
+
+        // System Gray Scale
+        'system-gray': {
+          1: { DEFAULT: '#8E8E93', light: '#8E8E93', dark: '#8E8E93' },
+          2: { DEFAULT: '#AEAEB2', light: '#AEAEB2', dark: '#636366' },
+          3: { DEFAULT: '#C7C7CC', light: '#C7C7CC', dark: '#48484A' },
+          4: { DEFAULT: '#D1D1D6', light: '#D1D1D6', dark: '#3A3A3C' },
+          5: { DEFAULT: '#E5E5EA', light: '#E5E5EA', dark: '#2C2C2E' },
+          6: { DEFAULT: '#F2F2F7', light: '#F2F2F7', dark: '#1C1C1E' },
+        },
+
+        // Backgrounds
+        'system-bg': {
+          primary: { DEFAULT: '#FFFFFF', light: '#FFFFFF', dark: '#000000' },
+          secondary: { DEFAULT: '#F2F2F7', light: '#F2F2F7', dark: '#1C1C1E' },
+          tertiary: { DEFAULT: '#FFFFFF', light: '#FFFFFF', dark: '#2C2C2E' },
+        },
+
+        // Traffic Light Colors (Window Controls)
+        'traffic-light': {
+          red: '#FF5F57',
+          'red-hover': '#E5453C',
+          yellow: '#FEBC2E',
+          'yellow-hover': '#D4A528',
+          green: '#28C840',
+          'green-hover': '#1EAD31',
+          inactive: '#DCDCDC',
+          'inactive-dark': '#4A4A4A',
+        },
+      },
+
+      fontFamily: {
+        // Figtree - #1 UI Design Font by Erik Kennedy (adhamdannaway.com)
+        // Modern, friendly, versatile - combines best parts of top typefaces
+        // Perfect for professional desktop applications
+        sans: [
+          'Figtree Variable',
+          'Figtree',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'SF Pro Display',
+          'SF Pro Text',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'sans-serif',
+        ],
+        mono: [
+          'Geist Mono Variable',
+          'Geist Mono',
+          'SF Mono',
+          'JetBrains Mono',
+          'Fira Code',
+          'Cascadia Code',
+          'Consolas',
+          'Liberation Mono',
+          'Menlo',
+          'monospace',
+        ],
+      },
+      fontSize: {
+        '2xs': ['11px', { lineHeight: '14px', letterSpacing: '0.006em' }],
+        'xs': ['12px', { lineHeight: '16px', letterSpacing: '0' }],
+        'sm': ['14px', { lineHeight: '20px', letterSpacing: '-0.006em' }],
+        'base': ['16px', { lineHeight: '24px', letterSpacing: '-0.011em' }],
+        'lg': ['18px', { lineHeight: '28px', letterSpacing: '-0.014em' }],
+        'xl': ['20px', { lineHeight: '28px', letterSpacing: '-0.017em' }],
+        '2xl': ['24px', { lineHeight: '32px', letterSpacing: '-0.019em' }],
+        '3xl': ['28px', { lineHeight: '36px', letterSpacing: '-0.021em' }],
+        '4xl': ['34px', { lineHeight: '40px', letterSpacing: '-0.022em' }],
+      },
+      backdropBlur: {
+        xs: '2px',
+        '2xl': '40px',
+        '3xl': '64px',
+      },
+      backgroundOpacity: {
+        '72': '0.72',
+        '85': '0.85',
+      },
+      borderRadius: {
+        'macos-sm': '6px',
+        'macos': '10px',
+        'macos-lg': '14px',
+        'macos-xl': '20px',
+      },
+      boxShadow: {
+        'glass': '0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+        'glass-lg': '0 24px 80px rgba(0, 0, 0, 0.15), 0 8px 32px rgba(0, 0, 0, 0.1)',
+        'glass-dark': '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        'button-hover': '0 4px 16px rgba(0, 0, 0, 0.1)',
+        'card-hover': '0 8px 40px rgba(0, 0, 0, 0.12)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.2s ease-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+        'scale-in': 'scaleIn 0.2s ease-out',
+        'blur-in': 'blurIn 0.3s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        blurIn: {
+          '0%': { opacity: '0', filter: 'blur(10px)' },
+          '100%': { opacity: '1', filter: 'blur(0)' },
+        },
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config;

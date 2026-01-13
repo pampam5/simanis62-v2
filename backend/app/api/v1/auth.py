@@ -1,101 +1,129 @@
 """
-Auth API Endpoints untuk SIMANIS62 V2.
+Authentication API endpoints untuk SIMANIS62 V2.
 
-Endpoints:
-- POST /api/v1/auth/login - Login user
-- POST /api/v1/auth/logout - Logout user
-- GET /api/v1/auth/me - Get current user info
+Menyediakan login, logout, dan session management.
 """
 
 import logging
+from typing import Annotated
 
-from fastapi import APIRouter, Cookie, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
-from app.api.deps import AuthServiceDep, CurrentUser
-from app.core.config import settings
-from app.schemas.auth import LoginRequest, LoginResponse, UserResponse
+from app.core.auth import CurrentUser, create_session, destroy_session, get_current_user
+from app.core.database import get_db
+from app.core.security import verify_password
+from app.models.user import User, UserStatus
 from app.schemas.response import SuccessResponse
+from app.schemas.user import LoginRequest, UserResponse
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
-logger = logging.getLogger(__name__)
 
 
 @router.post(
     "/login",
-    response_model=LoginResponse,
+    response_model=SuccessResponse[UserResponse],
     status_code=status.HTTP_200_OK,
-    summary="Login user",
-    description="Authenticate user dengan username dan password, return session cookie.",
+    summary="Login",
+    description="Authenticate user dan create session.",
 )
 async def login(
-    request: LoginRequest,
+    credentials: LoginRequest,
     response: Response,
-    auth_service: AuthServiceDep,
-) -> LoginResponse:
-    """Login user dan set session cookie.
+    db: AsyncSession = Depends(get_db),
+) -> SuccessResponse[UserResponse]:
+    """Login user dan create session.
 
     Args:
-        request: Login credentials (username, password)
-        response: FastAPI response untuk set cookie
-        auth_service: Auth service instance
+        credentials: Username dan password
+        response: FastAPI Response untuk set cookie
+        db: Database session
 
     Returns:
-        LoginResponse: User data dan session info
+        SuccessResponse dengan data user
 
     Raises:
-        InvalidCredentialsError: Jika username/password salah
+        HTTPException 401: Jika credentials invalid
     """
-    result = await auth_service.login(request)
+    # Find user by username
+    result = await db.execute(
+        select(User).where(User.username == credentials.username)
+    )
+    user = result.scalar_one_or_none()
 
-    # Set session cookie
+    # Validate user exists and is active
+    if not user or user.status != UserStatus.AKTIF:
+        logger.warning(f"Login failed for username: {credentials.username}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={
+                "error_code": "UNAUTHORIZED",
+                "message": "Username atau password salah",
+            },
+        )
+
+    # Verify password
+    if not verify_password(credentials.password, user.password_hash):
+        logger.warning(f"Invalid password for user: {credentials.username}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={
+                "error_code": "UNAUTHORIZED",
+                "message": "Username atau password salah",
+            },
+        )
+
+    # Create session and set cookie
+    session_id = await create_session(user.id, db)
     response.set_cookie(
         key="simanis62_session",
-        value=result.session.session_id,
+        value=session_id,
         httponly=True,
-        secure=False,  # HTTP only (localhost)
         samesite="lax",
-        max_age=settings.session_timeout_hours * 3600,  # Convert to seconds
+        secure=False,  # HTTP only (localhost)
+        max_age=7200,  # 2 hours
     )
 
-    logger.info(f"User logged in: {request.username}")
+    logger.info(f"User logged in: {user.username} (role: {user.role})")
 
-    return result
+    return SuccessResponse(
+        data=UserResponse.model_validate(user),
+        message="Login berhasil",
+    )
 
 
 @router.post(
     "/logout",
     response_model=SuccessResponse[dict],
     status_code=status.HTTP_200_OK,
-    summary="Logout user",
+    summary="Logout",
     description="Destroy session dan clear cookie.",
 )
 async def logout(
     response: Response,
-    auth_service: AuthServiceDep,
-    session_token: str | None = Cookie(None, alias="simanis62_session"),
+    current_user: CurrentUser,
+    db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse[dict]:
-    """Logout user dan clear session cookie.
+    """Logout user dan destroy session.
 
     Args:
-        response: FastAPI response untuk clear cookie
-        auth_service: Auth service instance
-        session_token: Session token dari cookie
+        response: FastAPI Response untuk clear cookie
+        current_user: Current authenticated user
+        db: Database session
 
     Returns:
-        SuccessResponse: Logout success message
+        SuccessResponse dengan message
     """
-    if session_token:
-        await auth_service.logout(session_token)
+    # Destroy session
+    await destroy_session(current_user.id, db)
 
-    # Clear session cookie
-    response.delete_cookie(
-        key="simanis62_session",
-        httponly=True,
-        secure=False,
-        samesite="lax",
-    )
+    # Clear cookie
+    response.delete_cookie(key="simanis62_session")
 
-    logger.info("User logged out")
+    logger.info(f"User logged out: {current_user.username}")
 
     return SuccessResponse(
         data={},
@@ -108,31 +136,19 @@ async def logout(
     response_model=SuccessResponse[UserResponse],
     status_code=status.HTTP_200_OK,
     summary="Get current user",
-    description="Get informasi user yang sedang login.",
+    description="Get current authenticated user info.",
 )
-async def get_current_user_info(
+async def get_me(
     current_user: CurrentUser,
 ) -> SuccessResponse[UserResponse]:
-    """Get current authenticated user info.
+    """Get current user info.
 
     Args:
-        current_user: Current authenticated user dari dependency
+        current_user: Current authenticated user
 
     Returns:
-        SuccessResponse[UserResponse]: Current user data
+        SuccessResponse dengan data user
     """
-    user_response = UserResponse(
-        id=str(current_user.id),
-        username=current_user.username,
-        nama_lengkap=current_user.nama_lengkap,
-        role=current_user.role,
-        status=current_user.status,
-        dapat_ekspor=current_user.dapat_ekspor,
-        created_at=current_user.created_at,
-        updated_at=current_user.updated_at,
-    )
-
     return SuccessResponse(
-        data=user_response,
-        message="User info retrieved",
+        data=UserResponse.model_validate(current_user),
     )
