@@ -1,20 +1,5 @@
 {
   "mcpServers": {
-    "local-image-analysis": {
-      "command": "python",
-      "args": [
-        "d:\\local-mcp-image-analysis-server\\enhanced_image_analysis_server.py"
-      ],
-      "env": {},
-      "disabled": true,
-      "autoApprove": [
-        "ai_analyze_single_image",
-        "ai_analyze_directory_images",
-        "extract_comprehensive_metadata",
-        "organize_images_by_content"
-      ],
-      "description": "Local image analysis MCP server for analyzing screenshots and images"
-    },
     "filesystem": {
       "command": "npx",
       "args": [
@@ -64,39 +49,6 @@
         "serena_get_task"
       ],
       "description": "Serena AI task management and project planning"
-    },
-    "basic-memory": {
-      "command": "uvx",
-      "args": [
-        "basic-memory",
-        "mcp"
-      ],
-      "env": {
-        "BASIC_MEMORY_PROJECT_DIR": "D:\\sistem manajemen aset sekolah project\\data\\basic-memory"
-      },
-      "disabled": false,
-      "autoApprove": [
-        "write_note",
-        "read_note",
-        "view_note",
-        "edit_note",
-        "delete_note",
-        "search_notes",
-        "list_entities",
-        "get_entity",
-        "search_entities",
-        "list_relations",
-        "create_graph",
-        "list_projects",
-        "get_project",
-        "set_project",
-        "recent_activity",
-        "build_context",
-        "list_directory",
-        "list_directory",
-        "list_directory"
-      ],
-      "description": "Basic Memory - persistent knowledge base dengan Markdown files dan knowledge graph"
     },
     "maxential-thinking": {
       "command": "npx",
@@ -163,22 +115,6 @@
       ],
       "description": "Browser automation with Playwright for visual validation and web testing"
     },
-    "awslabs.aws-diagram-mcp-server": {
-      "command": "uvx",
-      "args": [
-        "awslabs.aws-diagram-mcp-server"
-      ],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
-      "disabled": true,
-      "autoApprove": [
-        "generate_diagram",
-        "list_icons",
-        "get_diagram_examples"
-      ],
-      "description": "AWS Architecture Diagram generator using Python diagrams package with official AWS icons"
-    },
     "awslabs.aws-documentation-mcp-server": {
       "command": "uvx",
       "args": [
@@ -224,36 +160,6 @@
         "execute_sql_development"
       ],
       "description": "DBHub - Visual database management untuk SIMANIS62 V2 (SQLite multi-environment)"
-    },
-    "mcp-debugpy": {
-      "command": "d:\\simanis62-v2\\tools\\mcp-debugpy\\.venv\\Scripts\\python.exe",
-      "args": [
-        "src/mcp_server.py"
-      ],
-      "cwd": "d:\\simanis62-v2\\tools\\mcp-debugpy",
-      "env": {
-        "PYTHONPATH": "d:\\simanis62-v2\\tools\\mcp-debugpy\\src"
-      },
-      "disabled": false,
-      "autoApprove": [
-        "ensure_demo_program",
-        "read_text_file",
-        "run_tests_json",
-        "run_tests_focus",
-        "dap_launch",
-        "dap_validate_breakpoint_line",
-        "dap_set_breakpoints",
-        "dap_list_breakpoints",
-        "dap_continue",
-        "dap_step_over",
-        "dap_step_in",
-        "dap_step_out",
-        "dap_locals",
-        "dap_wait_for_event",
-        "dap_last_stopped_event",
-        "dap_shutdown"
-      ],
-      "description": "Interactive Python debugging MCP server using debugpy"
     }
   }
 }
